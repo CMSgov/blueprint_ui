@@ -6,7 +6,7 @@
 2. Clone this repo to your local machine
 3. To build the docker container, from root directory run `docker build -t blueprint:dev .`
 4. To start the application, from the root directory, run:
-`docker run \                                                                                                                                                                                                                                        125
+`docker run \
     -it \
     --rm \
     -v ${PWD}:/app \
