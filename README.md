@@ -1,6 +1,6 @@
 # Blueprint UI
 
-###Current (temporary) initial setup
+### Current (temporary) initial setup
 
 1. Make sure you have docker installed
 2. Clone this repo to your local machine
