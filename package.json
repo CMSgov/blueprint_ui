@@ -16,7 +16,10 @@
     "web-vitals": "^2.1.4"
   },
   "lint-staged": {
-    "*.{js,jsx}": ["eslint", "prettier --write"],
+    "*.{js,jsx}": [
+      "eslint",
+      "prettier --write"
+    ],
     "src/**/*.{ts,tsx,json,css,scss,md}": [
       "prettier --write"
     ]
@@ -32,7 +35,8 @@
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "plugin:cypress/recommended"
     ]
   },
   "browserslist": {
@@ -48,6 +52,8 @@
     ]
   },
   "devDependencies": {
+    "cypress": "^9.6.1",
+    "eslint-plugin-cypress": "^2.12.1",
     "husky": "^7.0.0"
   }
 }
