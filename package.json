@@ -8,7 +8,6 @@
     "@testing-library/user-event": "^13.5.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.4.1",
-    "phantomjs": "^2.1.7",
     "prettier": "^2.6.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
