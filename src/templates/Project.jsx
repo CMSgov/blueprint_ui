@@ -1,9 +1,7 @@
 import ControlsCompleted from "../molecules/CompletedControls";
 import ComponentsList from "../organisms/ComponentsList";
-// import { useState } from "react";
 
 export function Project({project}) {
-    // const [project] = useState();
     const componentList = [
         {id: 1, name: 'first component'},
         {id: 2, name: 'second component'}
@@ -22,5 +20,4 @@ export function Project({project}) {
             <button className="usa-button">Export Control Narratives</button>
         </div>
     )
-       
 }
