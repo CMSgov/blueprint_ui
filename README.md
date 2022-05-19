@@ -20,7 +20,7 @@ To run Cypress end-to-end tests;
 
 ### Developer Notes
 
-We have agreed to work based on the following standars for the project
+We have agreed to work based on the following standards for the project
     - Utilizing Atomic Design directory structure, visible under src atoms, molecules, organisms, templates, and pages
         - atoms will be for small reusable parts consisting of a single page element: input, button, label
         - molecules will be for small reusable components consisting of a few atoms or page elements: this is somewhat subjective 
