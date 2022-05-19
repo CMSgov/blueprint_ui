@@ -1,15 +1,16 @@
 import "./App.scss";
-import { Project } from "./templates/Project";
+import { AppRoutes } from "./AppRoutes";
+import { Link } from "react-router-dom";
+
 
 function App() {
-  const project = {"title":"Complex Amazing Technology","acronym":"CAT","creator":1,"impact_level":"moderate","location":"other","id":1};
-
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <button className="usa-button usa-button--big">Big USWDS Button</button>
-        <Project project={project} />
-      </header>
+      <nav>
+        <Link to="/">Home</Link> | <Link to="/projects">Projects</Link> | <Link to="/settings">Project Settings</Link>
+      </nav>
+      <AppRoutes />
     </div>
   );
 }
