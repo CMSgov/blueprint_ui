@@ -10,7 +10,7 @@ const Help = () => {
                 <div className="usa-card__body">
                     <span>Most popular inquiries</span>
                 </div>
-                <div class="usa-card__footer">
+                <div className="usa-card__footer">
                     <a href="/faq"><button className="usa-button usa-button--big">Read the FAQs</button></a>
                 </div>
             </div>
@@ -22,7 +22,7 @@ const Help = () => {
                 <div className="usa-card__body">
                     <span>Read more about the inititive</span>
                 </div>
-                <div class="usa-card__footer">
+                <div className="usa-card__footer">
                 <a href="https://ato.cms.gov/"><button className="usa-button usa-button--big">Learn more</button></a>
                 </div>
             </div>
@@ -34,7 +34,7 @@ const Help = () => {
                 <div className="usa-card__body">
                     <span>We look forward to connecting</span>
                 </div>
-                <div class="usa-card__footer">
+                <div className="usa-card__footer">
                 <a href="/contactus"><button className="usa-button usa-button--big">Contact us</button></a>
                 </div>
             </div>
@@ -42,4 +42,4 @@ const Help = () => {
     );
   };
   
-  export default Help;
+export default Help;

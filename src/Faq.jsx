@@ -55,7 +55,7 @@ const Faq = () => {
                 <div className="usa-card__header">
                     <h2>Do you have questions</h2>
                 </div>
-                <div class="usa-card__footer">
+                <div className="usa-card__footer">
                 <a href="/contactus"><button className="usa-button usa-button--big">Contact us</button></a>
                 </div>
             </div>
@@ -63,4 +63,4 @@ const Faq = () => {
     );
   };
   
-  export default Faq;
+export default Faq;

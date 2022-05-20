@@ -7,34 +7,34 @@ export default function Home() {
         <p>Collaboratively write contrk, narratives. Never start from scratch.</p>
 
 
-        <div id="process-list-preview-content" class="usa-accordion__content">
-          <ol class="usa-process-list">
-            <li class="usa-process-list__item">
-              <h4 class="usa-process-list__heading">Enter basic information</h4>
-              <p class="margin-top-05">
+        <div id="process-list-preview-content" className="usa-accordion__content">
+          <ol className="usa-process-list">
+            <li className="usa-process-list__item">
+              <h4 className="usa-process-list__heading">Enter basic information</h4>
+              <p className="margin-top-05">
                 System name, acronym, location, FISMA Impact Level
               </p>
             </li>
-            <li class="usa-process-list__item">
-              <h4 class="usa-process-list__heading">Select Blueprint components</h4>
+            <li className="usa-process-list__item">
+              <h4 className="usa-process-list__heading">Select Blueprint components</h4>
               <p>
               Groups of inherited and pre-written control narratives
               </p>
             </li>
-            <li class="usa-process-list__item">
-              <h4 class="usa-process-list__heading">Add your project team</h4>
+            <li className="usa-process-list__item">
+              <h4 className="usa-process-list__heading">Add your project team</h4>
               <p>
               Invite team members to collaborate and write control narratives in Blueprint
               </p>
             </li>
-            <li class="usa-process-list__item">
-              <h4 class="usa-process-list__heading">Edit, review and finalize narratives</h4>
+            <li className="usa-process-list__item">
+              <h4 className="usa-process-list__heading">Edit, review and finalize narratives</h4>
               <p>
               Complete narratives and confirm all required controls are met
               </p>
             </li>
-            <li class="usa-process-list__item">
-              <h4 class="usa-process-list__heading">Import narratives and add evidence into CFACTS</h4>
+            <li className="usa-process-list__item">
+              <h4 className="usa-process-list__heading">Import narratives and add evidence into CFACTS</h4>
               <p>
               Upload control narratives and supporting evidence into the system of record 
               </p>
@@ -49,7 +49,7 @@ export default function Home() {
             <div className="usa-card__body">
                 <span>Access existing project(s) and continue addressing controls.</span>
             </div>
-            <div class="usa-card__footer">
+            <div className="usa-card__footer">
             <a href="/projects"><button className="usa-button usa-button--big">Access projects</button></a>
             </div>
         </div>
@@ -61,7 +61,7 @@ export default function Home() {
             <div className="usa-card__body">
                 <span>Learn about how Blueprint fits into the ATO ecosystem at CMS.</span>
             </div>
-            <div class="usa-card__footer">
+            <div className="usa-card__footer">
             <a href="https://ato.cms.gov/"><button className="usa-button usa-button--big">Learn more</button></a>
             </div>
         </div>
