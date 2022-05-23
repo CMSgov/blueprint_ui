@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Project } from "../templates/Project";
 import { useParams } from "react-router-dom";
 import config from "../config";
-// import RequestService from "../RequestService";
 
 const Projects = () => {
   const { id } = useParams();
@@ -16,15 +15,12 @@ const Projects = () => {
           "Content-type": "application/json; charset=UTF-8",
         },
       })
-        .then((response) => {
-          // Why is this response failing when the network tab shows a success!>.<!
-          console.log("first then block", response);
-          response.json();
-        })
+        .then((response) => response.json())
         .then((project) => {
-          //once it reaches here everything will work >.>
-          console.log("api response:", project);
-          return setProject(project);
+          if(project !== undefined){
+            return setProject(project);
+          }
+          // do we want to log this error?
         })
         .catch((error) => {
           console.log("Error:", error);
