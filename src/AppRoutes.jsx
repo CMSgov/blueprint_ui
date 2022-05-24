@@ -7,7 +7,6 @@ import ContactUs from "./ContactUs";
 import Faq from "./Faq";
 import Help from "./Help";
 import Home from "./Home";
-import ProjectSettings from "./ProjectSettings";
 
 const ROUTES = {
   HOME: "/",
