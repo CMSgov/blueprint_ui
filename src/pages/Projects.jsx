@@ -5,6 +5,7 @@ import config from "../config";
 
 const Projects = () => {
   const { id } = useParams();
+  const [error, setError] = useState(false);
   const [project, setProject] = useState({});
 
   useEffect(() => {
@@ -17,17 +18,21 @@ const Projects = () => {
       })
         .then((response) => response.json())
         .then((project) => {
-          if(project !== undefined){
+          if(project !== undefined && project.id !== undefined){
             return setProject(project);
+          }else{
+            return setError(true);
           }
-          // do we want to log this error?
         })
         .catch((error) => {
-          console.log("Error:", error);
+          return setError(true);
         });
     }
   }, [id, project]);
 
+  if(error){
+    return (<h1>Project not found</h1>);
+  }
   return (
     <>
       <h1>Projects</h1>
