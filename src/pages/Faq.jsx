@@ -22,9 +22,11 @@ const Faq = () => {
         <h3>Are all controls created equal?</h3>
         <p>
         No, but the good news is that Blueprint clearly identifies which controls statements are:
-        Fully inherited (Other CMS systems provide the full statement)
-        Shared (Other CMS systems and your system each contribute to the statement)
-        Allocated (your system is responsible for the full statement)
+        <ul className="usa-list">
+            <li><span className="text-bold">Fully inherited</span> (Other CMS systems provide the full statement)</li>
+            <li><span className="text-bold">Shared</span> (Other CMS systems and your system each contribute to the statement)</li>
+            <li><span className="text-bold">Allocated</span> (your system is responsible for the full statement)</li>
+        </ul>
         So your team can focus on what needs attention.
         </p>
         <h3>What does “shared responsibility” mean?</h3>
@@ -51,14 +53,16 @@ const Faq = () => {
         For example, if your system is using Splunk to track audit logs and Confluence to manage information, you can select the Splunk and Confluence components and Blueprint will suggest control implementation narratives for your system.
         Rather than writing the statements from scratch, you can simply review and edit/augment the statements as needed. This also allows you to build your SSP as you build your system.
         </p>
-        <div className="usa-card__container">
+        <div className="usa-card-group grid-row">
+            <div className="usa-card__container">
                 <div className="usa-card__header">
                     <h2>Do you have questions</h2>
                 </div>
                 <div className="usa-card__footer">
-                <a href="/contactus"><button className="usa-button usa-button--big">Contact us</button></a>
+                    <a href="/contactus"><button className="usa-button usa-button--big">Contact us</button></a>
                 </div>
             </div>
+        </div>
     </>
     );
   };
