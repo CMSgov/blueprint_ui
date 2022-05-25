@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import Logo from "../atoms/Logo";
 import UserStub from "../stub";
 
@@ -10,18 +10,18 @@ const Header = () => {
         <header className="usa-header site-header site-header-dark" role="banner">
             <div className="usa-navbar site-header-navbar">
                 <div id="logo">
-                    <Link to="/">
+                    <a href="/">
                         <Logo />
-                    </Link>
+                    </a>
                 </div>
-                <Link to="/projects">Projects</Link>
+                <a href="/projects">Projects</a>
                 {/* @TODO: change component library to a link when it exists */}
-                <span to="/componentLibrary">Component Library</span>
+                <a href="/componentLibrary">Component Library</a>
                 <div className="site-header-right">
-                    <Link to="/help">Help</Link>
+                    <a href="/help">Help</a>
                     <span className="usa-media-block__img circle-4 bg-base display-flex flex-row flex-align-center flex-justify-center text-white">{count}</span>
                     {/* @TODO: change user to a link when it exists */}
-                    <span to="/user">{userName}</span>
+                    <a href="/user">{userName}</a>
                 </div>
             </div>
         </header>
@@ -29,3 +29,4 @@ const Header = () => {
 };
     
 export default Header;
+
