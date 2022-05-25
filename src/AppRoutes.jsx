@@ -3,10 +3,10 @@ import { Route, Routes } from "react-router-dom";
 
 import Projects from "./pages/Projects";
 import ProjectSettings from "./pages/ProjectSettings";
-import ContactUs from "./ContactUs";
-import Faq from "./Faq";
-import Help from "./Help";
-import Home from "./Home";
+import ContactUs from "./pages/ContactUs";
+import Faq from "./pages/Faq";
+import Help from "./pages/Help";
+import Home from "./pages/Home";
 
 const ROUTES = {
   HOME: "/",
