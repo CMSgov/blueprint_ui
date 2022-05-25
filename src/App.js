@@ -1,6 +1,6 @@
 import "./App.scss";
-import { MAIN_ROUTES, AppRoutes } from "./AppRoutes";
-import { Link } from "react-router-dom";
+import { MAIN_ROUTES } from "./AppRoutes";
+import { Link, Outlet } from "react-router-dom";
 
 function App() {
   return (
@@ -8,8 +8,7 @@ function App() {
       <nav>
         <Link to="/">Home</Link> | <Link to={MAIN_ROUTES.PROJECTS} >Projects</Link>
       </nav>
-      <button className="usa-button usa-button--big">Big USWDS Button</button>
-      <AppRoutes />
+      <Outlet />
     </div>
   );
 }
