@@ -1,7 +1,7 @@
 import ControlsCompleted from "../molecules/CompletedControls";
 import ComponentsList from "../organisms/ComponentsList";
 
-export function Project({project}) {
+export function ProjectTemplate({project}) {
     const componentList = [
         {id: 1, name: 'first component'},
         {id: 2, name: 'second component'}
