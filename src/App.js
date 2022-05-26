@@ -6,12 +6,8 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <div className="grid-row">
-        <div className="grid-col-1"></div>
-        <div className="grid-col-10">
-          <AppRoutes />
-        </div>
-        <div className="grid-col-1"></div>
+      <div className="grid-row grid-col-12 main-content-body">
+        <AppRoutes />
       </div>
     </div>
   );
