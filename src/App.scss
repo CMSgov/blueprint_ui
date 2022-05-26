@@ -19,6 +19,9 @@
   background-color: #F0F0F0;
   height: 50px;
   padding-top: 14px;
+  .footer-links, .footer-stats{
+    display: inline;
+  }
   a, span{
     margin: 0 28px;
   }
@@ -27,5 +30,22 @@
   }
   span.footer-item{
     color: #71767A;
+  }
+}
+@media (max-width: 720px) {
+  .site-footer{
+    height: 85px;
+    .footer-links, .footer-stats{
+      display: block;
+    }
+    a, span{
+      margin: 0 60px;
+    }
+    a{
+      padding-top: 16px;
+    }
+    span.footer-item{
+      padding-top: 12px;
+    }
   }
 }
