@@ -12,7 +12,7 @@ import Home from "./pages/Home";
 
 export const MAIN_ROUTES = {
   HOME: "/",
-  CONTACT_US: "/contactus",
+  CONTACT_US: "/contact-us",
   FAQ: "/faq",
   HELP: "/help",
   PROJECTS: "/projects",
