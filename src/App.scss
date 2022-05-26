@@ -3,17 +3,16 @@
   color: #fff;
   a{
     color: #fff;
-
   }
 }
 .site-header-navbar{
+  padding: 15px 0;
   a{
-    margin: 0 20px;
+    margin: 0 50px;
     text-decoration:none;
   }
   svg.site-logo{
-    width: 100px;
-    margin-top: 5px;
+    width: 125px;
     .cls-1{fill:#fff;}
     .cls-2{fill:#2e9cf3;}
     .cls-3{fill:#6cf;}
@@ -22,7 +21,10 @@
     display: flex;
     align-items: center;
     position: absolute;
-    right: 150px;
+    right: 180px;
+    a{
+      margin: 0 35px;
+    }
   }
 }
 
