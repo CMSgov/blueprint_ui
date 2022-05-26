@@ -11,7 +11,9 @@ function App() {
         <Link to="/settings">Project Settings</Link>
       </nav>
       <button className="usa-button usa-button--big">Big USWDS Button</button>
-      <AppRoutes />
+      <div className="grid-row grid-col-12 main-content-body">
+        <AppRoutes />
+      </div>
       <Footer />
     </div>
   );
