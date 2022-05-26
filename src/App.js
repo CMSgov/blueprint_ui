@@ -1,6 +1,7 @@
 import "./App.scss";
 import { AppRoutes } from "./AppRoutes";
 import { Link } from "react-router-dom";
+import Footer from "./organisms/Footer";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       </nav>
       <button className="usa-button usa-button--big">Big USWDS Button</button>
       <AppRoutes />
+      <Footer />
     </div>
   );
 }

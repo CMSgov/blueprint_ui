@@ -14,3 +14,18 @@
   color: white;
 }
 
+.site-footer{
+  text-align: center;
+  background-color: #F0F0F0;
+  height: 50px;
+  padding-top: 14px;
+  a, span{
+    margin: 0 28px;
+  }
+  a{
+    text-decoration:none;
+  }
+  span.footer-item{
+    color: #71767A;
+  }
+}
