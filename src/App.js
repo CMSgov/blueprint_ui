@@ -1,14 +1,14 @@
+import { Outlet } from "react-router-dom";
+import Header from "./organisms/Header";
 import "./App.scss";
-import { MAIN_ROUTES } from "./AppRoutes";
-import { Link, Outlet } from "react-router-dom";
 
 function App() {
   return (
     <div className="App">
-      <nav>
-        <Link to="/">Home</Link> | <Link to={MAIN_ROUTES.PROJECTS} >Projects</Link>
-      </nav>
-      <Outlet />
+      <Header />
+      <div className="grid-row grid-col-12 main-content-body">
+        <Outlet />
+      </div>
     </div>
   );
 }
