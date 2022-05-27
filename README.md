@@ -24,13 +24,13 @@ We have agreed to work based on the following standards for the project
     - Utilizing Atomic Design directory structure, visible under src atoms, molecules, organisms, templates, and pages
         - atoms will be for small reusable parts consisting of a single page element: input, button, label
         - molecules will be for small reusable components consisting of a few atoms or page elements: this is somewhat subjective 
-        - organisms will be for reusable components that make sense by them self: header, footer
-        - templates will be for reusable components that can make easily be used by pages
-        - pages will be for individual pages, either stand alone or mostly using a template
+        - organisms will be for reusable components that make sense by themselves: header, footer
+        - templates will be for reusable components that can easily be used by pages
+        - pages will be for individual pages, either stand alone or mostly using a template (pages act as instances of templates)
 
     - Naming conventions
-        - Files will be named using Pascale case: SomeFile.jsx
-        - Component names will also use Pascale case SomeFile
+        - Files will be named using Pascal case: SomeFile.jsx
+        - Component names will also use Pascal case SomeFile
 
-    - Code will be writen utilizing react hooks, and avoid using the react class style
+    - Code will be written utilizing react hooks, and avoid using the react class style
         - Hooks are basically functional components that scale up easily when needing to utilize state without having to rewrite them
