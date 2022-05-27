@@ -8,8 +8,4 @@ test("renders links", () => {
     expect(aboutLinkElement).toBeInTheDocument();
     const supportLinkElement = screen.getByText(/Blueprint Support/i);
     expect(supportLinkElement).toBeInTheDocument();
-    const startYearElement = screen.getByText(/GovReady PBC 2022/i);
-    expect(startYearElement).toBeInTheDocument();
-    const versionElement = screen.getByText(/v0.9.12-dev/i);
-    expect(versionElement).toBeInTheDocument();
 });
