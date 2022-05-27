@@ -47,7 +47,7 @@ textarea {
   background-color: #F0F0F0;
   height: 50px;
   padding-top: 14px;
-  .footer-links, .footer-stats{
+  .footer-links{
     display: inline;
   }
   a, span{
@@ -63,7 +63,7 @@ textarea {
 @media (max-width: 720px) {
   .site-footer{
     height: 85px;
-    .footer-links, .footer-stats{
+    .footer-links{
       display: block;
     }
     a, span{
@@ -71,9 +71,6 @@ textarea {
     }
     a{
       padding-top: 16px;
-    }
-    span.footer-item{
-      padding-top: 12px;
     }
   }
 }
