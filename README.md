@@ -34,3 +34,4 @@ We have agreed to work based on the following standards for the project
 
     - Code will be written utilizing react hooks, and avoid using the react class style
         - Hooks are basically functional components that scale up easily when needing to utilize state without having to rewrite them
+
