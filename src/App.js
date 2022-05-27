@@ -1,13 +1,13 @@
-import "./App.scss";
-import { AppRoutes } from "./AppRoutes";
+import { Outlet } from "react-router-dom";
 import Header from "./organisms/Header";
+import "./App.scss";
 
 function App() {
   return (
     <div className="App">
       <Header />
       <div className="grid-row grid-col-12 main-content-body">
-        <AppRoutes />
+        <Outlet />
       </div>
     </div>
   );
