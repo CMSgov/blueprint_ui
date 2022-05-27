@@ -12,6 +12,7 @@ import Home from "./pages/Home";
 
 export const MAIN_ROUTES = {
   HOME: "/",
+  COMPONENT_LIBRARY: "/component-library",
   CONTACT_US: "/contact-us",
   FAQ: "/faq",
   HELP: "/help",
