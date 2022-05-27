@@ -1,17 +1,41 @@
-.App {
-  text-align: center;
+.site-header-dark{
+  background-color:#1A2E4E;
+  color: #fff;
+  a{
+    color: #fff;
+  }
 }
-
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.site-header-navbar{
+  padding: 15px 0;
+  a{
+    margin: 0 50px;
+    text-decoration:none;
+  }
+  svg.site-logo{
+    width: 125px;
+    .cls-1{fill:#fff;}
+    .cls-2{fill:#2e9cf3;}
+    .cls-3{fill:#6cf;}
+  }
+  .site-header-right{
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 180px;
+    a{
+      margin: 0 35px;
+    }
+  }
+}
+@media (min-width: 64em){
+  .site-header-navbar {
+    display: flex;
+    align-items: center;
+  }
+}
+textarea {
+  height: 16rem;
+  width: 100%;
 }
 .main-content-body{
   padding: 0 100px;
