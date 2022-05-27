@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Logo from "../atoms/Logo";
 import UserStub from "../stub";
-import { MAIN_ROUTES } from "./AppRoutes";
+import { MAIN_ROUTES } from "../AppRoutes";
 
 const Header = () => {
     // @TODO: notification counter? needs functionality to be built
