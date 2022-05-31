@@ -27,7 +27,6 @@
     }
   }
 }
-
 @media (min-width: 64em){
   .site-header-navbar {
     display: flex;
@@ -42,4 +41,37 @@ textarea {
   padding: 0 100px;
   margin: 0;
   max-width: 1337px;
+}
+.site-footer{
+  text-align: center;
+  background-color: #F0F0F0;
+  height: 50px;
+  padding-top: 14px;
+  .footer-links{
+    display: inline;
+  }
+  a, span{
+    margin: 0 28px;
+  }
+  a{
+    text-decoration:none;
+    color: #005EA2;
+  }
+  span.footer-item{
+    color: #71767A;
+  }
+}
+@media (max-width: 720px) {
+  .site-footer{
+    height: 85px;
+    .footer-links{
+      display: block;
+    }
+    a, span{
+      margin: 0 60px;
+    }
+    a{
+      padding-top: 16px;
+    }
+  }
 }
