@@ -32,9 +32,12 @@ const Breadcrumbs = () => {
     let pathArray = pathname.split(" ");
     let pageName = '';
 
-    if(pathname === "contactus" || pathname === "faq"){
+    if(pathname === "contact-us" || pathname === "faq"){
         parentList = [{title:"help", url:"/help"}];
         pageName = pathname;
+        if(pathname === "contact-us"){
+            pageName = "contact us";
+        }
     }
     else if(pathArray[0] === "component-library"){
         parentList = [{title:"component library", url:"/component-library"}];
