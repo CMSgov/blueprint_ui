@@ -75,3 +75,24 @@ textarea {
     }
   }
 }
+
+.project-page {
+  .title {
+    color: #005EA2;
+    font-size: 40px;
+  }
+  .subtitle {
+    font-size: 32px;
+    margin-bottom: 40px;
+  }
+  .settings-description {
+    margin-bottom: 30px;
+    font-size: 22px;
+  }
+  .settings-about-section {
+    .question {
+      font-weight: bold;
+    }
+    line-height: 26px;
+  }
+}
