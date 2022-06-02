@@ -1,17 +1,13 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { ProjectTemplate } from "../templates/ProjectTemplate";
 import { useParams } from "react-router-dom";
 import config from "../config";
-import GlobalState from "../GlobalState";
 
 const Project = () => {
   const { id } = useParams();
   const [error, setError] = useState(false);
-  const [state, setState] = useContext(GlobalState);
-  let project = state.project;
-  if(state.project === undefined){
-    project = {};
-  }
+  const [project, setProject] = useState({});
+
   useEffect(() => {
     if (project.id !== parseInt(id)) {
       fetch(`${config.backendUrl}/projects/${id}/`, {
@@ -23,7 +19,7 @@ const Project = () => {
         .then((response) => response.json())
         .then((project) => {
           if(project !== undefined && project.id !== undefined){
-            return setState(state => ({...state, project: project}));
+            return setProject(project);
           }else{
             return setError(true);
           }
