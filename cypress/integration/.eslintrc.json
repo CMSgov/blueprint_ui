@@ -1,0 +1,5 @@
+{
+  "rules": {
+    "testing-library/await-async-utils": "off"
+  }
+}
