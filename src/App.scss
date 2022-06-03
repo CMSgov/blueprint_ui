@@ -106,9 +106,17 @@ textarea {
     font-size: 22px;
   }
   .settings-details-section {
+    line-height: 26px;
+    margin-bottom: 55px;
     .question {
       font-weight: bold;
     }
-    line-height: 26px;
+  }
+  .button-section {
+    font-size: 20px;
+    margin-bottom: 55px;
+    .above-button-text {
+      padding-bottom: 10px;
+    }
   }
 }

@@ -1,4 +1,5 @@
 import ProjectHeader from "../molecules/ProjectHeader";
+import { URL_CFACTS } from "../constants";
 
 export function ProjectSettingsTemplate({ project }) {
   const { id, acronym, impact_level, location, title } = project;
@@ -30,6 +31,14 @@ export function ProjectSettingsTemplate({ project }) {
           <br />
           {impact_level}
         </p>
+      </div>
+      <div className="button-section">
+        <div className="above-button-text">
+          Update your FISMA Impact Level in CFACTS
+        </div>
+        <a href={URL_CFACTS}>
+          <button className="usa-button">Go to CFACTS</button>
+        </a>
       </div>
     </div>
   );
