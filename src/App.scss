@@ -1,5 +1,10 @@
 $primary-blue: #005ea2;
 
+.link-title {
+  color: $primary-blue;
+  text-decoration: none;
+}
+
 .site-header-dark {
   background-color: #1a2e4e;
   color: #fff;
@@ -87,8 +92,9 @@ textarea {
 }
 
 .project-page {
-  .title {
-    color: $primary-blue;
+  .title,
+  a {
+    @extend .link-title;
     font-size: 40px;
   }
   .subtitle {

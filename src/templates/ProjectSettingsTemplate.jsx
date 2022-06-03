@@ -1,11 +1,16 @@
 import ProjectHeader from "../molecules/ProjectHeader";
 
 export function ProjectSettingsTemplate({ project }) {
-  const { acronym, impact_level, location, title } = project;
+  const { id, acronym, impact_level, location, title } = project;
   const subtitle = "Project Settings";
   return (
     <div className="project-page">
-      <ProjectHeader acronym={acronym} subtitle={subtitle} title={title} />
+      <ProjectHeader
+        id={id}
+        acronym={acronym}
+        subtitle={subtitle}
+        title={title}
+      />
       <div className="settings-description measure-2">
         Need to update your system information? Review your answers here to
         suggest System Components.
