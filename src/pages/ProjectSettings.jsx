@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import config from "../config";
 import { ProjectSettingsTemplate } from "../templates/ProjectSettingsTemplate";
-import ErrorMessage from "../molecules/ErrorMessage"
+import ErrorMessage from "../molecules/ErrorMessage";
 
 export default function ProjectSettings() {
   const { id } = useParams();
@@ -26,7 +26,9 @@ export default function ProjectSettings() {
             return setProject(jsonResponse);
           } else {
             // extract the response message to use as the error mesage or use backup message
-            setErrorMessage(jsonResponse.response || "Error loading project settings");
+            setErrorMessage(
+              jsonResponse.response || "Error loading project settings"
+            );
             return setError(true);
           }
         })
@@ -38,5 +40,5 @@ export default function ProjectSettings() {
 
   if (!error && Object.keys(project).length > 0) {
     return <ProjectSettingsTemplate project={project} />;
-  } else return <ErrorMessage message={errorMessage}/>
+  } else return <ErrorMessage message={errorMessage} />;
 }

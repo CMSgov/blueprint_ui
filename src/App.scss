@@ -1,33 +1,41 @@
-.site-header-dark{
-  background-color:#1A2E4E;
+$primary-blue: #005ea2;
+
+.site-header-dark {
+  background-color: #1a2e4e;
   color: #fff;
-  a{
+  a {
     color: #fff;
   }
 }
-.site-header-navbar{
+.site-header-navbar {
   padding: 15px 0;
-  a{
+  a {
     margin: 0 50px;
-    text-decoration:none;
+    text-decoration: none;
   }
-  svg.site-logo{
+  svg.site-logo {
     width: 125px;
-    .cls-1{fill:#fff;}
-    .cls-2{fill:#2e9cf3;}
-    .cls-3{fill:#6cf;}
+    .cls-1 {
+      fill: #fff;
+    }
+    .cls-2 {
+      fill: #2e9cf3;
+    }
+    .cls-3 {
+      fill: #6cf;
+    }
   }
-  .site-header-right{
+  .site-header-right {
     display: flex;
     align-items: center;
     position: absolute;
     right: 180px;
-    a{
+    a {
       margin: 0 35px;
     }
   }
 }
-@media (min-width: 64em){
+@media (min-width: 64em) {
   .site-header-navbar {
     display: flex;
     align-items: center;
@@ -37,40 +45,42 @@ textarea {
   height: 16rem;
   width: 100%;
 }
-.main-content-body{
+.main-content-body {
   padding: 0 100px;
   margin: 0;
   max-width: 1337px;
 }
-.site-footer{
+.site-footer {
   text-align: center;
-  background-color: #F0F0F0;
+  background-color: #f0f0f0;
   height: 50px;
   padding-top: 14px;
-  .footer-links{
+  .footer-links {
     display: inline;
   }
-  a, span{
+  a,
+  span {
     margin: 0 28px;
   }
-  a{
-    text-decoration:none;
-    color: #005EA2;
+  a {
+    text-decoration: none;
+    color: $primary-blue;
   }
-  span.footer-item{
-    color: #71767A;
+  span.footer-item {
+    color: #71767a;
   }
 }
 @media (max-width: 720px) {
-  .site-footer{
+  .site-footer {
     height: 85px;
-    .footer-links{
+    .footer-links {
       display: block;
     }
-    a, span{
+    a,
+    span {
       margin: 0 60px;
     }
-    a{
+    a {
       padding-top: 16px;
     }
   }
@@ -78,7 +88,7 @@ textarea {
 
 .project-page {
   .title {
-    color: #005EA2;
+    color: $primary-blue;
     font-size: 40px;
   }
   .subtitle {
@@ -89,7 +99,7 @@ textarea {
     margin-bottom: 30px;
     font-size: 22px;
   }
-  .settings-about-section {
+  .settings-details-section {
     .question {
       font-weight: bold;
     }
