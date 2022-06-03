@@ -56,7 +56,7 @@ describe("project settings page", () => {
   });
 
   it("displays an error when project does not exist", () => {
-    const nonexistentProjectId = 9999;
+    const nonexistentProjectId = 0;
     cy.visit(
       Cypress.env("BASE_URL") + `/projects/${nonexistentProjectId}/settings`
     );
