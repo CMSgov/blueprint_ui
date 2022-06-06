@@ -14,6 +14,8 @@ To run this manually on your staged files, in a terminal window, run: `npm run p
 
 To run tests, in a terminal window, run: `npm test` or `npm run test`
 
+You can choose to run a directory of tests or individual test files by adding the path to the command: e.g. `npm test /src/molecules/ProjectHeader.test.jsx`
+
 To run Cypress end-to-end tests;
     - make sure that your app is running the required Docker containers
     - in the root directory of Blueprint UI, run `npx cypress open`
