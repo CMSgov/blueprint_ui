@@ -1,24 +1,39 @@
 # Blueprint UI
 
-### Local Development
+## Local Development
 
 Please visit the infrastructure repo for setting up a local development environment at https://github.com/CMSgov/blueprint_infra
 
-### Pre-commit hook
+## Pre-commit hook
 
-When committing code, a pre-commit hook is set to run linting and prettier formatting on the staged files.
+When committing code, a pre-commit hook is set to run linting and prettier formatting on the staged files. It will also run the suite of react testing library test (it will not cypress tests).
 
-To run this manually on your staged files, in a terminal window, run: `npm run pre-commit`
+To run this hook manually on your staged files, in a terminal window, run: <br>
+`npm run pre-commit`
 
-### Testing
+## Testing
 
-To run tests, in a terminal window, run: `npm test` or `npm run test`
+We leverage two different sets of tests:
+1. [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) which is a library that uses the framework [Jest](https://jestjs.io/) - for unit tests and some integration tests
+2. [Cypress](https://docs.cypress.io/) - for end to end tests and some integration tests
 
-To run Cypress end-to-end tests;
-    - make sure that your app is running the required Docker containers
-    - in the root directory of Blueprint UI, run `npx cypress open`
+### React Testing Library
+To run manually in a terminal window, run: <br>
+*By default, the test commands will go into watch mode and rerun as you save code changes.* <br>
+`npm test` or `npm run test`
 
-### Developer Notes
+If you want to run only once, set the watch to false: <br>
+`npm test -- --watchAll=false`
+
+You can choose to run a directory of tests or individual test files by adding the path to the command: <br>
+e.g. `npm test /src/molecules/ProjectHeader.test.jsx`
+
+### Cypress
+To run Cypress end-to-end tests:
+- make sure that your app is running the required Docker containers
+- in the root directory of Blueprint UI, run `npx cypress open`
+
+## Developer Notes
 
 We have agreed to work based on the following standards for the project
     - Utilizing Atomic Design directory structure, visible under src atoms, molecules, organisms, templates, and pages
