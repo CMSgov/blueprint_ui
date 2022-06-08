@@ -1,12 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { ProjectTemplate } from "../templates/ProjectTemplate";
 import { useParams } from "react-router-dom";
 import config from "../config";
+import GlobalState from "../GlobalState";
 
 const Project = () => {
   const { id } = useParams();
   const [error, setError] = useState(false);
-  const [project, setProject] = useState({});
+  const [state, setState] = useContext(GlobalState);
+  let project = state.project;
+  if (state.project === undefined) {
+    project = {};
+  }
 
   useEffect(() => {
     if (project.id !== parseInt(id)) {
@@ -18,9 +23,9 @@ const Project = () => {
       })
         .then((response) => response.json())
         .then((project) => {
-          if(project !== undefined && project.id !== undefined){
-            return setProject(project);
-          }else{
+          if (project !== undefined && project.id !== undefined) {
+            return setState((state) => ({ ...state, project: project }));
+          } else {
             return setError(true);
           }
         })
@@ -30,8 +35,8 @@ const Project = () => {
     }
   }, [id, project]);
 
-  if(error){
-    return (<h1>Project not found</h1>);
+  if (error) {
+    return <h1>Project not found</h1>;
   }
   return (
     <>

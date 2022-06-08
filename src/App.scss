@@ -1,5 +1,8 @@
 $primary-blue: #005ea2;
-
+html,
+body {
+  height: 100%;
+}
 .link-title {
   color: $primary-blue;
   text-decoration: none;
@@ -50,12 +53,33 @@ textarea {
   height: 16rem;
   width: 100%;
 }
+#root {
+  min-height: 100%;
+}
 .main-content-body {
   padding: 0 100px;
   margin: 0;
   max-width: 1337px;
+  min-height: 100%;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  p {
+    width: 100%;
+  }
+}
+nav.usa-breadcrumb {
+  padding-bottom: 35px;
+  padding-top: 30px;
+  width: 100%;
+  text-transform: capitalize;
 }
 .site-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
   text-align: center;
   background-color: #f0f0f0;
   height: 50px;
@@ -76,6 +100,9 @@ textarea {
   }
 }
 @media (max-width: 720px) {
+  .main-content-body {
+    padding: 0 50px;
+  }
   .site-footer {
     height: 85px;
     .footer-links {
