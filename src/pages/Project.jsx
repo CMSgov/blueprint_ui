@@ -33,7 +33,7 @@ const Project = () => {
           return setError(true);
         });
     }
-  }, [id, project]);
+  }, [id, project, setState]);
 
   if (error) {
     return <h1>Project not found</h1>;
