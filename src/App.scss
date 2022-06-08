@@ -57,7 +57,7 @@ textarea {
   min-height: 100%;
 }
 .main-content-body {
-  padding: 0 100px;
+  padding: 0 100px 95px;
   margin: 0;
   max-width: 1337px;
   min-height: 100%;
@@ -102,7 +102,7 @@ nav.usa-breadcrumb {
 }
 @media (max-width: 720px) {
   .main-content-body {
-    padding: 0 50px;
+    padding: 0 50px 130px;
   }
   .site-footer {
     height: 85px;

@@ -12,8 +12,8 @@ function App() {
     <div className="App">
       <GlobalState.Provider value={[state, setState]}>
         <Header />
-        <div className="grid-row main-content-body">
-          <div className="grid-col-12">
+        <div className="grid-row">
+          <div className="grid-col-12 main-content-body">
             <Breadcrumbs />
             <Outlet />
           </div>
