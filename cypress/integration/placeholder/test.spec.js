@@ -24,7 +24,7 @@ describe("breadcrumbs & h1 show correctly on help page", () => {
 
 describe("breadcrumbs & h1 show correctly on faq page", () => {
   it("does display on faq page", () => {
-    cy.visit(Cypress.env("BASE_URL") + "/faq");
+    cy.visit(Cypress.env("BASE_URL") + "/help/faq");
     cy.get("header").should("exist");
     cy.get(".usa-breadcrumb").should("exist").contains("Home");
     cy.get(".usa-breadcrumb").contains("help");
@@ -36,7 +36,7 @@ describe("breadcrumbs & h1 show correctly on faq page", () => {
 
 describe("breadcrumbs & h1 show correctly on contact us page", () => {
   it("does display on contact us page", () => {
-    cy.visit(Cypress.env("BASE_URL") + "/contact-us");
+    cy.visit(Cypress.env("BASE_URL") + "/help/contact-us");
     cy.get("header").should("exist");
     cy.get(".usa-breadcrumb").should("exist").contains("Home");
     cy.get(".usa-breadcrumb").contains("help");

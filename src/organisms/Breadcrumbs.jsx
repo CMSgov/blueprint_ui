@@ -40,9 +40,9 @@ const Breadcrumbs = () => {
   let pathArray = pathname.split(" ");
   let pageName = "";
 
-  if (pathname === "contact-us" || pathname === "faq") {
+  if (pathArray[1] === "contact-us" || pathArray[1] === "faq") {
     parentList = [{ title: "help", url: "/help" }];
-    pageName = pathname.replaceAll("-", " ");
+    pageName = pathArray[1].replaceAll("-", " ");
   } else if (pathArray[0] === "component-library") {
     parentList = [{ title: "component library", url: "/component-library" }];
     //@TODO: when we have a component module convert pathArray[1] to component.title
