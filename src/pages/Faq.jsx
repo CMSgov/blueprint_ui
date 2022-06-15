@@ -6,12 +6,12 @@ const Faq = () => {
       <p>
         Completing the System Security Plan (SSP) accounts for about 80 percent
         of the work needed to get an ATO, and writing security control
-        implementation statements is one of the biggest challenges.{" "}
+        implementation statements is one of the biggest challenges.
       </p>
       <p>
         Blueprint simplifies the process by providing reusable compliance
         components that match your system and include draft control
-        implementation statements that satisfy requirements.{" "}
+        implementation statements that satisfy requirements.
       </p>
       <p>
         Components enhance the creation, maintenance and understanding of System
@@ -24,7 +24,7 @@ const Faq = () => {
       <h3>When should you start building your SSP?</h3>
       <p>
         As soon as you start deploying your infrastructure environments and
-        developing your system!{" "}
+        developing your system!
       </p>
       <p>
         Blueprint's goal is to make compliance more iterative. As you build your
@@ -32,7 +32,6 @@ const Faq = () => {
         using.
       </p>
       <p>
-        {" "}
         Once your system is built, your SSP should be as well. No more waterfall
         compliance!
       </p>
@@ -44,7 +43,6 @@ const Faq = () => {
         factors.
       </p>
       <p>
-        {" "}
         A System Security Plan includes implementation statements for each
         required control. These statements explain what measures are being taken
         to mitigate the risk for each control.
@@ -75,7 +73,6 @@ const Faq = () => {
         compliance requirements.
       </p>
       <p>
-        {" "}
         By allowing the CMS hosting environment to take on certain
         responsibilities, you fully inherit some control narratives. This means
         you don't have to write them. There are also shared controls, where the
@@ -90,13 +87,12 @@ const Faq = () => {
         defined technology, function or process.
       </p>
       <p>
-        {" "}
         Instead of writing all of the control implementation statements required
-        for your system, components do some of the work for you.{" "}
+        for your system, components do some of the work for you.
       </p>
       <p>
         Blueprint automatically adds some components to your system based on the
-        information you provide.{" "}
+        information you provide.
       </p>
       <p>
         You can also visit the Component Library to search for new components as
@@ -109,7 +105,6 @@ const Faq = () => {
         component yet.
       </p>
       <p>
-        {" "}
         For these controls, your team is responsible for creating accurate,
         complete control implementation statements.
       </p>
@@ -122,7 +117,7 @@ const Faq = () => {
         For example, if your system is using Splunk to track audit logs and
         Confluence to manage information, you can select the Splunk and
         Confluence components and Blueprint will suggest control implementation
-        narratives for your system.{" "}
+        narratives for your system.
       </p>
       <p>
         Rather than writing the statements from scratch, you can simply review
