@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 
+/** Based off of https://www.freecodecamp.org/news/build-a-custom-pagination-component-in-react/ */
 export const PaginationLogic = ({
   totalCount,
   pageSize,
