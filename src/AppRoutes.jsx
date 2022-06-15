@@ -9,6 +9,7 @@ import ContactUs from "./pages/ContactUs";
 import Faq from "./pages/Faq";
 import Help from "./pages/Help";
 import Home from "./pages/Home";
+import ComponentLibrary from "./pages/ComponentLibrary";
 
 export const MAIN_ROUTES = {
   HOME: "/",
@@ -32,6 +33,13 @@ export const AppRoutes = () => (
           <Route index element={<Project />} />
           <Route path="settings" element={<ProjectSettings />} />
         </Route>
+      </Route>
+      <Route
+        path={MAIN_ROUTES.COMPONENT_LIBRARY}
+        element={<ComponentLibrary />}
+      >
+        <Route index element={<ComponentLibrary />} />
+        <Route path="/component-library?page" />
       </Route>
     </Route>
   </Routes>
