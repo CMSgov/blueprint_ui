@@ -12,10 +12,7 @@ const PaginationPrevious = ({ onPrevious, currentPage, url }) => {
         className="usa-pagination__link usa-pagination__previous-page"
         aria-label="Previous page"
       >
-        <svg className="usa-icon" aria-hidden="true" role="img">
-          {/* <use xlink:href="/assets/img/sprite.svg#navigate_before"></use> */}
-        </svg>
-        <span className="usa-pagination__link-text">&#12296; Previous</span>
+        <span className="usa-pagination__link-text">Previous</span>
       </a>
     </li>
   );
@@ -76,10 +73,7 @@ const PaginationNext = ({ onNext, currentPage, paginationRange, url }) => {
         className="usa-pagination__link usa-pagination__next-page"
         aria-label="Next page"
       >
-        <span className="usa-pagination__link-text">Next &#12297;</span>
-        <svg className="usa-icon" aria-hidden="true" role="img">
-          {/* <use xlink:href="/assets/img/sprite.svg#navigate_next"></use> */}
-        </svg>
+        <span className="usa-pagination__link-text">Next</span>
       </a>
     </li>
   );
