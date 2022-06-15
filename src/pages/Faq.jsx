@@ -127,10 +127,7 @@ const Faq = () => {
       <div className="usa-card-group grid-row">
         <div className="usa-card__container">
           <div className="usa-card__header">
-            <h2>Do you have questions?</h2>
-          </div>
-          <div className="usa-card__body">
-            <span>Do you have questions?</span>
+            <h3>Do you have questions?</h3>
           </div>
           <div className="usa-card__footer">
             <a href="/help/contact-us">
