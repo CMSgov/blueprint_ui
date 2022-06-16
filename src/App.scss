@@ -61,7 +61,11 @@ textarea {
   margin: 0;
   max-width: 1337px;
   min-height: 100%;
+
   position: relative;
+  h3 {
+    margin-top: 40px;
+  }
 }
 nav.usa-breadcrumb {
   padding-bottom: 35px;

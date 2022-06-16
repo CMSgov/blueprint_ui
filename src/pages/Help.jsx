@@ -18,9 +18,7 @@ const Help = () => {
             </div>
             <div className="usa-card__footer">
               <a href="/help/faq">
-                <button className="usa-button usa-button--big">
-                  Read the FAQs
-                </button>
+                <button className="usa-button">Read the FAQs</button>
               </a>
             </div>
           </div>
@@ -31,13 +29,11 @@ const Help = () => {
               <h3>About CMS Rapid ATO</h3>
             </div>
             <div className="usa-card__body">
-              <span>Read more about the inititive</span>
+              <span>Read more about the initiative</span>
             </div>
             <div className="usa-card__footer">
               <a href="https://ato.cms.gov/">
-                <button className="usa-button usa-button--big">
-                  Learn more
-                </button>
+                <button className="usa-button">Learn more</button>
               </a>
             </div>
           </div>
@@ -52,9 +48,7 @@ const Help = () => {
             </div>
             <div className="usa-card__footer">
               <a href="/help/contact-us">
-                <button className="usa-button usa-button--big">
-                  Contact us
-                </button>
+                <button className="usa-button">Contact us</button>
               </a>
             </div>
           </div>
