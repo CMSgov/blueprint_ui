@@ -61,16 +61,10 @@ textarea {
   margin: 0;
   max-width: 1337px;
   min-height: 100%;
+
+  position: relative;
   h3 {
     margin-top: 40px;
-  }
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  p {
-    width: 100%;
   }
 }
 nav.usa-breadcrumb {
@@ -150,4 +144,27 @@ nav.usa-breadcrumb {
       padding-bottom: 10px;
     }
   }
+}
+
+.component-library-filter {
+  legend {
+    font-weight: 700;
+  }
+  .catalog-filter {
+    margin-top: 44px;
+  }
+}
+.usa-prose > table thead th,
+.usa-table thead th,
+.usa-prose > table thead td,
+.usa-table thead td {
+  background-color: #f0f0f0;
+}
+.usa-table--striped tbody tr:nth-child(even) td,
+.usa-table--striped tbody tr:nth-child(even) th {
+  background-color: #f0f0f0;
+}
+.usa-table--striped tbody tr:nth-child(odd) td,
+.usa-table--striped tbody tr:nth-child(odd) th {
+  background-color: white;
 }
