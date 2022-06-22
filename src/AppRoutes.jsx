@@ -10,9 +10,11 @@ import Faq from "./pages/Faq";
 import Help from "./pages/Help";
 import Home from "./pages/Home";
 import ComponentLibrary from "./pages/ComponentLibrary";
+import Healthcheck from "./pages/Healthcheck";
 
 export const MAIN_ROUTES = {
   HOME: "/",
+  HEALTHCHECK: "/healthcheck",
   COMPONENT_LIBRARY: "/component-library",
   HELP: "/help",
   PROJECTS: "/projects",
@@ -22,6 +24,7 @@ export const AppRoutes = () => (
   <Routes>
     <Route path={MAIN_ROUTES.HOME} element={<App />}>
       <Route index element={<Home />} />
+      <Route path={MAIN_ROUTES.HEALTHCHECK} element={<Healthcheck />} />
       <Route path={MAIN_ROUTES.HELP}>
         <Route index element={<Help />} />
         <Route path="contact-us" element={<ContactUs />} />
