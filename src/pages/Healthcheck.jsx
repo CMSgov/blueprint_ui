@@ -12,26 +12,20 @@ const Healthcheck = () => {
                     "Content-type": "application/json; charset=UTF-8",
                 },
             })
-            .then((healthcheck) => {
-                console.log(healthcheck)
-                if (healthcheck !== undefined) {
+                .then((healthcheck) => {
                     return setState(healthcheck.status);
-                } else {
-                    return setError(true);
-                }
-            })
+                })
                 .catch((error) => {
                     return setError(true);
                 });
         }
-    }, [setState]);
-
+    }, [status, setState]);
     if (error) {
-        return <h1>Healthcheck not working</h1>;
+        return <h1>Api healthcheck is not reachable</h1>;
     }
     return (
         <>
-            <h1>Healthcheck</h1>
+            <h1>Api healthcheck status: {status}</h1>
         </>
     );
 };
