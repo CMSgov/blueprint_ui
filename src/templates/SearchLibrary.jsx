@@ -1,23 +1,26 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Search, Table, Checkbox } from "@trussworks/react-uswds";
-import { ComponentListStub } from "../stub";
+
 import Pagination from "../molecules/Pagination";
 import { Link } from "react-router-dom";
 import { MAIN_ROUTES } from "../AppRoutes";
 
 const TableRow = ({ component }) => {
+  if (component.title === undefined) {
+    return "";
+  }
   return (
     <>
-      <td>{component.name}</td>
+      <td>{component.title}</td>
       <td>{component.description}</td>
-      <td>{component.controlCount}</td>
+      <td>{component.controls_count}</td>
     </>
   );
 };
 
-const EmptyResults = ({ lenth }) => {
-  if (lenth !== 0) {
+const EmptyResults = ({ length }) => {
+  if (length !== 0) {
     return "";
   }
   return (
@@ -28,13 +31,17 @@ const EmptyResults = ({ lenth }) => {
   );
 };
 
-const SearchLibrary = () => {
+const SearchLibrary = ({ componentList }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const componentList = ComponentListStub; // @TODO: connect this to the api instead of a stub
   const componentNameSearch = () => {
     // @TODO: connect to component search api should return 20 components based on all selected filters, # of total components
   };
-  const totalCount = componentList.length;
+  let totalCount = 0;
+  let lastItem = componentList[componentList.length - 1];
+  if (lastItem !== undefined && lastItem.total_item_count !== undefined) {
+    totalCount = lastItem.total_item_count;
+  }
+
   const baseUrl = useLocation();
   let searchParams = baseUrl.search.replaceAll("?", " ").trim();
   searchParams = searchParams.split("=");
@@ -43,6 +50,10 @@ const SearchLibrary = () => {
   }
   const onPageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+  const checkBoxHandler = ({ box, v }) => {
+    console.log(box, v);
+    // @TODO: this should be populating the query params in the url
   };
 
   return (
@@ -57,16 +68,23 @@ const SearchLibrary = () => {
         <div className="component-library-filter grid-col-2">
           <fieldset className="usa-fieldset">
             <legend className="usa-legend">Type</legend>
-            <Checkbox id="policy-filter" name="policy-filter" label="Policy" />
+            <Checkbox
+              id="policy-filter"
+              name="policy-filter"
+              label="Policy"
+              onChange={checkBoxHandler}
+            />
             <Checkbox
               id="service-filter"
               name="service-filter"
               label="Service"
+              onChange={(e) => checkBoxHandler(e.target, "service")}
             />
             <Checkbox
               id="software-filter"
               name="software-filter"
               label="Software"
+              onChange={checkBoxHandler}
             />
           </fieldset>
           <fieldset className="usa-fieldset catalog-filter">
@@ -93,7 +111,7 @@ const SearchLibrary = () => {
               ))}
             </tbody>
           </Table>
-          <EmptyResults lenth={componentList.length} />
+          <EmptyResults lenth={totalCount} />
           <Pagination
             onPageChange={onPageChange}
             totalCount={totalCount}

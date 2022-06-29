@@ -87,13 +87,16 @@ const Pagination = (props) => {
     pageSize = 20,
     baseUrl,
   } = props;
+  if (totalCount === 0 || totalCount === undefined) {
+    return "";
+  }
   const paginationRange = PaginationLogic({
     currentPage,
     totalCount,
     pageSize,
   });
   if (paginationRange.length < 2) {
-    return <></>;
+    return "";
   }
   const getUrl = (pageNumber) => {
     return baseUrl + "?page=" + pageNumber;
