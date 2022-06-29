@@ -46,6 +46,17 @@ describe("breadcrumbs & h1 show correctly on contact us page", () => {
   });
 });
 
+describe("breadcrumbs & h1 show correctly on component library page", () => {
+  it("does display on contact us page", () => {
+    cy.visit(Cypress.env("BASE_URL") + "/component-library");
+    cy.get("header").should("exist");
+    cy.get(".usa-breadcrumb").should("exist").contains("Home");
+    cy.get(".usa-breadcrumb").contains("component library");
+    cy.get("h1").contains("Component Library");
+    cy.get("footer").should("exist");
+  });
+});
+
 describe("breadcrumbs show correctly on projects page", () => {
   it("does display on projects list page", () => {
     cy.visit(Cypress.env("BASE_URL") + "/projects");
@@ -59,10 +70,41 @@ describe("breadcrumbs show correctly on projects page", () => {
 describe("breadcrumbs show correctly on projects not found page", () => {
   it("does display on project not found page", () => {
     cy.visit(Cypress.env("BASE_URL") + "/projects/0");
+    cy.intercept("GET", "/api/projects/0/").as("response");
+    cy.wait("@response");
     cy.get("header").should("exist");
     cy.get(".usa-breadcrumb").should("exist").contains("Home");
     cy.get(".usa-breadcrumb").contains("projects");
     cy.get("h1").contains("Project not found");
+    cy.get("footer").should("exist");
+  });
+});
+
+describe("breadcrumbs show correctly on projects details page", () => {
+  it("does display on project details page", () => {
+    cy.visit(Cypress.env("BASE_URL") + "/projects/1");
+    cy.intercept("GET", "/api/projects/1/").as("response");
+    cy.wait("@response");
+    cy.get("header").should("exist");
+    cy.get(".usa-breadcrumb").should("exist").contains("Home");
+    cy.get(".usa-breadcrumb").contains("projects");
+    cy.get(".usa-breadcrumb").contains("Complex Amazing Technology");
+    cy.get("h1").contains("Complex Amazing Technology (CAT)");
+    cy.get("footer").should("exist");
+  });
+});
+
+describe("breadcrumbs show correctly on projects system components page", () => {
+  it("does display on project system components page", () => {
+    cy.visit(Cypress.env("BASE_URL") + "/projects/1/system-components");
+    cy.intercept("GET", "/api/projects/1/").as("response");
+    cy.wait("@response");
+    cy.get("header").should("exist");
+    cy.get(".usa-breadcrumb").should("exist").contains("Home");
+    cy.get(".usa-breadcrumb").contains("projects");
+    cy.get(".usa-breadcrumb").contains("Complex Amazing Technology");
+    cy.get(".usa-breadcrumb").contains("system components");
+    cy.get("h1").contains("Complex Amazing Technology (CAT)");
     cy.get("footer").should("exist");
   });
 });
