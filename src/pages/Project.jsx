@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { ProjectTemplate } from "../templates/ProjectTemplate";
 import { useParams } from "react-router-dom";
-import config from "../config";
+import Config from "../config";
 import GlobalState from "../GlobalState";
 
 const Project = () => {
@@ -15,7 +15,7 @@ const Project = () => {
 
   useEffect(() => {
     if (project.id !== parseInt(id)) {
-      fetch(`${config.backendUrl}/projects/${id}/`, {
+      fetch(`${Config("backendUrl")}/projects/${id}/`, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Content-type": "application/json; charset=UTF-8",
