@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 const config = {
   backendUrl: `${process.env.REACT_APP_API_ENDPOINT}/api`,
 };
