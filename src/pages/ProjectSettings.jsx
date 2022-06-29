@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import config from "../config";
+import Config from "../config";
 import { ProjectSettingsTemplate } from "../templates/ProjectSettingsTemplate";
 import ErrorMessage from "../molecules/ErrorMessage";
 
@@ -14,7 +14,7 @@ export default function ProjectSettings() {
 
   useEffect(() => {
     if (project.id !== parseInt(id)) {
-      fetch(`${config.backendUrl}/projects/${id}/`, {
+      fetch(`${Config("backendUrl")}/projects/${id}/`, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Content-type": "application/json; charset=UTF-8",
