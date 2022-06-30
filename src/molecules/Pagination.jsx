@@ -99,7 +99,7 @@ const Pagination = (props) => {
     return "";
   }
   const getUrl = (pageNumber) => {
-    return baseUrl + "?page=" + pageNumber;
+    return baseUrl + "page=" + pageNumber;
   };
   const onNext = () => {
     onPageChange(currentPage + 1);
