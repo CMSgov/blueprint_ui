@@ -18,7 +18,8 @@ We leverage two different sets of tests:
 2. [Cypress](https://docs.cypress.io/) - for end to end tests and some integration tests
 
 ### React Testing Library
-To run manually in a terminal window, run: <br>
+To run manually, open a shell terminal in the repo's docker container (e.g. `docker exec -it blueprint_ui_1 sh`). From there the following commands can be run: <br>
+
 *By default, the test commands will go into watch mode and rerun as you save code changes.* <br>
 `npm test` or `npm run test`
 
