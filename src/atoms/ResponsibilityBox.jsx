@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-
+import classNames from "classnames";
 export default function ResponsibilityBox({ responsibility }) {
   const RESPONSIBILITY_MAP = {
     none: {
@@ -35,8 +35,14 @@ export default function ResponsibilityBox({ responsibility }) {
   const title = RESPONSIBILITY_MAP[responsibility].title;
   const content = RESPONSIBILITY_MAP[responsibility].content;
 
+  const boxClass = classNames({
+    "responsibility-box--yellow":
+      responsibility === "some" || responsibility === "all",
+    "responsibility-box--green": responsibility === "none",
+  });
+
   return (
-    <div className="responsibility-box--yellow">
+    <div className={boxClass}>
       <div>
         {title}
         <ul className="responsibility-list">

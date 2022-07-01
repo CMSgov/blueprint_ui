@@ -7,6 +7,7 @@ import ErrorMessage from "../molecules/ErrorMessage";
 
 const sampleData = {
   controlId: "ac-1",
+  controlTitle: "Access Control Policy and Procedures",
   version: "5",
   family: "ac",
   description: "some stuff",

@@ -1,43 +1,40 @@
+import PropTypes from "prop-types";
+import { Accordion, Checkbox, Textarea } from "@trussworks/react-uswds";
 import ProjectHeader from "../molecules/ProjectHeader";
 import ResponsibilityBox from "../atoms/ResponsibilityBox";
-import { Accordion, Textarea } from "@trussworks/react-uswds";
-
-// const sampleData = {
-//   controlId: "ac-1", version: "5", family: "ac", description: "some stuff" }
 
 export function ControlTemplate({ project, control }) {
-  const { id, acronym, title } = project;
+  const { id: projectId, acronym, title } = project;
   const {
     controlId,
     version,
     family,
-    name,
+    controlTitle,
     description,
     guidance,
     responsibility,
   } = control;
-  // const { controlId, version, family, name, description, narrative } = control;
 
   const accordionItemsProps = [
     {
       title: "CMS Implementation Standards",
       content: <p>{guidance}</p>,
       expanded: false,
-      id: "implementation-standards",
+      id: "implementation_standards",
       headingLevel: "h3",
     },
     {
       title: "CMS Control Guidance",
       content: <p>{guidance}</p>,
       expanded: false,
-      id: "control-guidance",
+      id: "control_guidance",
       headingLevel: "h3",
     },
     {
       title: "Inherited Narratives",
       content: <p>{guidance}</p>,
       expanded: false,
-      id: "inherited-narratives",
+      id: "inherited_narratives",
       headingLevel: "h3",
     },
     {
@@ -49,16 +46,16 @@ export function ControlTemplate({ project, control }) {
         />
       ),
       expanded: false,
-      id: "private-narratives",
+      id: "private_narratives",
       headingLevel: "h3",
     },
   ];
 
-  const subtitle = `System Control: ${controlId}`;
+  const subtitle = `System Control: ${controlId.toUpperCase()} ${controlTitle}`;
   return (
-    <div className="project-page control-page">
+    <div className="control-page">
       <ProjectHeader
-        id={id}
+        id={projectId}
         acronym={acronym}
         subtitle={subtitle}
         title={title}
@@ -72,7 +69,7 @@ export function ControlTemplate({ project, control }) {
       <p>
         <b>Control Description:</b> {description}
       </p>
-      <ResponsibilityBox responsibility="some" />
+      <ResponsibilityBox responsibility={responsibility} />
       <Accordion
         items={accordionItemsProps}
         multiselectable
@@ -80,9 +77,29 @@ export function ControlTemplate({ project, control }) {
         className={"control-page-accordion"}
       />
       <hr />
-      <a href={`/projects/${id}/controls`}>
-        <button className="usa-button">Save & next</button>
-      </a>
+      <div className="bottom-section">
+        <Checkbox id="is_complete_checkbox" label="Mark as complete" />
+        <a href={`/projects/${projectId}/controls`}>
+          <button className="usa-button">Save & next</button>
+        </a>
+      </div>
     </div>
   );
 }
+
+ControlTemplate.propTypes = {
+  project: PropTypes.shape({
+    id: PropTypes.number,
+    acronym: PropTypes.string,
+    title: PropTypes.string,
+  }).isRequired,
+  control: PropTypes.shape({
+    controlId: PropTypes.string,
+    version: PropTypes.string,
+    family: PropTypes.string,
+    controlTitle: PropTypes.string,
+    description: PropTypes.string,
+    guidance: PropTypes.string,
+    responsibility: PropTypes.oneOf(["none", "some", "all"]).isRequired,
+  }),
+};
