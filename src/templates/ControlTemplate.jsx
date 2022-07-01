@@ -72,7 +72,7 @@ export function ControlTemplate({ project, control }) {
       <p>
         <b>Control Description:</b> {description}
       </p>
-      <ResponsibilityBox responsibility={1} />
+      <ResponsibilityBox responsibility="some" />
       <Accordion
         items={accordionItemsProps}
         multiselectable
