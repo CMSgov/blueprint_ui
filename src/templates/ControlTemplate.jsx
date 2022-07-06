@@ -75,13 +75,13 @@ export default function ControlTemplate({
         subtitle={subtitle}
         title={title}
       />
-      <p>
+      <p data-testid="control_version">
         <b>Version:</b> {version}
       </p>
-      <p>
+      <p data-testid="control_family">
         <b>Control Family:</b> {family}
       </p>
-      <p>
+      <p data-testid="control_description">
         <b>Control Description:</b> {description}
       </p>
       <ResponsibilityBox responsibility={responsibility} />

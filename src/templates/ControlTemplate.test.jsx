@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import "@testing-library/jest-dom";
 import ControlTemplate from "./ControlTemplate";
@@ -24,6 +24,52 @@ const nextControlId = "ac-2";
 const inheritedComponentNarratives =
   "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.";
 
+test("renders each section on the page", () => {
+  render(
+    <MemoryRouter>
+      <ControlTemplate
+        project={projectData}
+        control={controlData}
+        nextControlId={nextControlId}
+        inheritedComponentNarratives={inheritedComponentNarratives}
+      />
+    </MemoryRouter>
+  );
+
+  const expectedVersion = `Version: ${controlData.version}`;
+  const expectedFamily = `Control Family: ${controlData.family}`;
+  const expectedDescription = `Control Description: ${controlData.description}`;
+
+  expect(screen.getByTestId("control_version")).toHaveTextContent(
+    expectedVersion
+  );
+  expect(screen.getByTestId("control_family")).toHaveTextContent(
+    expectedFamily
+  );
+  expect(screen.getByTestId("control_description")).toHaveTextContent(
+    expectedDescription
+  );
+  expect(screen.getByTestId("responsibility_box")).toBeInTheDocument();
+
+  const accordionSection = screen.getByTestId("accordion");
+  const implementationAccordion = within(accordionSection).getByText(
+    "CMS Implementation Standards"
+  );
+  const guidanceAccordion = within(accordionSection).getByText(
+    "CMS Control Guidance"
+  );
+  const inheritedNarrativesAccordion = within(accordionSection).getByText(
+    "Inherited Narratives"
+  );
+  const privateNarrativesAccordion = within(accordionSection).getByText(
+    "Private (System-Specific) Narratives"
+  );
+  expect(implementationAccordion).toBeInTheDocument();
+  expect(guidanceAccordion).toBeInTheDocument();
+  expect(inheritedNarrativesAccordion).toBeInTheDocument();
+  expect(privateNarrativesAccordion).toBeInTheDocument();
+});
+
 test("subtitle displays with capitalized control id and control title", () => {
   render(
     <MemoryRouter>
@@ -31,6 +77,7 @@ test("subtitle displays with capitalized control id and control title", () => {
         project={projectData}
         control={controlData}
         nextControlId={nextControlId}
+        inheritedComponentNarratives={inheritedComponentNarratives}
       />
     </MemoryRouter>
   );
@@ -50,6 +97,7 @@ test("save & next button links to next control page when nextControlId is passed
         project={projectData}
         control={controlData}
         nextControlId={nextControlId}
+        inheritedComponentNarratives={inheritedComponentNarratives}
       />
     </MemoryRouter>
   );
@@ -63,7 +111,11 @@ test("save & next button links to next control page when nextControlId is passed
 test("save & next button links to project controls page when nextControlId is NOT passed in", () => {
   render(
     <MemoryRouter>
-      <ControlTemplate project={projectData} control={controlData} />
+      <ControlTemplate
+        project={projectData}
+        control={controlData}
+        inheritedComponentNarratives={inheritedComponentNarratives}
+      />
     </MemoryRouter>
   );
 
