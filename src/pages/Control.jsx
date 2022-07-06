@@ -58,5 +58,6 @@ export default function Control() {
         inheritedComponentNarratives={mockInheritedComponentNarratives}
       />
     );
-  } else return <ErrorMessage message={errorMessage} />;
+  }
+  return <ErrorMessage message={errorMessage} />;
 }
