@@ -3,7 +3,12 @@ import { Accordion, Checkbox, Textarea } from "@trussworks/react-uswds";
 import ProjectHeader from "../molecules/ProjectHeader";
 import ResponsibilityBox from "../atoms/ResponsibilityBox";
 
-export function ControlTemplate({ project, control }) {
+export default function ControlTemplate({
+  project,
+  control,
+  nextControlId,
+  inheritedComponentNarratives,
+}) {
   const { id: projectId, acronym, title } = project;
   const {
     controlId,
@@ -11,6 +16,7 @@ export function ControlTemplate({ project, control }) {
     family,
     controlTitle,
     description,
+    implementationStandards,
     guidance,
     responsibility,
   } = control;
@@ -18,7 +24,7 @@ export function ControlTemplate({ project, control }) {
   const accordionItemsProps = [
     {
       title: "CMS Implementation Standards",
-      content: <p>{guidance}</p>,
+      content: <p>{implementationStandards}</p>,
       expanded: false,
       id: "implementation_standards",
       headingLevel: "h3",
@@ -32,7 +38,7 @@ export function ControlTemplate({ project, control }) {
     },
     {
       title: "Inherited Narratives",
-      content: <p>{guidance}</p>,
+      content: <p>{inheritedComponentNarratives}</p>,
       expanded: false,
       id: "inherited_narratives",
       headingLevel: "h3",
@@ -52,6 +58,15 @@ export function ControlTemplate({ project, control }) {
   ];
 
   const subtitle = `System Control: ${controlId.toUpperCase()} ${controlTitle}`;
+
+  function getNextButtonLink() {
+    let nextButtonLink = `/projects/${projectId}/controls/`;
+    if (nextControlId) {
+      nextButtonLink = `/projects/${projectId}/controls/${nextControlId}`;
+    }
+    return nextButtonLink;
+  }
+
   return (
     <div className="control-page">
       <ProjectHeader
@@ -79,7 +94,7 @@ export function ControlTemplate({ project, control }) {
       <hr />
       <div className="bottom-section">
         <Checkbox id="is_complete_checkbox" label="Mark as complete" />
-        <a href={`/projects/${projectId}/controls`}>
+        <a href={getNextButtonLink()}>
           <button className="usa-button">Save & next</button>
         </a>
       </div>
@@ -102,4 +117,5 @@ ControlTemplate.propTypes = {
     guidance: PropTypes.string,
     responsibility: PropTypes.oneOf(["none", "some", "all"]).isRequired,
   }),
+  nextControlId: PropTypes.string,
 };
