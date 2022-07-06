@@ -1,9 +1,10 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import Config from "../config";
 import ControlTemplate from "../templates/ControlTemplate";
 import ErrorMessage from "../molecules/ErrorMessage";
+import GlobalState from "../GlobalState";
 
 const mockControlData = {
   controlId: "ac-1",
@@ -27,8 +28,13 @@ export default function Control() {
   const { id, controlId } = useParams();
 
   const [error, setError] = useState(false);
+  const [state, setState] = useContext(GlobalState);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [project, setProject] = useState({});
+
+  let project = {};
+  if (state.project !== undefined) {
+    project = state.project;
+  }
 
   useEffect(() => {
     if (project.id !== parseInt(id)) {
@@ -39,13 +45,13 @@ export default function Control() {
         },
       })
         .then((response) => response.json())
-        .then((jsonResponse) => {
-          if (jsonResponse !== undefined && jsonResponse.id !== undefined) {
-            return setProject(jsonResponse);
+        .then((project) => {
+          if (project !== undefined && project.id !== undefined) {
+            return setState((state) => ({ ...state, project: project }));
           } else {
             // extract the response message to use as the error mesage or use backup message
             setErrorMessage(
-              jsonResponse.response || "Error loading project control"
+              project.response || "Error loading project control"
             );
             return setError(true);
           }
@@ -54,7 +60,7 @@ export default function Control() {
           return setError(true);
         });
     }
-  }, [id, project]);
+  }, [id, project, setState]);
 
   if (!error && Object.keys(project).length > 0) {
     return (
