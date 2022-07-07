@@ -12,13 +12,13 @@ export default function ControlTemplate({
   const { id: projectId, acronym, title } = project;
   const {
     controlId,
-    version,
-    family,
     controlTitle,
     description,
-    implementationStandards,
+    family,
     guidance,
+    implementationStandards,
     responsibility,
+    version,
   } = control;
 
   const accordionItemsProps = [
@@ -110,12 +110,13 @@ ControlTemplate.propTypes = {
   }).isRequired,
   control: PropTypes.shape({
     controlId: PropTypes.string,
-    version: PropTypes.string,
-    family: PropTypes.string,
     controlTitle: PropTypes.string,
     description: PropTypes.string,
+    family: PropTypes.string,
     guidance: PropTypes.string,
+    implementationStandards: PropTypes.string,
     responsibility: PropTypes.oneOf(["none", "some", "all"]).isRequired,
+    version: PropTypes.string,
   }),
   nextControlId: PropTypes.string,
 };
