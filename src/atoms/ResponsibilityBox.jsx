@@ -45,7 +45,7 @@ export default function ResponsibilityBox({ responsibility }) {
   return (
     <div className={boxClass} data-testid="responsibility_box">
       <div>
-        {title}
+        <b>{title}</b>
         <ul className="responsibility-list">
           {content.map((listItem, index) => (
             <li key={index}>{listItem}</li>
