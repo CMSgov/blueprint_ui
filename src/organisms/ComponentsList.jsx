@@ -1,5 +1,8 @@
 import Component from "../molecules/Component";
+import { useLocation } from "react-router-dom";
 const ComponentsList = ({ componentList }) => {
+  const params = useLocation();
+  const manageComponentsUrl = params.pathname + "/system-components";
   return (
     <>
       {componentList.map((component, i) => (
@@ -7,7 +10,9 @@ const ComponentsList = ({ componentList }) => {
           <Component component={component} />
         </div>
       ))}
-      <button className="usa-button">Manage System Components</button>
+      <a href={manageComponentsUrl}>
+        <button className="usa-button">Manage System Components</button>
+      </a>
     </>
   );
 };

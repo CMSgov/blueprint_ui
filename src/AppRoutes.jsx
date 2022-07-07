@@ -11,6 +11,7 @@ import Help from "./pages/Help";
 import Home from "./pages/Home";
 import ComponentLibrary from "./pages/ComponentLibrary";
 import Healthcheck from "./pages/Healthcheck";
+import ProjectSystemComponents from "./pages/ProjectSystemComponents";
 
 export const MAIN_ROUTES = {
   HOME: "/",
@@ -35,6 +36,10 @@ export const AppRoutes = () => (
         <Route path=":id">
           <Route index element={<Project />} />
           <Route path="settings" element={<ProjectSettings />} />
+          <Route
+            path="system-components"
+            element={<ProjectSystemComponents />}
+          />
         </Route>
       </Route>
       <Route

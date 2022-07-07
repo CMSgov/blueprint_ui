@@ -1,13 +1,16 @@
 import { useState, useEffect, useContext } from "react";
-import { ProjectTemplate } from "../templates/ProjectTemplate";
 import { useParams } from "react-router-dom";
 import Config from "../config";
+import ErrorMessage from "../molecules/ErrorMessage";
 import GlobalState from "../GlobalState";
+import ProjectSystemComponentsTemplate from "../templates/ProjectSystemComponentsTemplate";
 
-const Project = () => {
+const ProjectSystemComponents = () => {
   const { id } = useParams();
   const [error, setError] = useState(false);
   const [state, setState] = useContext(GlobalState);
+  const [errorMessage, setErrorMessage] = useState(null);
+
   let project = state.project;
   if (state.project === undefined) {
     project = {};
@@ -26,6 +29,7 @@ const Project = () => {
           if (project !== undefined && project.id !== undefined) {
             return setState((state) => ({ ...state, project: project }));
           } else {
+            setErrorMessage("Error loading project information");
             return setError(true);
           }
         })
@@ -36,13 +40,9 @@ const Project = () => {
   }, [id, project, setState]);
 
   if (error) {
-    return <h1>Project not found</h1>;
+    return <ErrorMessage message={errorMessage} />;
   }
-  return (
-    <>
-      <ProjectTemplate project={project} />
-    </>
-  );
+  return <ProjectSystemComponentsTemplate project={project} />;
 };
 
-export default Project;
+export default ProjectSystemComponents;
