@@ -1,4 +1,8 @@
+$green-background: #ecf3ec;
+$green-button: #4d8055;
 $primary-blue: #005ea2;
+$yellow-background: #faf3d1;
+
 html,
 body {
   height: 100%;
@@ -59,7 +63,6 @@ textarea {
 .main-content-body {
   padding: 0 100px 95px;
   margin: 0;
-  max-width: 1337px;
   min-height: 100%;
 
   position: relative;
@@ -116,16 +119,19 @@ nav.usa-breadcrumb {
   }
 }
 
-.project-page {
+.project-header {
   .title,
   a {
     @extend .link-title;
     font-size: 40px;
+    margin-top: 0;
   }
   .subtitle {
     font-size: 32px;
-    margin-bottom: 40px;
   }
+}
+
+.project-settings-page {
   .settings-description {
     margin-bottom: 30px;
     font-size: 22px;
@@ -141,8 +147,60 @@ nav.usa-breadcrumb {
     font-size: 20px;
     margin-bottom: 55px;
     .above-button-text {
-      padding-bottom: 10px;
+      padding-bottom: 18px;
     }
+  }
+}
+
+.control-page {
+  hr {
+    margin: 40px 0 25px;
+    background-color: #979797;
+    height: 1px;
+    border: none;
+  }
+  .control-page-accordion {
+    p {
+      font-size: 16px;
+      max-width: 100%;
+    }
+    .usa-accordion__heading {
+      margin-top: 35px;
+      font-size: 18px;
+      .usa-accordion__button {
+        color: #343434;
+      }
+    }
+  }
+  .control-page-textarea {
+    border: none;
+    max-width: 100%;
+  }
+  .bottom-section {
+    display: flex;
+    justify-content: space-between;
+    button {
+      background-color: $green-button;
+    }
+  }
+}
+
+.responsibility-box {
+  margin-top: 25px;
+  padding: 16px 18px;
+  line-height: 26px;
+  width: 100%;
+  &--yellow {
+    @extend .responsibility-box;
+    background-color: $yellow-background;
+  }
+  &--green {
+    @extend .responsibility-box;
+    background-color: $green-background;
+  }
+  .responsibility-list {
+    margin-bottom: 0;
+    margin-top: 10px;
   }
 }
 

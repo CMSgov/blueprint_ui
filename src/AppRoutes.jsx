@@ -4,6 +4,8 @@ import { Route, Routes } from "react-router-dom";
 import App from "./App";
 import Projects from "./pages/Projects";
 import Project from "./pages/Project";
+import Controls from "./pages/Controls";
+import Control from "./pages/Control";
 import ProjectSettings from "./pages/ProjectSettings";
 import ContactUs from "./pages/ContactUs";
 import Faq from "./pages/Faq";
@@ -40,6 +42,10 @@ export const AppRoutes = () => (
             path="system-components"
             element={<ProjectSystemComponents />}
           />
+          <Route path="controls">
+            <Route index element={<Controls />} />
+            <Route path=":controlId" element={<Control />} />
+          </Route>
         </Route>
       </Route>
       <Route

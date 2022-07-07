@@ -5,7 +5,7 @@ export function ProjectSettingsTemplate({ project }) {
   const { id, acronym, impact_level, location, title } = project;
   const subtitle = "Project Settings";
   return (
-    <div className="project-page">
+    <div className="project-settings-page">
       <ProjectHeader
         id={id}
         acronym={acronym}

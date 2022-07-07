@@ -40,5 +40,6 @@ export default function ProjectSettings() {
 
   if (!error && Object.keys(project).length > 0) {
     return <ProjectSettingsTemplate project={project} />;
-  } else return <ErrorMessage message={errorMessage} />;
+  }
+  return <ErrorMessage message={errorMessage} />;
 }

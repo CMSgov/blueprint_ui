@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function ProjectHeader({ id, acronym, subtitle, title }) {
   const projectsHomeUrl = `/projects/${id}`;
   return (
-    <div id="project_header">
+    <div className="project-header" id="project_header">
       <h1
         className="title"
         id="project_header_title_acronym"
