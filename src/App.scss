@@ -1,22 +1,32 @@
+// Color Variables
+$blue-primary: #005ea2;
+$blue-dark-background: #1a2e4e;
+
 $green-background: #ecf3ec;
 $green-button: #4d8055;
-$primary-blue: #005ea2;
+
 $yellow-background: #faf3d1;
+
+$gray-light: #f0f0f0;
+$gray-dark: #979797;
+$gray-darker: #71767a;
+$gray-darkest: #343434;
+$white: #fff;
 
 html,
 body {
   height: 100%;
 }
 .link-title {
-  color: $primary-blue;
+  color: $blue-primary;
   text-decoration: none;
 }
 
 .site-header-dark {
-  background-color: #1a2e4e;
-  color: #fff;
+  background-color: $blue-dark-background;
+  color: $white;
   a {
-    color: #fff;
+    color: $white;
   }
 }
 .site-header-navbar {
@@ -28,7 +38,7 @@ body {
   svg.site-logo {
     width: 125px;
     .cls-1 {
-      fill: #fff;
+      fill: $white;
     }
     .cls-2 {
       fill: #2e9cf3;
@@ -81,7 +91,7 @@ nav.usa-breadcrumb {
   bottom: 0;
   width: 100%;
   text-align: center;
-  background-color: #f0f0f0;
+  background-color: $gray-light;
   height: 50px;
   padding-top: 14px;
   margin-top: 30px;
@@ -94,10 +104,10 @@ nav.usa-breadcrumb {
   }
   a {
     text-decoration: none;
-    color: $primary-blue;
+    color: $blue-primary;
   }
   span.footer-item {
-    color: #71767a;
+    color: $gray-darker;
   }
 }
 @media (max-width: 720px) {
@@ -120,14 +130,27 @@ nav.usa-breadcrumb {
 }
 
 .project-header {
+  margin-bottom: 30px;
   .title,
   a {
     @extend .link-title;
     font-size: 40px;
     margin-top: 0;
+    margin-bottom: 0;
+  }
+  .impact-level {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    .gear-link {
+      display: flex;
+      margin-left: 5px;
+    }
   }
   .subtitle {
     font-size: 32px;
+    margin-top: 26px;
   }
 }
 
@@ -155,7 +178,7 @@ nav.usa-breadcrumb {
 .control-page {
   hr {
     margin: 40px 0 25px;
-    background-color: #979797;
+    background-color: $gray-dark;
     height: 1px;
     border: none;
   }
@@ -168,7 +191,7 @@ nav.usa-breadcrumb {
       margin-top: 35px;
       font-size: 18px;
       .usa-accordion__button {
-        color: #343434;
+        color: $gray-darkest;
       }
     }
   }
@@ -216,11 +239,11 @@ nav.usa-breadcrumb {
 .usa-table thead th,
 .usa-prose > table thead td,
 .usa-table thead td {
-  background-color: #f0f0f0;
+  background-color: $gray-light;
 }
 .usa-table--striped tbody tr:nth-child(even) td,
 .usa-table--striped tbody tr:nth-child(even) th {
-  background-color: #f0f0f0;
+  background-color: $gray-light;
 }
 .usa-table--striped tbody tr:nth-child(odd) td,
 .usa-table--striped tbody tr:nth-child(odd) th {
