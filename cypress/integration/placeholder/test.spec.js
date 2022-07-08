@@ -74,7 +74,7 @@ describe("breadcrumbs show correctly on project setup page", () => {
     cy.visit(Cypress.env("BASE_URL") + "/project-setup");
     cy.get("header").should("exist");
     cy.get(".usa-breadcrumb").should("exist").contains("Home");
-    cy.get(".usa-breadcrumb").contains("Project Setup");
+    cy.get(".usa-breadcrumb").contains("project setup");
     cy.get("h1").should("exist").contains("Tell us a little about this system");
     cy.get("footer").should("exist");
   });
@@ -85,8 +85,8 @@ describe("breadcrumbs show correctly on project setup confirmation page", () => 
     cy.visit(Cypress.env("BASE_URL") + "/project-setup/confirmation");
     cy.get("header").should("exist");
     cy.get(".usa-breadcrumb").should("exist").contains("Home");
-    cy.get(".usa-breadcrumb").contains("Project Setup");
-    cy.get(".usa-breadcrumb").contains("Confirmation");
+    cy.get(".usa-breadcrumb").contains("project setup");
+    cy.get(".usa-breadcrumb").contains("confirmation");
     cy.get("h1").should("exist").contains("Inherited policies and procedures");
     cy.get("footer").should("exist");
   });
