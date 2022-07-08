@@ -12,6 +12,8 @@ import Home from "./pages/Home";
 import ComponentLibrary from "./pages/ComponentLibrary";
 import Healthcheck from "./pages/Healthcheck";
 import ProjectSystemComponents from "./pages/ProjectSystemComponents";
+import ProjectSetup from "./pages/ProjectSetup";
+import ProjectSetupConfirmation from "./pages/ProjectSetupConfirmation";
 
 export const MAIN_ROUTES = {
   HOME: "/",
@@ -19,6 +21,7 @@ export const MAIN_ROUTES = {
   COMPONENT_LIBRARY: "/component-library",
   HELP: "/help",
   PROJECTS: "/projects",
+  PROJECT_SETUP: "/project-setup",
 };
 
 export const AppRoutes = () => (
@@ -48,6 +51,10 @@ export const AppRoutes = () => (
       >
         <Route index element={<ComponentLibrary />} />
         <Route path="/component-library?page" />
+      </Route>
+      <Route path={MAIN_ROUTES.PROJECT_SETUP}>
+        <Route index element={<ProjectSetup />} />
+        <Route path="confirmation" element={<ProjectSetupConfirmation />} />
       </Route>
     </Route>
   </Routes>
