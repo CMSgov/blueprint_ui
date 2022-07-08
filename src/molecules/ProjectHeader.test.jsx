@@ -51,7 +51,6 @@ test("project name links to project homepage", () => {
       <ProjectHeader
         id={projectData.id}
         acronym={projectData.acronym}
-        subtitle={projectData.subtitle}
         title={projectData.title}
       />
     </MemoryRouter>
@@ -61,4 +60,28 @@ test("project name links to project homepage", () => {
   const projectHomepageUrl = `/projects/${projectData.id}`;
   const linkElement = screen.getByRole("link", { name: projectName });
   expect(linkElement).toHaveAttribute("href", projectHomepageUrl);
+});
+
+test("gear icon next to impact level links to project settings page", () => {
+  const projectData = {
+    id: 1,
+    acronym: "MAP",
+    impactLevel: "Low",
+    title: "Most Awesomest Project",
+  };
+
+  render(
+    <MemoryRouter>
+      <ProjectHeader
+        id={projectData.id}
+        acronym={projectData.acronym}
+        impactLevel={projectData.impactLevel}
+        title={projectData.title}
+      />
+    </MemoryRouter>
+  );
+
+  const projectSettingsUrl = `/projects/${projectData.id}/settings`;
+  const linkElement = screen.getByTestId("gear_link");
+  expect(linkElement).toHaveAttribute("href", projectSettingsUrl);
 });

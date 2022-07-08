@@ -26,7 +26,11 @@ export default function ProjectHeader({
           data-testid="project_header_impact_level"
         >
           FISMA Impact Level: {impactLevel}
-          <Link to={projectSettingsUrl} className="gear-link">
+          <Link
+            to={projectSettingsUrl}
+            className="gear-link"
+            data-testid="gear_link"
+          >
             <img src="/icons/gear.svg" alt="link to project settings page" />
           </Link>
         </div>
