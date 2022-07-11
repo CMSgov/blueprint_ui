@@ -51,12 +51,10 @@ const ProjectSystemComponentsTemplate = ({ project }) => {
         You can add components by visiting the{" "}
         <Link to={MAIN_ROUTES.COMPONENT_LIBRARY}>Component Library</Link>.
       </p>
-      <Link to={MAIN_ROUTES.COMPONENT_LIBRARY}>
-        <button className="usa-button usa-button--outline">
-          Add from the Component Library
-        </button>
-      </Link>
-      <SearchLibrary componentList={componentList} />
+      <SearchLibrary
+        componentList={componentList}
+        linkToComponentLibrary={true}
+      />
     </>
   );
 };
