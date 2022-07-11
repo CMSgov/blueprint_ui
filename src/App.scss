@@ -69,6 +69,17 @@ textarea {
   h3 {
     margin-top: 40px;
   }
+  .bold-text {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .sub-header-text {
+    font-size: 22px;
+    line-height: 35px;
+  }
+  .top-space-40 {
+    margin-top: 40px;
+  }
 }
 nav.usa-breadcrumb {
   padding-bottom: 35px;
@@ -225,4 +236,14 @@ nav.usa-breadcrumb {
 .usa-table--striped tbody tr:nth-child(odd) td,
 .usa-table--striped tbody tr:nth-child(odd) th {
   background-color: white;
+}
+
+.usa-checkbox__input--tile + [class*="__label"],
+.usa-radio__input--tile + [class*="__label"] {
+  background: #f0f0f0;
+}
+@media (min-width: 30em) {
+  .usa-form {
+    max-width: 22rem;
+  }
 }
