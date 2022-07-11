@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
-export default function ProjectHeader({ id, acronym, subtitle, title }) {
-  const projectsHomeUrl = `/projects/${id}`;
+export default function ProjectHeader({
+  id,
+  acronym,
+  impactLevel,
+  subtitle,
+  title,
+}) {
+  const projectHomeUrl = `/projects/${id}`;
+  const projectSettingsUrl = `/projects/${id}/settings`;
   return (
     <div className="project-header" id="project_header">
       <h1
@@ -9,15 +17,41 @@ export default function ProjectHeader({ id, acronym, subtitle, title }) {
         id="project_header_title_acronym"
         data-testid="project_header_title_acronym"
       >
-        <Link to={projectsHomeUrl}>{`${title} (${acronym})`}</Link>
+        <Link to={projectHomeUrl}>{`${title} (${acronym})`}</Link>
       </h1>
-      <h2
-        className="subtitle"
-        id="project_header_subtitle"
-        data-testid="project_header_subtitle"
-      >
-        {subtitle}
-      </h2>
+      {impactLevel && (
+        <div
+          className="impact-level"
+          id="project_header_impact_level"
+          data-testid="project_header_impact_level"
+        >
+          FISMA Impact Level: {impactLevel}
+          <Link
+            to={projectSettingsUrl}
+            className="gear-link"
+            data-testid="gear_link"
+          >
+            <img src="/icons/gear.svg" alt="link to project settings page" />
+          </Link>
+        </div>
+      )}
+      {subtitle && (
+        <h2
+          className="subtitle"
+          id="project_header_subtitle"
+          data-testid="project_header_subtitle"
+        >
+          {subtitle}
+        </h2>
+      )}
     </div>
   );
 }
+
+ProjectHeader.propTypes = {
+  id: PropTypes.number.isRequired,
+  acronym: PropTypes.string.isRequired,
+  impactLevel: PropTypes.string,
+  subtitle: PropTypes.string,
+  title: PropTypes.string.isRequired,
+};
