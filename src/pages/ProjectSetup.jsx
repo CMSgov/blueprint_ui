@@ -101,6 +101,10 @@ const ProjectSetup = () => {
     }
   };
 
+  if (project) {
+    localStorage.setItem("project", JSON.stringify(project));
+  }
+
   return (
     <>
       {project && <Navigate to="/project-setup/confirmation" />}
