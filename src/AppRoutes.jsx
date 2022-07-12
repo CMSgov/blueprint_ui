@@ -16,6 +16,7 @@ import Healthcheck from "./pages/Healthcheck";
 import ProjectSystemComponents from "./pages/ProjectSystemComponents";
 import ProjectSetup from "./pages/ProjectSetup";
 import ProjectSetupConfirmation from "./pages/ProjectSetupConfirmation";
+import ProjectSystemSecurityPlan from "./pages/ProjectSystemSecurityPlan";
 
 export const MAIN_ROUTES = {
   HOME: "/",
@@ -49,6 +50,10 @@ export const AppRoutes = () => (
             <Route index element={<Controls />} />
             <Route path=":controlId" element={<Control />} />
           </Route>
+          <Route
+            path="system-security-plan"
+            element={<ProjectSystemSecurityPlan />}
+          />
         </Route>
       </Route>
       <Route
