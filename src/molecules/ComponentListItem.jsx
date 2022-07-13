@@ -1,4 +1,4 @@
-const Component = ({ component }) => {
+export const ComponentListItem = ({ component }) => {
   return (
     <>
       {component.name}
@@ -6,5 +6,3 @@ const Component = ({ component }) => {
     </>
   );
 };
-
-export default Component;

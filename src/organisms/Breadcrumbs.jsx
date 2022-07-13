@@ -1,12 +1,12 @@
 import {
-  BreadcrumbBar,
   Breadcrumb,
+  BreadcrumbBar,
   BreadcrumbLink,
 } from "@trussworks/react-uswds";
 import { useContext } from "react";
 import { useLocation } from "react-router-dom";
-import GlobalState from "../GlobalState";
 import { MAIN_ROUTES } from "../AppRoutes";
+import GlobalState from "../GlobalState";
 
 const ParentBreadcrumbs = ({ parent }) => {
   return <BreadcrumbLink href={parent.url}>{parent.title}</BreadcrumbLink>;
@@ -51,10 +51,16 @@ const Breadcrumbs = () => {
   setPageName(pathArray[pathArray.length - 1]);
   if (pathArray[1] === "contact-us" || pathArray[1] === "faq") {
     appendToParentList("help", "/help");
-  } else if (pathArray[0] === "component-library") {
-    appendToParentList("component library", "/component-library");
-    // @TODO: when we have a component module convert pathArray[1] to component.title
-    // should be similar to the project section pulling from the global state
+  } else if (pathArray[0] === "components") {
+    appendToParentList("components", "/components");
+    let title = "";
+    if (state.component !== undefined && state.component.title !== undefined) {
+      title = state.component.title;
+    }
+
+    if (pathArray.length === 2) {
+      setPageName(title);
+    }
   } else if (pathArray[0] === "project-setup") {
     appendToParentList("project setup", "/project-setup");
     if (pathArray.length === 3) {

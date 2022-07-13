@@ -2,28 +2,29 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 
 import App from "./App";
-import Projects from "./pages/Projects";
-import Project from "./pages/Project";
-import Controls from "./pages/Controls";
-import Control from "./pages/Control";
-import ProjectSettings from "./pages/ProjectSettings";
+import Component from "./pages/Component";
+import ComponentLibrary from "./pages/ComponentLibrary";
 import ContactUs from "./pages/ContactUs";
+import Control from "./pages/Control";
+import Controls from "./pages/Controls";
 import Faq from "./pages/Faq";
+import Healthcheck from "./pages/Healthcheck";
 import Help from "./pages/Help";
 import Home from "./pages/Home";
-import ComponentLibrary from "./pages/ComponentLibrary";
-import Healthcheck from "./pages/Healthcheck";
-import ProjectSystemComponents from "./pages/ProjectSystemComponents";
+import Project from "./pages/Project";
+import Projects from "./pages/Projects";
+import ProjectSettings from "./pages/ProjectSettings";
 import ProjectSetup from "./pages/ProjectSetup";
 import ProjectSetupConfirmation from "./pages/ProjectSetupConfirmation";
 import ProjectSystemSecurityPlan from "./pages/ProjectSystemSecurityPlan";
 import ProjectSetupSelectComponents from "./pages/ProjectSetupSelectComponents";
+import ProjectSystemComponents from "./pages/ProjectSystemComponents";
 
 
 export const MAIN_ROUTES = {
   HOME: "/",
   HEALTHCHECK: "/healthcheck",
-  COMPONENT_LIBRARY: "/component-library",
+  COMPONENT_LIBRARY: "/components",
   HELP: "/help",
   PROJECTS: "/projects",
   PROJECT_SETUP: "/project-setup",
@@ -58,12 +59,12 @@ export const AppRoutes = () => (
           />
         </Route>
       </Route>
-      <Route
-        path={MAIN_ROUTES.COMPONENT_LIBRARY}
-        element={<ComponentLibrary />}
-      >
+      <Route path={MAIN_ROUTES.COMPONENT_LIBRARY}>
         <Route index element={<ComponentLibrary />} />
-        <Route path="/component-library?page" />
+        <Route path="/components?page" />
+        <Route path=":componentId">
+          <Route index element={<Component />} />
+        </Route>
       </Route>
       <Route path={MAIN_ROUTES.PROJECT_SETUP}>
         <Route index element={<ProjectSetup />} />
