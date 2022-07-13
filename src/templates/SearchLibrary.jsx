@@ -5,7 +5,7 @@ import {
   createSearchParams,
   useSearchParams,
 } from "react-router-dom";
-import { Search, Table, Checkbox } from "@trussworks/react-uswds";
+import { Search, Checkbox } from "@trussworks/react-uswds";
 
 import Pagination from "../molecules/Pagination";
 import { Link } from "react-router-dom";
@@ -36,7 +36,7 @@ const EmptyResults = ({ length }) => {
   );
 };
 // this seems overly complex when it is not doing much :/ defining variables, setting url params, callbacks, template varibles finished, template
-const SearchLibrary = ({ componentList }) => {
+const SearchLibrary = ({ componentList, linkToComponentLibrary = false }) => {
   const baseUrl = useLocation();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
@@ -96,6 +96,7 @@ const SearchLibrary = ({ componentList }) => {
       pathname: baseUrl.pathname,
       search: `?${createSearchParams(newQuery)}`,
     });
+    window.location.reload();
   };
 
   // setup total count for pagination to work
@@ -112,12 +113,25 @@ const SearchLibrary = ({ componentList }) => {
   if (currentType) {
     paginationUrl += "type=" + currentType + "&";
   }
+
   return (
     <>
       <div className="grid-row">
-        <div className="grid-col-5"></div>
+        <div className="grid-col-5">
+          {linkToComponentLibrary && (
+            <Link to={MAIN_ROUTES.COMPONENT_LIBRARY}>
+              <button className="usa-button usa-button--outline add-component-button">
+                Add from the Component Library
+              </button>
+            </Link>
+          )}
+        </div>
         <div className="grid-col-7">
-          <Search onSubmit={componentNameSearch} placeholder={currentSearch} />
+          <Search
+            onSubmit={componentNameSearch}
+            placeholder={currentSearch}
+            className="width-full"
+          />
         </div>
       </div>
       <div className="grid-row">
@@ -153,18 +167,20 @@ const SearchLibrary = ({ componentList }) => {
               name="ars-3-filter"
               label="ARS 3.1"
               value="catalog=1"
+              onChange={checkBoxHandler}
             />
             <Checkbox
               id="ars-5-filter"
               name="ars-5-filter"
               label="ARS 5.0"
               value="catalog=2"
+              onChange={checkBoxHandler}
             />
           </fieldset>
         </div>
         <div className="grid-col-1"></div>
         <div className="grid-col-9">
-          <Table striped bordered>
+          <table className="usa-table width-full usa-table--striped">
             <thead>
               <tr>
                 <th scope="col">Component</th>
@@ -179,7 +195,7 @@ const SearchLibrary = ({ componentList }) => {
                 </tr>
               ))}
             </tbody>
-          </Table>
+          </table>
           <EmptyResults lenth={totalCount} />
           <Pagination
             onPageChange={onPageChange}

@@ -246,6 +246,20 @@ nav.usa-breadcrumb {
     margin-top: 44px;
   }
 }
+.usa-prose > table,
+.usa-table {
+  margin: 0;
+}
+.add-component-button {
+  margin-top: 30px;
+}
+.usa-search[role="search"],
+.usa-search[role="search"] > div,
+.usa-search [role="search"] {
+  padding-top: 8px;
+  margin-bottom: 40px;
+  margin-top: 30px;
+}
 .usa-prose > table thead th,
 .usa-table thead th,
 .usa-prose > table thead td,
