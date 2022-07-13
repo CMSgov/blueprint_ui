@@ -57,7 +57,10 @@ export function ComponentTemplate({ component, controlText, catalogData }) {
             </p>
           </div>
           <div className="tablet:grid-col">
-            <ComponentProjectForm project_data={component.project_data} />
+            <ComponentProjectForm
+              project_data={component.project_data}
+              component_id={component.id}
+            />
           </div>
         </div>
       </div>

@@ -2,35 +2,39 @@
 
 ## Local Development
 
-Please visit the infrastructure repo for setting up a local development environment at https://github.com/CMSgov/blueprint_infra
+Please visit the infrastructure repo for setting up a local development environment at <https://github.com/CMSgov/blueprint_infra>
 
 ## Pre-commit hook
 
 When committing code, a pre-commit hook is set to run linting and prettier formatting on the staged files. It will also run the suite of react testing library test (it will not cypress tests).
 
-To run this hook manually on your staged files, in a terminal window, run: <br>
+To run this hook manually on your staged files, in a terminal window, run:
 `npm run pre-commit`
 
 ## Testing
 
 We leverage two different sets of tests:
+
 1. [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) which is a library that uses the framework [Jest](https://jestjs.io/) - for unit tests and some integration tests
 2. [Cypress](https://docs.cypress.io/) - for end to end tests and some integration tests
 
 ### React Testing Library
-To run manually, open a shell terminal in the repo's docker container (e.g. `docker exec -it blueprint_ui_1 sh`). From there the following commands can be run: <br>
 
-*By default, the test commands will go into watch mode and rerun as you save code changes.* <br>
+To run manually, open a shell terminal in the repo's docker container (e.g. `docker exec -it blueprint_ui_1 sh`). From there the following commands can be run:
+
+*By default, the test commands will go into watch mode and rerun as you save code changes.*
 `npm test` or `npm run test`
 
-If you want to run only once, set the watch to false: <br>
+If you want to run only once, set the watch to false:
 `npm test -- --watchAll=false`
 
-You can choose to run a directory of tests or individual test files by adding the path to the command: <br>
+You can choose to run a directory of tests or individual test files by adding the path to the command:
 e.g. `npm test /src/molecules/ProjectHeader.test.jsx`
 
 ### Cypress
+
 To run Cypress end-to-end tests:
+
 - make sure that your app is running the required Docker containers
 - in the root directory of Blueprint UI, run `npx cypress open`
 
@@ -39,7 +43,7 @@ To run Cypress end-to-end tests:
 We have agreed to work based on the following standards for the project
     - Utilizing Atomic Design directory structure, visible under src atoms, molecules, organisms, templates, and pages
         - atoms will be for small reusable parts consisting of a single page element: input, button, label
-        - molecules will be for small reusable components consisting of a few atoms or page elements: this is somewhat subjective 
+        - molecules will be for small reusable components consisting of a few atoms or page elements: this is somewhat subjective
         - organisms will be for reusable components that make sense by themselves: header, footer
         - templates will be for reusable components that can easily be used by pages
         - pages will be for individual pages, either stand alone or mostly using a template (pages act as instances of templates)

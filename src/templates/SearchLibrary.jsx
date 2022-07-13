@@ -1,15 +1,15 @@
+import { Checkbox, Search } from "@trussworks/react-uswds";
 import { useState } from "react";
 import {
+  createSearchParams,
   useLocation,
   useNavigate,
-  createSearchParams,
-  useSearchParams,
+  useSearchParams
 } from "react-router-dom";
-import { Search, Checkbox } from "@trussworks/react-uswds";
 
-import Pagination from "../molecules/Pagination";
 import { Link } from "react-router-dom";
 import { MAIN_ROUTES } from "../AppRoutes";
+import Pagination from "../molecules/Pagination";
 
 const TableRow = ({ component }) => {
   if (component.title === undefined) {
@@ -17,7 +17,9 @@ const TableRow = ({ component }) => {
   }
   return (
     <>
-      <td>{component.title}</td>
+      <td>
+        <Link to={`/components/${component.id}`}>{component.title}</Link>
+      </td>
       <td>{component.description}</td>
       <td>{component.controls_count}</td>
     </>
