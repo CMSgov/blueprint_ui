@@ -7,7 +7,8 @@ describe("project setup page form testing", () => {
     cy.contains("Next").click();
     cy.get(".usa-error-message")
       .should("exist")
-      .contains("This field are required.");
+      .contains("This field is required.");
+    cy.get(".usa-error-message").contains("A selection is required.");
     cy.get(".usa-input--error").should("exist");
   });
 

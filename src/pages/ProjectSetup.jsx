@@ -135,7 +135,7 @@ const ProjectSetup = () => {
             id="input-error-message"
             role="alert"
           >
-            This field are required.
+            This field is required.
           </span>
         )}
         <TextInput
@@ -153,7 +153,7 @@ const ProjectSetup = () => {
             id="input-error-message"
             role="alert"
           >
-            This field are required.
+            This field is required.
           </span>
         )}
         <TextInput
