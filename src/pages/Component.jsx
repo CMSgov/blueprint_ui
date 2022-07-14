@@ -54,6 +54,8 @@ const Component = () => {
         catalogData={getControl}
       />
     );
+  } else {
+    return <h1>{errorMessage}</h1>;
   }
 };
 
