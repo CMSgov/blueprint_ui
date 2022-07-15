@@ -1,11 +1,4 @@
-import {
-  Alert,
-  Button,
-  Form,
-  Label,
-  Radio,
-  TextInput,
-} from "@trussworks/react-uswds";
+import { Button, Form, Label, Radio, TextInput } from "@trussworks/react-uswds";
 import { useState, useRef } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { MAIN_ROUTES } from "../AppRoutes";
@@ -13,7 +6,12 @@ import Config from "../config";
 
 const ProjectSetup = () => {
   const [fullNameValidationStatus, setFullNameValidationStatus] = useState("");
+  const [errorName, setErrorName] = useState(false);
   const [acronymValidationStatus, setaAcronymValidationStatus] = useState("");
+  const [errorAcronym, setErrorAcronym] = useState(false);
+  const [errorLocation, setErrorLocation] = useState(false);
+  const [errorFisma, setErrorFisma] = useState(false);
+
   const [error, setError] = useState(false);
   const [project, setProject] = useState(false);
   // setup input references
@@ -58,33 +56,48 @@ const ProjectSetup = () => {
     if (textInputAcronym.current.value) {
       postVariables["acronym"] = textInputAcronym.current.value;
       setaAcronymValidationStatus("success");
+      setErrorAcronym(false);
     } else {
       setaAcronymValidationStatus("error");
+      setErrorAcronym(true);
     }
 
     if (textInputFull.current.value) {
       postVariables["title"] = textInputFull.current.value;
       setFullNameValidationStatus("success");
+      setErrorName(false);
     } else {
       setFullNameValidationStatus("error");
+      setErrorName(true);
     }
 
     if (radioInputLocationCmsAws.current.checked) {
       postVariables["location"] = radioInputLocationCmsAws.current.value;
+      setErrorLocation(false);
     } else if (radioInputLocationGovcloud.current.checked) {
       postVariables["location"] = radioInputLocationGovcloud.current.value;
+      setErrorLocation(false);
     } else if (radioInputLocationAzure.current.checked) {
       postVariables["location"] = radioInputLocationAzure.current.value;
+      setErrorLocation(false);
     } else if (radioInputLocationOther.current.checked) {
       postVariables["location"] = radioInputLocationOther.current.value;
+      setErrorLocation(false);
+    } else {
+      setErrorLocation(true);
     }
 
     if (radioInputLevelLow.current.checked) {
       postVariables["impact_level"] = radioInputLevelLow.current.value;
+      setErrorFisma(false);
     } else if (radioInputLevelModerate.current.checked) {
       postVariables["impact_level"] = radioInputLevelModerate.current.value;
+      setErrorFisma(false);
     } else if (radioInputLevelHigh.current.checked) {
       postVariables["impact_level"] = radioInputLevelHigh.current.value;
+      setErrorFisma(false);
+    } else {
+      setErrorFisma(true);
     }
 
     if (
@@ -114,9 +127,17 @@ const ProjectSetup = () => {
         baseline.
       </p>
       <Form>
-        {error && <Alert type="error">{error}</Alert>}
         <span className="bold-text">What is the name of the FISMA system?</span>
         <Label htmlFor="project-full-name">Full name</Label>
+        {errorName && (
+          <span
+            className="usa-error-message"
+            id="input-error-message"
+            role="alert"
+          >
+            This field is required.
+          </span>
+        )}
         <TextInput
           type="text"
           id="project-full-name"
@@ -126,6 +147,15 @@ const ProjectSetup = () => {
         ></TextInput>
 
         <Label htmlFor="project-acronym">Acronym</Label>
+        {errorAcronym && (
+          <span
+            className="usa-error-message"
+            id="input-error-message"
+            role="alert"
+          >
+            This field is required.
+          </span>
+        )}
         <TextInput
           type="text"
           id="project-acronym"
@@ -138,6 +168,15 @@ const ProjectSetup = () => {
         <span className="bold-text">
           Where is this system going to be located?
         </span>
+        {errorLocation && (
+          <span
+            className="usa-error-message"
+            id="input-error-message"
+            role="alert"
+          >
+            A selection is required.
+          </span>
+        )}
         <Radio
           tile
           id="radio-location-cms-aws-east-west"
@@ -174,6 +213,15 @@ const ProjectSetup = () => {
         <span className="bold-text">
           What is the FISMA impact level of this system?
         </span>
+        {errorFisma && (
+          <span
+            className="usa-error-message"
+            id="input-error-message"
+            role="alert"
+          >
+            A selection is required.
+          </span>
+        )}
         <Radio
           tile
           id="radio-fisma-low"

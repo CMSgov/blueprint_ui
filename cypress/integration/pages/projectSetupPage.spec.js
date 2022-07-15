@@ -2,12 +2,13 @@
 describe("project setup page form testing", () => {
   it("empty form errors", () => {
     cy.visit(Cypress.env("BASE_URL") + "/project-setup");
-    cy.get(".usa-alert--error").should("not.exist");
+    cy.get(".usa-error-message").should("not.exist");
     cy.get(".usa-input--error").should("not.exist");
     cy.contains("Next").click();
-    cy.get(".usa-alert--error")
+    cy.get(".usa-error-message")
       .should("exist")
-      .contains("All fields are required.");
+      .contains("This field is required.");
+    cy.get(".usa-error-message").contains("A selection is required.");
     cy.get(".usa-input--error").should("exist");
   });
 
@@ -20,7 +21,7 @@ describe("project setup page form testing", () => {
       .should("be.checked");
     cy.get("#radio-fisma-low").check({ force: true }).should("be.checked");
     cy.contains("Next").click();
-    cy.get(".usa-alert--error").should("not.exist");
+    cy.get(".usa-error-message").should("not.exist");
     cy.get(".usa-input--error").should("not.exist");
   });
 });

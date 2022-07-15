@@ -180,7 +180,10 @@ const SearchLibrary = ({ componentList, linkToComponentLibrary = false }) => {
         </div>
         <div className="grid-col-1"></div>
         <div className="grid-col-9">
-          <table className="usa-table width-full usa-table--striped">
+          <table
+            data-testid="table"
+            className="usa-table width-full usa-table--striped"
+          >
             <thead>
               <tr>
                 <th scope="col">Component</th>

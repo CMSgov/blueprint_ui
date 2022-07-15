@@ -284,3 +284,17 @@ nav.usa-breadcrumb {
     max-width: 22rem;
   }
 }
+.select-components {
+  .usa-checkbox__label,
+  .usa-radio__label {
+    display: inline;
+  }
+  .usa-prose > table,
+  .usa-table {
+    margin-bottom: 37px;
+    margin-top: 45px;
+  }
+}
+.blueprint-tooltip {
+  background-color: $blue-primary;
+}
