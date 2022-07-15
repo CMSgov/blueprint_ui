@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 
 export function ProjectTemplate({ project }) {
   const { id, acronym, impact_level, title } = project;
-  const sspUrl = "/projects/" + { id } + "/system-security-plan";
+  const sspUrl = "/projects/" + id + "/system-security-plan";
   const params = useLocation();
   const manageComponentsUrl = params.pathname + "/system-components";
   return (
