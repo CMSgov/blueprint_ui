@@ -2,10 +2,13 @@ import ControlsCompleted from "../molecules/CompletedControls";
 import ComponentsList from "../organisms/ComponentsList";
 import ProjectHeader from "../molecules/ProjectHeader";
 import { Tooltip } from "@trussworks/react-uswds";
+import { useLocation } from "react-router-dom";
 
 export function ProjectTemplate({ project }) {
   const { id, acronym, impact_level, title } = project;
   const sspUrl = "/projects/" + { id } + "/system-security-plan";
+  const params = useLocation();
+  const manageComponentsUrl = params.pathname + "/system-components";
   return (
     <div>
       <ProjectHeader
@@ -22,9 +25,11 @@ export function ProjectTemplate({ project }) {
         Add, remove, or create new components to match your system architecture,
         policies, and procedures and help complete your System Security Plan.{" "}
       </p>
-      <button className="usa-button usa-button--outline">
-        Manage System Components
-      </button>
+      <a href={manageComponentsUrl}>
+        <button className="usa-button usa-button--outline">
+          Manage System Components
+        </button>
+      </a>
       <h3>Export to CFACTS</h3>
       <p>
         Once you're finished with your control narratives, export them to upload
