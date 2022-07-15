@@ -31,7 +31,7 @@ export default function ProjectHeader({
             className="gear-link"
             data-testid="gear_link"
           >
-            <img src="/icons/gear.svg" alt="link to project settings page" />
+            <img src="/gear.svg" alt="link to project settings page" />
           </Link>
         </div>
       )}
