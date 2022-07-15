@@ -60,7 +60,7 @@ const ProjectSetupSelectComponentsTemplate = ({ componentList }) => {
       postVariables["component_id"] = checkbox.value;
       postProjectAddComponent(postVariables);
     }
-    console.log(checkedList.length);
+
     if (checkedList.length === 0) {
       setResponse(true);
     }
