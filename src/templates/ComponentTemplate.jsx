@@ -111,7 +111,7 @@ export function ComponentTemplate({ component, controlText, catalogData }) {
               </>
             )}
             <p>
-              <Link to="/component-library">Back to Component Library</Link>
+              <Link to="/components">Back to Component Library</Link>
             </p>
           </div>
         </div>
