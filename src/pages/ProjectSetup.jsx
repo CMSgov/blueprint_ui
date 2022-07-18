@@ -50,7 +50,7 @@ const ProjectSetup = () => {
   const formSubmit = () => {
     // Validate and set form post values
     let postVariables = {};
-    postVariables["creator"] = 1; // @TODO: This should be the current userId when we have it
+    postVariables["creator"] = 2; // @TODO: This should be the current userId when we have it
     postVariables["catalog"] = 1; // @TODO: This should be ARS 3.1 catalog or list of catalogs to choose from
 
     if (textInputAcronym.current.value) {
