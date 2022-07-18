@@ -40,6 +40,7 @@ const Component = () => {
   const getControl = (controlId) => {
     let control = getControlData(component, controlId);
     setSelectedControl(control);
+    window.location.hash = "#controls";
   };
 
   if (error) {

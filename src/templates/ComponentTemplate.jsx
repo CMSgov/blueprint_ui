@@ -64,7 +64,7 @@ export function ComponentTemplate({ component, controlText, catalogData }) {
           </div>
         </div>
       </div>
-      <div className="grid-container border-top margin-top-4">
+      <div className="grid-container border-top margin-top-4" id="controls">
         <div className="grid-row">
           <div className="grid-col-2">
             <h3 className="text-bold margin-bottom-2 margin-top-1">Controls</h3>
@@ -73,7 +73,9 @@ export function ComponentTemplate({ component, controlText, catalogData }) {
                 {Object.entries(component.catalog_data.controls).map(
                   ([key, val]) => (
                     <li className="usa-sidenav__item" key={key}>
-                      <a onClick={() => catalogData(key)}>{val.label}</a>
+                      <a href="#controls" onClick={() => catalogData(key)}>
+                        {val.label}
+                      </a>
                     </li>
                   )
                 )}
