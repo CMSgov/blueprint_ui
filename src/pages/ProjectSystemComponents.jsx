@@ -1,15 +1,19 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import Config from "../config";
 import ErrorMessage from "../molecules/ErrorMessage";
 import GlobalState from "../GlobalState";
 import ProjectSystemComponentsTemplate from "../templates/ProjectSystemComponentsTemplate";
 
 const ProjectSystemComponents = () => {
+  const urlParams = useLocation();
   const { id } = useParams();
   const [error, setError] = useState(false);
   const [state, setState] = useContext(GlobalState);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [componentList, setComponentList] = useState([]);
+  const [totalItemCount, setTotalItemCount] = useState(0);
+  const getParams = urlParams.search;
 
   let project = state.project;
   if (state.project === undefined) {
@@ -18,17 +22,23 @@ const ProjectSystemComponents = () => {
 
   useEffect(() => {
     if (project.id !== parseInt(id)) {
-      fetch(`${Config("backendUrl")}/projects/${id}/`, {
+      fetch(`${Config("backendUrl")}/projects/${id}/search/${getParams}`, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Content-type": "application/json; charset=UTF-8",
         },
       })
         .then((response) => response.json())
-        .then((project) => {
+        .then((response) => {
+          console.log(response[0]);
+          console.log(response[0]["project"]);
+          project = response[0]["project"];
           if (project !== undefined && project.id !== undefined) {
-            return setState((state) => ({ ...state, project: project }));
+            setState((state) => ({ ...state, project: project }));
+            setComponentList(response[1]["components"]);
+            setTotalItemCount(response[2]["total_item_count"]);
           } else {
+            console.log("are we in the else block???", project);
             setErrorMessage("Error loading project information");
             return setError(true);
           }
@@ -42,7 +52,13 @@ const ProjectSystemComponents = () => {
   if (error) {
     return <ErrorMessage message={errorMessage} />;
   }
-  return <ProjectSystemComponentsTemplate project={project} />;
+  return (
+    <ProjectSystemComponentsTemplate
+      project={project}
+      componentList={componentList}
+      totalItemCount={totalItemCount}
+    />
+  );
 };
 
 export default ProjectSystemComponents;

@@ -19,7 +19,7 @@ describe("component library page", () => {
       });
     // reference fixture as existing project and visit the url for that project
     cy.get("@componentLibraryFreshData").then((componentLibraryFreshData) => {
-      cy.visit(Cypress.env("BASE_URL") + `/component-library/`);
+      cy.visit(Cypress.env("BASE_URL") + `/components/`);
     });
     cy.wait("@getComponentLibraryFreshData");
     // check expected fields
@@ -46,7 +46,7 @@ describe("component library page", () => {
     // reference fixture as existing project and visit the url for that project
     cy.get("@componentLibrarySearchWinData").then(
       (componentLibrarySearchWinData) => {
-        cy.visit(Cypress.env("BASE_URL") + `/component-library/?search=win`);
+        cy.visit(Cypress.env("BASE_URL") + `/components/?search=win`);
       }
     );
     cy.wait("@getComponentLibrarySearchWinData");
@@ -78,7 +78,7 @@ describe("component library page", () => {
     cy.get("@componentLibrarySearchWinTypePolicyData").then(
       (componentLibrarySearchWinTypePolicyData) => {
         cy.visit(
-          Cypress.env("BASE_URL") + `/component-library/?search=win&type=policy`
+          Cypress.env("BASE_URL") + `/components/?search=win&type=policy`
         );
       }
     );
@@ -113,8 +113,7 @@ describe("component library page", () => {
     cy.get("@componentLibrarySearchWinTypeSoftwarePage1Data").then(
       (componentLibrarySearchWinTypeSoftwarePage1Data) => {
         cy.visit(
-          Cypress.env("BASE_URL") +
-            `/component-library/?search=win&type=software`
+          Cypress.env("BASE_URL") + `/components/?search=win&type=software`
         );
       }
     );
@@ -151,7 +150,7 @@ describe("component library page", () => {
       (componentLibrarySearchWinTypeSoftwarePage2Data) => {
         cy.visit(
           Cypress.env("BASE_URL") +
-            `/component-library/?search=win&type=software&page=2`
+            `/components/?search=win&type=software&page=2`
         );
       }
     );
