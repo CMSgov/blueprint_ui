@@ -12,8 +12,7 @@ export default function ProjectCard({ project }) {
     <div className="project-card" data-testid="project_card">
       <div>
         <div className="card-title">
-          {title}
-          <br />({acronym})
+          {title} ({acronym})
         </div>
         <div className="links-list">
           <Link to={componentsUrl}>Manage Components</Link>

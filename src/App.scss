@@ -14,6 +14,11 @@ $gray-dark: #979797;
 $gray-darker: #71767a;
 $gray-darkest: #343434;
 
+// Breakpoints for screen sizes
+$tablet-size-max-width: 640px;
+$card-collection-two-per-row-width: 900px;
+$card-collection-three-per-row-width: 901px;
+
 html,
 body {
   height: 100%;
@@ -122,7 +127,7 @@ nav.usa-breadcrumb {
     color: $gray-darker;
   }
 }
-@media (max-width: 720px) {
+@media (max-width: $tablet-size-max-width) {
   .main-content-body {
     padding: 0 50px 130px;
   }
@@ -172,7 +177,12 @@ nav.usa-breadcrumb {
   margin-bottom: 20px;
   margin-top: 20px;
   padding: 20px 25px 25px 25px;
-  width: 30%;
+  @media (min-width: $card-collection-three-per-row-width) {
+    width: 30%;
+  }
+  @media (max-width: $card-collection-two-per-row-width) {
+    width: 45%;
+  }
   .card-title {
     font-size: 22px;
     font-weight: bold;
@@ -201,10 +211,16 @@ nav.usa-breadcrumb {
     display: flex;
     flex-wrap: wrap;
     margin-top: 35px;
-    // adds margin spacing around the middle card of each row
-    > div:nth-child(3n + 2) {
-      margin-left: 5%;
-      margin-right: 5%;
+
+    @media (min-width: $card-collection-three-per-row-width) {
+      // adds margin spacing around the middle card of each row
+      > div:nth-child(3n + 2) {
+        margin-left: 5%;
+        margin-right: 5%;
+      }
+    }
+    @media (max-width: $card-collection-two-per-row-width) {
+      justify-content: space-between;
     }
   }
 }
