@@ -7,11 +7,12 @@ $green-button: #4d8055;
 
 $yellow-background: #faf3d1;
 
+$white: #fff;
 $gray-light: #f0f0f0;
+$gray-border: #dcdee0;
 $gray-dark: #979797;
 $gray-darker: #71767a;
 $gray-darkest: #343434;
-$white: #fff;
 
 html,
 body {
@@ -162,6 +163,49 @@ nav.usa-breadcrumb {
   .subtitle {
     font-size: 32px;
     margin-top: 26px;
+  }
+}
+
+.project-card {
+  border: 1px solid $gray-border;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  padding: 20px 25px 25px 25px;
+  width: 30%;
+  .card-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  .links-list {
+    line-height: 26px;
+    margin-bottom: 25px;
+    margin-left: 0;
+    a {
+      color: $blue-primary;
+    }
+  }
+}
+
+.projects-page {
+  h1 {
+    font-size: 40px;
+    margin-top: 0px;
+    margin-bottom: 18px;
+  }
+  .subtitle {
+    font-size: 22px;
+  }
+  .cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 35px;
+    // adds margin spacing around the middle card of each row
+    > div:nth-child(3n + 2) {
+      margin-left: 5%;
+      margin-right: 5%;
+    }
   }
 }
 
