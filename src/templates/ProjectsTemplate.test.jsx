@@ -3,6 +3,17 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import ProjectsTemplate from "./ProjectsTemplate";
 
+test("Projects page displays text for 0 projects when NO projects prop is passed in", () => {
+  render(
+    <MemoryRouter>
+      <ProjectsTemplate />
+    </MemoryRouter>
+  );
+
+  const expectedProjectsText = `You have access to 0 project(s).`;
+  screen.getByText(expectedProjectsText);
+});
+
 test("Projects page displays text for correct number of projects", () => {
   const projects = [
     {
