@@ -1,5 +1,5 @@
 import React from "react";
-import { ProjectsTemplate } from "../templates/ProjectsTemplate";
+import ProjectsTemplate from "../templates/ProjectsTemplate";
 import { useEffect, useState } from "react";
 import Config from "../config";
 import ErrorMessage from "../molecules/ErrorMessage";
