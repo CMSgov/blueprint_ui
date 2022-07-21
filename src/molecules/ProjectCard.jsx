@@ -22,6 +22,8 @@ export default function ProjectCard({ project }) {
           <Link to={settingsUrl}>View Settings</Link>
           <br />
         </div>
+      </div>
+      <div>
         <Link to={projectUrl}>
           <button className="usa-button">View Project</button>
         </Link>

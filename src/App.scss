@@ -172,6 +172,9 @@ nav.usa-breadcrumb {
 }
 
 .project-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   border: 1px solid $gray-border;
   border-radius: 4px;
   margin-bottom: 20px;
