@@ -60,10 +60,10 @@ describe("breadcrumbs & h1 show correctly on contact us page", () => {
 
 describe("breadcrumbs & h1 show correctly on component library page", () => {
   it("does display on contact us page", () => {
-    cy.visit(Cypress.env("BASE_URL") + "/component-library");
+    cy.visit(Cypress.env("BASE_URL") + "/components");
     cy.get("header").should("exist");
     cy.get(".usa-breadcrumb").should("exist").contains("Home");
-    cy.get(".usa-breadcrumb").contains("component library");
+    cy.get(".usa-breadcrumb").contains("components");
     cy.get("h1").contains("Component Library");
     cy.get("footer").should("exist");
   });

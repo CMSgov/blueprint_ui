@@ -2,37 +2,14 @@ import SearchLibrary from "./SearchLibrary";
 import ProjectHeader from "../molecules/ProjectHeader";
 import { Link } from "react-router-dom";
 import { MAIN_ROUTES } from "../AppRoutes";
-import { useState, useEffect } from "react";
-import Config from "../config";
-import { useLocation } from "react-router-dom";
 
-const ProjectSystemComponentsTemplate = ({ project }) => {
+const ProjectSystemComponentsTemplate = ({
+  project,
+  componentList,
+  totalItemCount,
+}) => {
   const { id, acronym, title } = project;
   const subtitle = "System Components";
-
-  const urlParams = useLocation();
-  const [error, setError] = useState(false);
-  const [componentList, setComponentList] = useState([]);
-  const getParams = urlParams.search;
-  useEffect(() => {
-    fetch(`${Config("backendUrl")}/components/search/${getParams}`, {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => response.json())
-      .then((componentList) => {
-        if (componentList !== undefined) {
-          return setComponentList(componentList);
-        } else {
-          return setError(true);
-        }
-      })
-      .catch((error) => {
-        return setError(true);
-      });
-  }, []);
 
   return (
     <>
@@ -54,6 +31,7 @@ const ProjectSystemComponentsTemplate = ({ project }) => {
       <SearchLibrary
         componentList={componentList}
         linkToComponentLibrary={true}
+        totalItemCount={totalItemCount}
       />
     </>
   );
