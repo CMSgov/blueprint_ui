@@ -13,6 +13,7 @@ const ProjectSystemComponents = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [componentList, setComponentList] = useState([]);
   const [totalItemCount, setTotalItemCount] = useState(0);
+  const [typeList, setTypeList] = useState(0);
   const getParams = urlParams.search;
 
   let project = state.project;
@@ -30,15 +31,14 @@ const ProjectSystemComponents = () => {
       })
         .then((response) => response.json())
         .then((response) => {
-          console.log(response[0]);
-          console.log(response[0]["project"]);
+          console.log(response);
           project = response[0]["project"];
           if (project !== undefined && project.id !== undefined) {
             setState((state) => ({ ...state, project: project }));
             setComponentList(response[1]["components"]);
             setTotalItemCount(response[2]["total_item_count"]);
+            setTypeList(response[3]["type_list"]);
           } else {
-            console.log("are we in the else block???", project);
             setErrorMessage("Error loading project information");
             return setError(true);
           }
@@ -57,6 +57,7 @@ const ProjectSystemComponents = () => {
       project={project}
       componentList={componentList}
       totalItemCount={totalItemCount}
+      typeList={typeList}
     />
   );
 };

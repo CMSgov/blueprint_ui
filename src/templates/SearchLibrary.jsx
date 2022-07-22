@@ -4,7 +4,7 @@ import {
   createSearchParams,
   useLocation,
   useNavigate,
-  useSearchParams
+  useSearchParams,
 } from "react-router-dom";
 
 import { Link } from "react-router-dom";
@@ -38,7 +38,12 @@ const EmptyResults = ({ length }) => {
   );
 };
 // this seems overly complex when it is not doing much :/ defining variables, setting url params, callbacks, template varibles finished, template
-const SearchLibrary = ({ componentList, linkToComponentLibrary = false }) => {
+const SearchLibrary = ({
+  componentList = [],
+  linkToComponentLibrary = false,
+  typeList = [],
+  totalItemCount = 0,
+}) => {
   const baseUrl = useLocation();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
@@ -101,12 +106,6 @@ const SearchLibrary = ({ componentList, linkToComponentLibrary = false }) => {
     window.location.reload();
   };
 
-  // setup total count for pagination to work
-  let totalCount = 0;
-  const lastItem = componentList[componentList.length - 1];
-  if (lastItem !== undefined && lastItem.total_item_count !== undefined) {
-    totalCount = lastItem.total_item_count;
-  }
   // format url for pagination
   let paginationUrl = baseUrl.pathname + "?";
   if (currentSearch) {
@@ -114,6 +113,12 @@ const SearchLibrary = ({ componentList, linkToComponentLibrary = false }) => {
   }
   if (currentType) {
     paginationUrl += "type=" + currentType + "&";
+  }
+
+  let showTypeFilter = typeList && typeList.length > 1;
+  let catalogClasses = "usa-fieldset ";
+  if (showTypeFilter) {
+    catalogClasses += "catalog-filter";
   }
 
   return (
@@ -138,31 +143,23 @@ const SearchLibrary = ({ componentList, linkToComponentLibrary = false }) => {
       </div>
       <div className="grid-row">
         <div className="component-library-filter grid-col-2">
-          <fieldset className="usa-fieldset">
-            <legend className="usa-legend">Type</legend>
-            <Checkbox
-              id="policy-filter"
-              name="policy-filter"
-              label="Policy"
-              value="type=policy"
-              onChange={checkBoxHandler}
-            />
-            <Checkbox
-              id="service-filter"
-              name="service-filter"
-              label="Service"
-              value="type=service"
-              onChange={checkBoxHandler}
-            />
-            <Checkbox
-              id="software-filter"
-              name="software-filter"
-              label="Software"
-              value="type=software"
-              onChange={checkBoxHandler}
-            />
-          </fieldset>
-          <fieldset className="usa-fieldset catalog-filter">
+          {showTypeFilter && (
+            <fieldset className="usa-fieldset">
+              <legend className="usa-legend">Type</legend>
+              {typeList.map((type, i) => (
+                <Checkbox
+                  id={type[0] + "-filter"}
+                  name={type[0] + "-filter"}
+                  label={type[0]}
+                  value={"type=" + type[0]}
+                  onChange={checkBoxHandler}
+                  key={i}
+                />
+              ))}
+            </fieldset>
+          )}
+
+          <fieldset className={catalogClasses}>
             <legend className="usa-legend">Catalog</legend>
             <Checkbox
               id="ars-3-filter"
@@ -201,10 +198,10 @@ const SearchLibrary = ({ componentList, linkToComponentLibrary = false }) => {
               ))}
             </tbody>
           </table>
-          <EmptyResults lenth={totalCount} />
+          <EmptyResults lenth={totalItemCount} />
           <Pagination
             onPageChange={onPageChange}
-            totalCount={totalCount}
+            totalCount={totalItemCount}
             currentPage={currentPage}
             baseUrl={paginationUrl}
           />
