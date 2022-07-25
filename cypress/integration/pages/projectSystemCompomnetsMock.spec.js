@@ -24,9 +24,6 @@ describe("component library page", () => {
     cy.wait("@getComponentLibraryFreshData");
     // check expected fields
     cy.get('[data-testid="textInput"]').should("exist");
-    cy.get('[data-testid="checkbox"]').contains("Policy");
-    cy.get('[data-testid="checkbox"]').contains("Service");
-    cy.get('[data-testid="checkbox"]').contains("Software");
     cy.get('[data-testid="table"]').should("exist").contains("Component");
     cy.get('[data-testid="table"]').contains("Description");
     cy.get('[data-testid="table"]').contains("Controls");
@@ -55,9 +52,6 @@ describe("component library page", () => {
     cy.get('[data-testid="textInput"]')
       .invoke("attr", "placeholder")
       .should("contain", "win");
-    cy.get('[data-testid="checkbox"]').contains("Policy");
-    cy.get('[data-testid="checkbox"]').contains("Service");
-    cy.get('[data-testid="checkbox"]').contains("Software");
     cy.get('[data-testid="table"]').should("exist").contains("Component");
     cy.get('[data-testid="table"]').contains("Description");
     cy.get('[data-testid="table"]').contains("Controls");
@@ -88,9 +82,6 @@ describe("component library page", () => {
     cy.get('[data-testid="textInput"]')
       .invoke("attr", "placeholder")
       .should("contain", "win");
-    cy.get('[data-testid="checkbox"]').contains("Policy");
-    cy.get('[data-testid="checkbox"]').contains("Service");
-    cy.get('[data-testid="checkbox"]').contains("Software");
     cy.get('[data-testid="table"]').should("exist").contains("Component");
     cy.get('[data-testid="table"]').contains("Description");
     cy.get('[data-testid="table"]').contains("Controls");
@@ -123,9 +114,6 @@ describe("component library page", () => {
     cy.get('[data-testid="textInput"]')
       .invoke("attr", "placeholder")
       .should("contain", "win");
-    cy.get('[data-testid="checkbox"]').contains("Policy");
-    cy.get('[data-testid="checkbox"]').contains("Service");
-    cy.get('[data-testid="checkbox"]').contains("Software");
     cy.get('[data-testid="table"]').should("exist").contains("Component");
     cy.get('[data-testid="table"]').contains("Description");
     cy.get('[data-testid="table"]').contains("Controls");
@@ -160,9 +148,6 @@ describe("component library page", () => {
     cy.get('[data-testid="textInput"]')
       .invoke("attr", "placeholder")
       .should("contain", "win");
-    cy.get('[data-testid="checkbox"]').contains("Policy");
-    cy.get('[data-testid="checkbox"]').contains("Service");
-    cy.get('[data-testid="checkbox"]').contains("Software");
     cy.get('[data-testid="table"]').should("exist").contains("Component");
     cy.get('[data-testid="table"]').contains("Description");
     cy.get('[data-testid="table"]').contains("Controls");

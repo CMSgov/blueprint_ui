@@ -7,8 +7,10 @@ const ComponentLibrary = () => {
   const urlParams = useLocation();
   const [error, setError] = useState(false);
   const [componentList, setComponentList] = useState([]);
+  const [typeList, setTypeList] = useState([]);
   const getParams = urlParams.search;
-  useEffect(() => {
+
+  function getSearch() {
     fetch(`${Config("backendUrl")}/components/search/${getParams}`, {
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -20,18 +22,52 @@ const ComponentLibrary = () => {
         if (componentList !== undefined) {
           return setComponentList(componentList);
         } else {
-          return setError(true);
+          throw new Error("Error loading the list of components");
         }
       })
       .catch((error) => {
-        return setError(true);
+        throw new Error(error);
       });
+  }
+
+  function getTypes() {
+    fetch(`${Config("backendUrl")}/components/types/`, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        return setTypeList(response);
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }
+  useEffect(() => {
+    try {
+      getSearch();
+      getTypes();
+    } catch (error) {
+      return setError(true);
+    }
   }, []);
+
+  let totalItemCount = 0;
+  let lastItem = componentList[componentList.length - 1];
+  if (lastItem !== undefined && lastItem.total_item_count !== undefined) {
+    totalItemCount = lastItem.total_item_count;
+  }
 
   return (
     <>
       <h1>Component Library</h1>
-      <SearchLibrary componentList={componentList} />
+      <SearchLibrary
+        componentList={componentList}
+        typeList={typeList}
+        totalItemCount={totalItemCount}
+      />
     </>
   );
 };
