@@ -12,15 +12,15 @@ import {
 } from "../mockData/ControlPage";
 
 export default function Control() {
-  const { id, controlId } = useParams();
+  const { id } = useParams();
 
   const [error, setError] = useState(false);
   const [state, setState] = useContext(GlobalState);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  let project = {};
-  if (state.project !== undefined) {
-    project = state.project;
+  let project = state.project;
+  if (state.project === undefined) {
+    project = {};
   }
 
   useEffect(() => {

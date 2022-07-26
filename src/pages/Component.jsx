@@ -8,10 +8,13 @@ import { ComponentTemplate } from "../templates/ComponentTemplate";
 const Component = () => {
   const { componentId } = useParams();
   const [error, setError] = useState(false);
-  const [component, setComponent] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
   const [selectedControl, setSelectedControl] = useState(false);
   const [state, setState] = useContext(GlobalState);
+  let component = state.component;
+  if (component === undefined) {
+    component = {};
+  }
 
   useEffect(() => {
     if (component.id !== parseInt(componentId)) {
@@ -24,8 +27,7 @@ const Component = () => {
         .then((response) => response.json())
         .then((component) => {
           if (component !== undefined && component.id !== undefined) {
-            setState((state) => ({ ...state, component: component }));
-            return setComponent(component);
+            return setState((state) => ({ ...state, component: component }));
           } else {
             setErrorMessage(component.response || "Error loading component");
             return setError(true);
@@ -35,7 +37,7 @@ const Component = () => {
           return setError(error);
         });
     }
-  }, [componentId, component]);
+  }, [componentId, component, setState]);
 
   const getControl = (controlId) => {
     let control = getControlData(component, controlId);
