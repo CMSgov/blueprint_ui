@@ -18,9 +18,9 @@ export default function Control() {
   const [state, setState] = useContext(GlobalState);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  let project = state.project;
-  if (state.project === undefined) {
-    project = {};
+  let project = {};
+  if (state.project !== undefined) {
+    project = state.project;
   }
 
   useEffect(() => {
