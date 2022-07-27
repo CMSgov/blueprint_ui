@@ -12,7 +12,7 @@ import {
 } from "../mockData/ControlPage";
 
 export default function Control() {
-  const { id, controlId } = useParams();
+  const { id } = useParams();
 
   const [error, setError] = useState(false);
   const [state, setState] = useContext(GlobalState);

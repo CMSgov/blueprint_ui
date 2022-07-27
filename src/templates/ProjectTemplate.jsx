@@ -1,7 +1,5 @@
 import ControlsCompleted from "../molecules/CompletedControls";
-import ComponentsList from "../organisms/ComponentsList";
 import ProjectHeader from "../molecules/ProjectHeader";
-import { Tooltip } from "@trussworks/react-uswds";
 import { useLocation } from "react-router-dom";
 
 export function ProjectTemplate({ project }) {

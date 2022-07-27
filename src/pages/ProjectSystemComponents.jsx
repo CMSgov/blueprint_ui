@@ -31,8 +31,7 @@ const ProjectSystemComponents = () => {
       })
         .then((response) => response.json())
         .then((response) => {
-          console.log(response);
-          project = response[0]["project"];
+          let project = response[0]["project"];
           if (project !== undefined && project.id !== undefined) {
             setState((state) => ({ ...state, project: project }));
             setComponentList(response[1]["components"]);
@@ -47,7 +46,7 @@ const ProjectSystemComponents = () => {
           return setError(true);
         });
     }
-  }, [id, project, setState]);
+  }, [id, project, getParams, setState]);
 
   if (error) {
     return <ErrorMessage message={errorMessage} />;
