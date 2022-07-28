@@ -1,7 +1,8 @@
 import { Checkbox } from "@trussworks/react-uswds";
-import Config from "../config";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
+import Config from "../config";
+import RequestService from "../services/RequestService";
 
 const TableRow = ({ component }) => {
   if (component.title === undefined) {
@@ -24,28 +25,19 @@ const TableRow = ({ component }) => {
 };
 
 const ProjectSetupSelectComponentsTemplate = ({ componentList }) => {
-  const [error, setError] = useState(false);
   const [response, setResponse] = useState(false);
   const localStorageProject = JSON.parse(localStorage.getItem("project"));
   const projectId = localStorageProject.id;
   const projectUrl = "/projects/" + projectId;
 
   function postProjectAddComponent(formValues) {
-    fetch(`${Config("backendUrl")}/projects/add-component/`, {
-      method: "POST",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json; charset=UTF-8",
-      },
-      body: JSON.stringify(formValues),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        return setResponse(true);
-      })
-      .catch((error) => {
-        return setError(error);
-      });
+    RequestService.post(
+      `${Config("backendUrl")}/projects/add-component/`,
+      JSON.stringify(formValues),
+      (response) => {
+        setResponse(true);
+      }
+    );
   }
 
   const formSubmit = () => {
