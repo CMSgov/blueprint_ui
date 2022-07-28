@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { isEmpty } from "../utils";
@@ -15,14 +15,13 @@ const ERROR_MESSAGE = "Error loading project";
 const ProjectSystemSecurityPlan = () => {
   const { id } = useParams();
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
   const [state, setState] = useContext(GlobalState);
-
-  let project = useMemo(() => state.project || {}, [state]);
+  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (project.id !== parseInt(id)) {
+    if (!state.project || state.project.id !== parseInt(id)) {
+      setIsLoading(true);
       RequestService.get(
         `${Config("backendUrl")}/projects/${id}/`,
         (response) => {
@@ -35,15 +34,17 @@ const ProjectSystemSecurityPlan = () => {
         }
       );
     }
-  }, [id, project, setState]);
+  }, [id, state, setState]);
 
   if (isLoading) {
     return <LoadingIndicator />;
   }
-  if (hasError || isEmpty(project)) {
+  if (hasError) {
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
-  return <SystemSecurityPlanTemplate project={project} />;
+  if (state.project && !isEmpty(state.project)) {
+    return <SystemSecurityPlanTemplate project={state.project} />;
+  }
 };
 
 export default ProjectSystemSecurityPlan;

@@ -1,5 +1,5 @@
 import React from "react";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { isEmpty } from "../utils";
@@ -24,12 +24,11 @@ export default function Control() {
 
   const [state, setState] = useContext(GlobalState);
   const [hasError, setHasError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  let project = useMemo(() => state.project || {}, [state]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (project.id !== parseInt(id)) {
+    if (!state.project || state.project.id !== parseInt(id)) {
+      setIsLoading(true);
       RequestService.get(
         `${Config("backendUrl")}/projects/${id}/`,
         (response) => {
@@ -42,20 +41,20 @@ export default function Control() {
         }
       );
     }
-  }, [id, project, setState]);
+  }, [id, state, setState]);
 
   if (isLoading) {
     return <LoadingIndicator />;
   }
-  if (hasError || isEmpty(project)) {
+  if (hasError) {
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
-  return (
+  if (state.project && !isEmpty(state.project)) {
     <ControlTemplate
-      project={project}
+      project={state.project}
       control={mockControlData}
       nextControlId={mockNextControlId}
       inheritedComponentNarratives={mockInheritedComponentNarratives}
-    />
-  );
+    />;
+  }
 }

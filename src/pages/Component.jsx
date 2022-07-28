@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { isEmpty } from "../utils";
@@ -19,12 +19,11 @@ const Component = () => {
   const [selectedControl, setSelectedControl] = useState(false);
   const [state, setState] = useContext(GlobalState);
   const [hasError, setHasError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  let component = useMemo(() => state.component || {}, [state]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (component.id !== parseInt(componentId)) {
+    if (!state.component || state.component.id !== parseInt(componentId)) {
+      setIsLoading(true);
       RequestService.get(
         `${Config("backendUrl")}/components/${componentId}/`,
         (response) => {
@@ -37,10 +36,10 @@ const Component = () => {
         }
       );
     }
-  }, [componentId, component, setState]);
+  }, [componentId, state, setState]);
 
   const getControl = (controlId) => {
-    let control = getControlData(component, controlId);
+    let control = getControlData(state.component, controlId);
     setSelectedControl(control);
     window.location.hash = "#controls";
   };
@@ -48,16 +47,18 @@ const Component = () => {
   if (isLoading) {
     return <LoadingIndicator />;
   }
-  if (hasError || isEmpty(component)) {
+  if (hasError) {
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
-  return (
-    <ComponentTemplate
-      component={component}
-      controlText={selectedControl}
-      catalogData={getControl}
-    />
-  );
+  if (state.component && !isEmpty(state.component)) {
+    return (
+      <ComponentTemplate
+        component={state.component}
+        controlText={selectedControl}
+        catalogData={getControl}
+      />
+    );
+  }
 };
 
 export default Component;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import Config from "../config";
@@ -18,7 +18,7 @@ const ComponentLibrary = () => {
 
   const getParams = urlParams.search;
 
-  const getSearch = () => {
+  const getSearch = useCallback(() => {
     RequestService.get(
       `${Config("backendUrl")}/components/search/${getParams}`,
       (response) => {
@@ -28,9 +28,9 @@ const ComponentLibrary = () => {
         throw err;
       }
     );
-  };
+  }, [getParams]);
 
-  function getTypes() {
+  const getTypes = () => {
     RequestService.get(
       `${Config("backendUrl")}/components/types/`,
       (response) => {
@@ -40,7 +40,7 @@ const ComponentLibrary = () => {
         throw err;
       }
     );
-  }
+  };
 
   useEffect(() => {
     try {
@@ -49,7 +49,7 @@ const ComponentLibrary = () => {
     } catch (error) {
       return setHasError(true);
     }
-  }, [getParams]);
+  }, [getSearch]);
 
   let totalItemCount = 0;
   let lastItem = componentList[componentList.length - 1];

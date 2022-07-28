@@ -1,38 +1,33 @@
-import { Link } from "react-router-dom";
-import { MAIN_ROUTES } from "../AppRoutes";
 import { useState, useEffect } from "react";
-import Config from "../config";
+import { Link } from "react-router-dom";
 import { Alert } from "@trussworks/react-uswds";
+import { MAIN_ROUTES } from "../AppRoutes";
+import Config from "../config";
+import RequestService from "../services/RequestService";
 
 const ProjectSetupConfirmation = () => {
   const [project, setProject] = useState({});
   const [error, setError] = useState(false);
   const localStorageProject = JSON.parse(localStorage.getItem("project"));
+
   useEffect(() => {
     if (localStorageProject.components !== undefined && !project.id) {
       return setProject(localStorageProject);
     } else if (project.id !== localStorageProject.id) {
-      fetch(`${Config("backendUrl")}/projects/${localStorageProject.id}/`, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json; charset=UTF-8",
+      RequestService.get(
+        `${Config("backendUrl")}/projects/${localStorageProject.id}/`,
+        (response) => {
+          localStorage.setItem("project", JSON.stringify(response.data));
+          setProject(response.data);
         },
-      })
-        .then((response) => response.json())
-        .then((project) => {
-          if (project !== undefined && project.id !== undefined) {
-            localStorage.setItem("project", JSON.stringify(project));
-            return setProject(project);
-          } else {
-            return setError(true);
-          }
-        })
-        .catch((error) => {
-          return setError(true);
-        });
+        (err) => {
+          setError(true);
+        }
+      );
     }
   }, [localStorageProject, project, setProject]);
   const components = project.components || [];
+
   return (
     <>
       {error && <Alert type="error">{error}</Alert>}
