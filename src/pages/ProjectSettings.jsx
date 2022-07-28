@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState, useContext, useMemo } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { isEmpty } from "../utils";
@@ -16,11 +16,11 @@ const ERROR_MESSAGE = "Error loading project settings";
 export default function ProjectSettings() {
   const { id } = useParams();
 
-  const [state, setState] = useContext(GlobalState);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [state, setState] = useContext(GlobalState);
 
-  let project = state.project || {}
+  let project = useMemo(() => state.project || {}, [state]);
 
   useEffect(() => {
     if (project.id !== parseInt(id)) {
