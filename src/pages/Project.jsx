@@ -15,9 +15,9 @@ const ERROR_MESSAGE = "Error loading project";
 const Project = () => {
   const { id } = useParams();
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
   const [state, setState] = useContext(GlobalState);
+  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   let project = useMemo(() => state.project || {}, [state]);
 

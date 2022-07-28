@@ -3,8 +3,8 @@ import Config from "../config";
 import RequestService from "../services/RequestService";
 
 const Healthcheck = () => {
-  const [hasError, setHasError] = useState(false);
   const [status, setStatus] = useState();
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     RequestService.get(

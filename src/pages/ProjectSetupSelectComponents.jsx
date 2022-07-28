@@ -1,31 +1,39 @@
 import { useState, useEffect } from "react";
+
 import Config from "../config";
+import RequestService from "../services/RequestService";
+
+import ErrorMessage from "../molecules/ErrorMessage";
+import LoadingIndicator from "../atoms/LoadingIndicator";
 import ProjectSetupSelectComponentsTemplate from "../templates/ProjectSetupSelectComponentsTemplate";
+
+const ERROR_MESSAGE = "Error loading components for project setup";
 
 const ProjectSetupSelectComponents = () => {
   const [componentList, setComponentList] = useState([]);
-  const [error, setError] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${Config("backendUrl")}/components/search/`, {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json; charset=UTF-8",
+    RequestService.get(
+      `${Config("backendUrl")}/components/search/`,
+      (response) => {
+        setComponentList(response.data);
+        setIsLoading(false);
       },
-    })
-      .then((response) => response.json())
-      .then((componentList) => {
-        if (componentList !== undefined) {
-          return setComponentList(componentList);
-        } else {
-          return setError(true);
-        }
-      })
-      .catch((error) => {
-        return setError(true);
-      });
+      (err) => {
+        setHasError(true);
+        setIsLoading(false);
+      }
+    );
   }, []);
 
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
+  if (hasError) {
+    return <ErrorMessage message={ERROR_MESSAGE} />;
+  }
   return <ProjectSetupSelectComponentsTemplate componentList={componentList} />;
 };
 

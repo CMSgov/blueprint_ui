@@ -1,56 +1,53 @@
-import SearchLibrary from "../templates/SearchLibrary";
 import { useState, useEffect } from "react";
-import Config from "../config";
 import { useLocation } from "react-router-dom";
+
+import Config from "../config";
+import RequestService from "../services/RequestService";
+
+import ErrorMessage from "../molecules/ErrorMessage";
+import SearchLibrary from "../templates/SearchLibrary";
+
+const ERROR_MESSAGE = "Error loading components";
 
 const ComponentLibrary = () => {
   const urlParams = useLocation();
-  const [error, setError] = useState(false);
+
   const [componentList, setComponentList] = useState([]);
   const [typeList, setTypeList] = useState([]);
+  const [hasError, setHasError] = useState(false);
+
   const getParams = urlParams.search;
 
-  useEffect(() => {
-    function getSearch() {
-      fetch(`${Config("backendUrl")}/components/search/${getParams}`, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      })
-        .then((response) => response.json())
-        .then((componentList) => {
-          if (componentList !== undefined) {
-            return setComponentList(componentList);
-          } else {
-            throw new Error("Error loading the list of components");
-          }
-        })
-        .catch((error) => {
-          throw new Error(error);
-        });
-    }
+  const getSearch = () => {
+    RequestService.get(
+      `${Config("backendUrl")}/components/search/${getParams}`,
+      (response) => {
+        setComponentList(response.data);
+      },
+      (err) => {
+        throw err;
+      }
+    );
+  };
 
-    function getTypes() {
-      fetch(`${Config("backendUrl")}/components/types/`, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      })
-        .then((response) => response.json())
-        .then((response) => {
-          return setTypeList(response);
-        })
-        .catch((error) => {
-          throw new Error(error);
-        });
-    }
+  function getTypes() {
+    RequestService.get(
+      `${Config("backendUrl")}/components/types/`,
+      (response) => {
+        setTypeList(response.data);
+      },
+      (err) => {
+        throw err;
+      }
+    );
+  }
+
+  useEffect(() => {
     try {
       getSearch();
       getTypes();
     } catch (error) {
-      return setError(true);
+      return setHasError(true);
     }
   }, [getParams]);
 
@@ -60,6 +57,9 @@ const ComponentLibrary = () => {
     totalItemCount = lastItem.total_item_count;
   }
 
+  if (hasError) {
+    return <ErrorMessage message={ERROR_MESSAGE} />;
+  }
   return (
     <>
       <h1>Component Library</h1>
