@@ -1,32 +1,27 @@
 import { useState, useEffect } from "react";
 import Config from "../config";
+import RequestService from "../services/RequestService";
 
 const Healthcheck = () => {
-  const [error, setError] = useState(false);
-  const [status, setState] = useState("");
+  const [status, setStatus] = useState();
+  const [hasError, setHasError] = useState(false);
+
   useEffect(() => {
-    if (status === "") {
-      fetch(`${Config("backendUrl")}/healthcheck/`, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      })
-        .then((healthcheck) => {
-          return setState(healthcheck.status);
-        })
-        .catch((error) => {
-          return setError(true);
-        });
-    }
-  }, [status, setState]);
-  if (error) {
+    RequestService.get(
+      `${Config("backendUrl")}/healthcheck/`,
+      (response) => {
+        setStatus(response.status);
+      },
+      (err) => {
+        setHasError(true);
+      }
+    );
+  }, []);
+
+  if (hasError) {
     return <h1>Api healthcheck is not reachable</h1>;
   }
-  return (
-    <>
-      <h1>Api healthcheck status: {status}</h1>
-    </>
-  );
+  return <h1>Api healthcheck status: {status}</h1>;
 };
+
 export default Healthcheck;

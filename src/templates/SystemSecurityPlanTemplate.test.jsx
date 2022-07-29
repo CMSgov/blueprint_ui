@@ -16,12 +16,6 @@ const projectData = {
   impact_level: "low",
 };
 
-global.fetch = jest.fn();
-
-beforeEach(() => {
-  fetch.mockClear();
-});
-
 test("renders page", () => {
   render(<SystemSecurityPlanTemplate project={projectData} />, {
     wrapper: MemoryRouter,

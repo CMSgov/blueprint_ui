@@ -1,64 +1,63 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Config from "../config";
-import GlobalState from "../GlobalState";
+
+import { isEmpty } from "../utils";
 import { getControlData } from "../Helpers";
+import Config from "../config";
+import RequestService from "../services/RequestService";
+
 import { ComponentTemplate } from "../templates/ComponentTemplate";
+import ErrorMessage from "../molecules/ErrorMessage";
+import GlobalState from "../GlobalState";
+import LoadingIndicator from "../atoms/LoadingIndicator";
+
+const ERROR_MESSAGE = "Error loading component";
 
 const Component = () => {
   const { componentId } = useParams();
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+
   const [selectedControl, setSelectedControl] = useState(false);
   const [state, setState] = useContext(GlobalState);
-  let component = state.component;
-  if (component === undefined) {
-    component = {};
-  }
+  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (component.id !== parseInt(componentId)) {
-      fetch(`${Config("backendUrl")}/components/${componentId}/`, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json; charset=UTF-8",
+    if (!state.component || state.component.id !== parseInt(componentId)) {
+      setIsLoading(true);
+      RequestService.get(
+        `${Config("backendUrl")}/components/${componentId}/`,
+        (response) => {
+          setState((state) => ({ ...state, component: response.data }));
+          setIsLoading(false);
         },
-      })
-        .then((response) => response.json())
-        .then((component) => {
-          if (component !== undefined && component.id !== undefined) {
-            return setState((state) => ({ ...state, component: component }));
-          } else {
-            setErrorMessage(component.response || "Error loading component");
-            return setError(true);
-          }
-        })
-        .catch((error) => {
-          return setError(error);
-        });
+        (err) => {
+          setHasError(true);
+          setIsLoading(false);
+        }
+      );
     }
-  }, [componentId, component, setState]);
+  }, [componentId, state, setState]);
 
   const getControl = (controlId) => {
-    let control = getControlData(component, controlId);
+    let control = getControlData(state.component, controlId);
     setSelectedControl(control);
     window.location.hash = "#controls";
   };
 
-  if (error) {
-    return <h1>Component not found</h1>;
+  if (isLoading) {
+    return <LoadingIndicator />;
   }
-
-  if (Object.keys(component).length > 0) {
+  if (hasError) {
+    return <ErrorMessage message={ERROR_MESSAGE} />;
+  }
+  if (state.component && !isEmpty(state.component)) {
     return (
       <ComponentTemplate
-        component={component}
+        component={state.component}
         controlText={selectedControl}
         catalogData={getControl}
       />
     );
-  } else {
-    return <h1>{errorMessage}</h1>;
   }
 };
 

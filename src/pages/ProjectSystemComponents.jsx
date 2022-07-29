@@ -1,59 +1,60 @@
-import { useState, useEffect, useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
+
+import { isEmpty } from "../utils";
 import Config from "../config";
+import RequestService from "../services/RequestService";
+
 import ErrorMessage from "../molecules/ErrorMessage";
 import GlobalState from "../GlobalState";
+import LoadingIndicator from "../atoms/LoadingIndicator";
 import ProjectSystemComponentsTemplate from "../templates/ProjectSystemComponentsTemplate";
 
+const ERROR_MESSAGE = "Error loading system components";
+
 const ProjectSystemComponents = () => {
-  const urlParams = useLocation();
   const { id } = useParams();
-  const [error, setError] = useState(false);
+
   const [state, setState] = useContext(GlobalState);
-  const [errorMessage, setErrorMessage] = useState(null);
   const [componentList, setComponentList] = useState([]);
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [typeList, setTypeList] = useState(0);
+  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const urlParams = useLocation();
   const getParams = urlParams.search;
 
-  let project = state.project;
-  if (state.project === undefined) {
-    project = {};
-  }
-
   useEffect(() => {
-    if (project.id !== parseInt(id)) {
-      fetch(`${Config("backendUrl")}/projects/${id}/search/${getParams}`, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      })
-        .then((response) => response.json())
-        .then((response) => {
-          let project = response[0]["project"];
-          if (project !== undefined && project.id !== undefined) {
-            setState((state) => ({ ...state, project: project }));
-            setComponentList(response[1]["components"]);
-            setTotalItemCount(response[2]["total_item_count"]);
-            setTypeList(response[3]["type_list"]);
-          } else {
-            setErrorMessage("Error loading project information");
-            return setError(true);
-          }
-        })
-        .catch((error) => {
-          return setError(true);
-        });
-    }
-  }, [id, project, getParams, setState]);
+    RequestService.get(
+      `${Config("backendUrl")}/projects/${id}/search/${getParams}`,
+      (response) => {
+        const projectData = response.data[0]["project"];
+        const componentsData = response.data[1]["components"];
+        const totalItemCountData = response.data[2]["total_item_count"];
+        const typeListData = response.data[3]["type_list"];
+        setState((state) => ({ ...state, project: projectData }));
+        setComponentList(componentsData);
+        setTotalItemCount(totalItemCountData);
+        setTypeList(typeListData);
+        setIsLoading(false);
+      },
+      (err) => {
+        setHasError(true);
+        setIsLoading(false);
+      }
+    );
+  }, [id, getParams, setState]);
 
-  if (error) {
-    return <ErrorMessage message={errorMessage} />;
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
+  if (hasError || isEmpty(state.project)) {
+    return <ErrorMessage message={ERROR_MESSAGE} />;
   }
   return (
     <ProjectSystemComponentsTemplate
-      project={project}
+      project={state.project}
       componentList={componentList}
       totalItemCount={totalItemCount}
       typeList={typeList}

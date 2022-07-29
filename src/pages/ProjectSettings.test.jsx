@@ -1,42 +1,98 @@
-// @TODO This test file is a work in progress
-// The jest mock works to correctly handle setting url params that the component will use
-// The fetch mocking is not yet working
+// WIP test file
+// ProjectSettings uses Context and we need a way to test the changes to Context
 
-import { MemoryRouter } from "react-router-dom";
-import { render, screen } from "@testing-library/react";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { render, screen, waitFor } from "@testing-library/react";
+import { within } from "@testing-library/dom";
 import "@testing-library/jest-dom";
 import ProjectSettings from "./ProjectSettings";
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
+import Config from "../config";
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useParams: () => ({
-    id: "12",
-  }),
-}));
+test.skip("renders the ProjectSettingsTemplate page when project data is successfully returned", async () => {
+  const projectData = {
+    title: "Test Project",
+    acronym: "TP",
+    id: 1,
+  };
 
-const projectData = {
-  title: "Test Project",
-  acronym: "TP",
-  id: 1,
-};
-
-global.fetch = jest.fn();
-
-beforeEach(() => {
-  fetch.mockClear();
-});
-
-test.skip("Project Settings page renders with title", async () => {
-  fetch.mockImplementationOnce(() =>
-    Promise.resolve({ json: () => Promise.resolve(projectData) })
-  );
+  let mock = new MockAdapter(axios);
+  mock
+    .onGet(`${Config("backendUrl")}/projects/${projectData.id}/`)
+    .reply(200, projectData);
 
   render(
-    <MemoryRouter>
-      <ProjectSettings />
+    <MemoryRouter initialEntries={[`/projects/${projectData.id}/`]}>
+      <Routes>
+        <Route path="projects/:id" element={<ProjectSettings />} />
+      </Routes>
     </MemoryRouter>
   );
 
-  //   await waitFor(() => screen.getByText("Project Settings"));
-  expect(screen.getByRole("heading")).toHaveTextContent("Project Settings");
+  const expectedTitle = `${projectData.title} (${projectData.acronym})`;
+  await waitFor(() => {
+    // ensures component has finished running async code and has rendered data
+    screen.getByText(expectedTitle);
+    // checks that project template has rendered
+    const projectTemplate = screen.getByTestId("project_settings_page");
+    expect(
+      within(projectTemplate).getByTestId("project_header_subtitle")
+    ).toHaveTextContent("Project Settings");
+  });
+});
+
+test.skip("renders the ErrorMessage when projects data is NOT successfully returned", async () => {
+  const nonExistentProjectId = 0;
+
+  let mock = new MockAdapter(axios);
+  mock
+    .onGet(`${Config("backendUrl")}/projects/${nonExistentProjectId}`)
+    .reply(401);
+
+  render(
+    <MemoryRouter initialEntries={[`/projects/${nonExistentProjectId}/`]}>
+      <Routes>
+        <Route path="projects/:id" element={<ProjectSettings />} />
+      </Routes>
+    </MemoryRouter>
+  );
+
+  await waitFor(() => {
+    // ensures component has finished running async code and has rendered data
+    screen.getByText(`Error loading project settings`);
+    // checks that ErrorMessage component has rendered
+    const errorMessage = screen.getByTestId("error_message");
+    expect(within(errorMessage).getByRole("heading")).toHaveTextContent(
+      "Error"
+    );
+  });
+});
+
+test.skip("renders the LoadingIcon when waiting for data", async () => {
+  const projectData = {
+    title: "Test Project",
+    acronym: "TP",
+    id: 1,
+  };
+
+  let mock = new MockAdapter(axios);
+  mock
+    .onGet(`${Config("backendUrl")}/projects/${projectData.id}/`)
+    .reply(200, projectData);
+
+  render(
+    <MemoryRouter initialEntries={[`/projects/${projectData.id}/`]}>
+      <Routes>
+        <Route path="projects/:id" element={<ProjectSettings />} />
+      </Routes>
+    </MemoryRouter>
+  );
+
+  screen.getByTestId("loading_indicator");
+
+  // allows component to finish running async code and rerender
+  await waitFor(() => {
+    screen.getByTestId("project_settings_page");
+  });
 });

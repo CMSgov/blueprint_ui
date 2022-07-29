@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { MAIN_ROUTES } from "../AppRoutes";
 import Config from "../config";
+import RequestService from "../services/RequestService";
 
 const ProjectSetup = () => {
   const [fullNameValidationStatus, setFullNameValidationStatus] = useState("");
@@ -12,7 +13,6 @@ const ProjectSetup = () => {
   const [errorLocation, setErrorLocation] = useState(false);
   const [errorFisma, setErrorFisma] = useState(false);
 
-  const [error, setError] = useState(false);
   const [project, setProject] = useState(false);
   // setup input references
   const textInputFull = useRef(null);
@@ -26,25 +26,13 @@ const ProjectSetup = () => {
   const radioInputLevelHigh = useRef(null);
 
   function postProjectCreate(formValues) {
-    fetch(`${Config("backendUrl")}/projects/`, {
-      method: "POST",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json; charset=UTF-8",
-      },
-      body: JSON.stringify(formValues),
-    })
-      .then((response) => response.json())
-      .then((project) => {
-        if (project !== undefined && project.id !== undefined) {
-          return setProject(project);
-        } else {
-          return setError(project);
-        }
-      })
-      .catch((error) => {
-        return setError(error);
-      });
+    RequestService.post(
+      `${Config("backendUrl")}/projects/`,
+      JSON.stringify(formValues),
+      (response) => {
+        setProject(response.data);
+      }
+    );
   }
 
   const formSubmit = () => {
@@ -109,8 +97,6 @@ const ProjectSetup = () => {
       postVariables["impact_level"]
     ) {
       postProjectCreate(postVariables);
-    } else {
-      setError("All fields are required.");
     }
   };
 

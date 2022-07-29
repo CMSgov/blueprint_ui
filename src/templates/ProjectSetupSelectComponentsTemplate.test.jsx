@@ -67,12 +67,6 @@ const componentList = [
   { total_item_count: 5 },
 ];
 
-global.fetch = jest.fn();
-
-beforeEach(() => {
-  fetch.mockClear();
-});
-
 test("renders page", () => {
   render(
     <ProjectSetupSelectComponentsTemplate componentList={componentList} />,

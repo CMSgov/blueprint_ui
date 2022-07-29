@@ -1,63 +1,60 @@
 import React from "react";
-import { useEffect, useState, useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
+import { isEmpty } from "../utils";
 import Config from "../config";
+import RequestService from "../services/RequestService";
+
 import ControlTemplate from "../templates/ControlTemplate";
 import ErrorMessage from "../molecules/ErrorMessage";
 import GlobalState from "../GlobalState";
+import LoadingIndicator from "../atoms/LoadingIndicator";
+
 import {
   mockControlData,
   mockNextControlId,
   mockInheritedComponentNarratives,
 } from "../mockData/ControlPage";
 
+const ERROR_MESSAGE = "Error loading project control";
+
 export default function Control() {
   const { id } = useParams();
 
-  const [error, setError] = useState(false);
   const [state, setState] = useContext(GlobalState);
-  const [errorMessage, setErrorMessage] = useState(null);
-
-  let project = {};
-  if (state.project !== undefined) {
-    project = state.project;
-  }
+  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (project.id !== parseInt(id)) {
-      fetch(`${Config("backendUrl")}/projects/${id}/`, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json; charset=UTF-8",
+    if (!state.project || state.project.id !== parseInt(id)) {
+      setIsLoading(true);
+      RequestService.get(
+        `${Config("backendUrl")}/projects/${id}/`,
+        (response) => {
+          setState((state) => ({ ...state, project: response.data }));
+          setIsLoading(false);
         },
-      })
-        .then((response) => response.json())
-        .then((project) => {
-          if (project !== undefined && project.id !== undefined) {
-            return setState((state) => ({ ...state, project: project }));
-          } else {
-            // extract the response message to use as the error mesage or use backup message
-            setErrorMessage(
-              project.response || "Error loading project control"
-            );
-            return setError(true);
-          }
-        })
-        .catch((error) => {
-          return setError(true);
-        });
+        (err) => {
+          setHasError(true);
+          setIsLoading(false);
+        }
+      );
     }
-  }, [id, project, setState]);
+  }, [id, state, setState]);
 
-  if (!error && Object.keys(project).length > 0) {
-    return (
-      <ControlTemplate
-        project={project}
-        control={mockControlData}
-        nextControlId={mockNextControlId}
-        inheritedComponentNarratives={mockInheritedComponentNarratives}
-      />
-    );
+  if (isLoading) {
+    return <LoadingIndicator />;
   }
-  return <ErrorMessage message={errorMessage} />;
+  if (hasError) {
+    return <ErrorMessage message={ERROR_MESSAGE} />;
+  }
+  if (state.project && !isEmpty(state.project)) {
+    <ControlTemplate
+      project={state.project}
+      control={mockControlData}
+      nextControlId={mockNextControlId}
+      inheritedComponentNarratives={mockInheritedComponentNarratives}
+    />;
+  }
 }

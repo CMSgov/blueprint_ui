@@ -1,9 +1,8 @@
 import { Dropdown, Form } from "@trussworks/react-uswds";
-import { useState } from "react";
 import Config from "../config";
+import RequestService from "../services/RequestService";
 
 const ComponentProjectForm = ({ project_data, component_id }) => {
-  const [error, setError] = useState(false);
   const postVariables = {};
 
   const addComponent = (event) => {
@@ -26,18 +25,10 @@ const ComponentProjectForm = ({ project_data, component_id }) => {
   };
 
   function postProjectUpdate(formValues, path) {
-    fetch(`${Config("backendUrl")}/${path}`, {
-      method: "POST",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json; charset=UTF-8",
-      },
-      body: JSON.stringify(formValues),
-    })
-      .then((response) => response.json())
-      .catch((error) => {
-        return setError(error);
-      });
+    RequestService.post(
+      `${Config("backendUrl")}/${path}`,
+      JSON.stringify(formValues)
+    );
   }
 
   return (
