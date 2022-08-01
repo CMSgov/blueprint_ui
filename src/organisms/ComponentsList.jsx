@@ -3,7 +3,7 @@ import { ComponentListItem } from "../molecules/ComponentListItem";
 
 const ComponentsList = ({ componentList }) => {
   const params = useLocation();
-  const manageComponentsUrl = params.pathname + "/system-components";
+  const manageComponentsUrl = params.pathname + "/components";
   return (
     <>
       {componentList.map((component, i) => (

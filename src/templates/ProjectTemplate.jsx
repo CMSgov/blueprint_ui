@@ -6,7 +6,7 @@ export function ProjectTemplate({ project }) {
   const { id, acronym, impact_level, title } = project;
   const sspUrl = "/projects/" + id + "/system-security-plan";
   const params = useLocation();
-  const manageComponentsUrl = params.pathname + "/system-components";
+  const manageComponentsUrl = params.pathname + "/components";
   return (
     <div>
       <ProjectHeader

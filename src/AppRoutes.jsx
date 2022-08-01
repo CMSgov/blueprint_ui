@@ -18,8 +18,7 @@ import ProjectSetup from "./pages/ProjectSetup";
 import ProjectSetupConfirmation from "./pages/ProjectSetupConfirmation";
 import ProjectSystemSecurityPlan from "./pages/ProjectSystemSecurityPlan";
 import ProjectSetupSelectComponents from "./pages/ProjectSetupSelectComponents";
-import ProjectSystemComponents from "./pages/ProjectSystemComponents";
-
+import ProjectComponents from "./pages/ProjectComponents";
 
 export const MAIN_ROUTES = {
   HOME: "/",
@@ -45,10 +44,7 @@ export const AppRoutes = () => (
         <Route path=":id">
           <Route index element={<Project />} />
           <Route path="settings" element={<ProjectSettings />} />
-          <Route
-            path="system-components"
-            element={<ProjectSystemComponents />}
-          />
+          <Route path="components" element={<ProjectComponents />} />
           <Route path="controls">
             <Route index element={<Controls />} />
             <Route path=":controlId" element={<Control />} />

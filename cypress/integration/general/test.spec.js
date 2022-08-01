@@ -145,7 +145,7 @@ describe("breadcrumbs show correctly on projects details page", () => {
 
 describe("breadcrumbs show correctly on projects system components page", () => {
   it("does display on project system components page", () => {
-    cy.visit(Cypress.env("BASE_URL") + "/projects/1/system-components");
+    cy.visit(Cypress.env("BASE_URL") + "/projects/1/components");
     cy.get("header").should("exist");
     cy.get(".usa-breadcrumb").should("exist").contains("Home");
     cy.get(".usa-breadcrumb").contains("projects");

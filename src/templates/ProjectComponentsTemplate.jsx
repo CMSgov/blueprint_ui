@@ -3,7 +3,7 @@ import ProjectHeader from "../molecules/ProjectHeader";
 import { Link } from "react-router-dom";
 import { MAIN_ROUTES } from "../AppRoutes";
 
-const ProjectSystemComponentsTemplate = ({
+const ProjectComponentsTemplate = ({
   project,
   componentList,
   totalItemCount,
@@ -37,4 +37,4 @@ const ProjectSystemComponentsTemplate = ({
   );
 };
 
-export default ProjectSystemComponentsTemplate;
+export default ProjectComponentsTemplate;

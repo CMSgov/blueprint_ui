@@ -8,11 +8,11 @@ import RequestService from "../services/RequestService";
 import ErrorMessage from "../molecules/ErrorMessage";
 import GlobalState from "../GlobalState";
 import LoadingIndicator from "../atoms/LoadingIndicator";
-import ProjectSystemComponentsTemplate from "../templates/ProjectSystemComponentsTemplate";
+import ProjectComponentsTemplate from "../templates/ProjectComponentsTemplate";
 
 const ERROR_MESSAGE = "Error loading system components";
 
-const ProjectSystemComponents = () => {
+const ProjectComponents = () => {
   const { id } = useParams();
 
   const [state, setState] = useContext(GlobalState);
@@ -53,7 +53,7 @@ const ProjectSystemComponents = () => {
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
   return (
-    <ProjectSystemComponentsTemplate
+    <ProjectComponentsTemplate
       project={state.project}
       componentList={componentList}
       totalItemCount={totalItemCount}
@@ -62,4 +62,4 @@ const ProjectSystemComponents = () => {
   );
 };
 
-export default ProjectSystemComponents;
+export default ProjectComponents;
