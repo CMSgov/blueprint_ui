@@ -37,11 +37,59 @@ const EmptyResults = ({ length }) => {
     </p>
   );
 };
+
+const FilterCol = ({
+  showTypeFilter,
+  showCatalogFilter,
+  catalogClasses,
+  typeList,
+  catalogList,
+  checkBoxHandler,
+}) => {
+  return (
+    <>
+      <div className="component-library-filter grid-col-2">
+        {showTypeFilter && (
+          <fieldset className="usa-fieldset">
+            <legend className="usa-legend">Type</legend>
+            {typeList.map((type, i) => (
+              <Checkbox
+                id={type[0] + "-filter"}
+                name={type[0] + "-filter"}
+                label={type[0]}
+                value={"type=" + type[0]}
+                onChange={checkBoxHandler}
+                key={i}
+              />
+            ))}
+          </fieldset>
+        )}
+        {showCatalogFilter && (
+          <fieldset className={catalogClasses}>
+            <legend className="usa-legend">Catalog</legend>
+            {catalogList.map((catalog, i) => (
+              <Checkbox
+                id={catalog.id + "-filter"}
+                name={catalog.name + "-filter"}
+                label={catalog.name}
+                value={"catalog=" + catalog.id}
+                onChange={checkBoxHandler}
+                key={i}
+              />
+            ))}
+          </fieldset>
+        )}
+      </div>
+      <div className="grid-col-1"></div>
+    </>
+  );
+};
 // this seems overly complex when it is not doing much :/ defining variables, setting url params, callbacks, template varibles finished, template
 const SearchLibrary = ({
   componentList = [],
   linkToComponentLibrary = false,
   typeList = [],
+  catalogList = [],
   totalItemCount = 0,
 }) => {
   const baseUrl = useLocation();
@@ -49,6 +97,7 @@ const SearchLibrary = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [currentSearch, setCurrentSearch] = useState("");
   const [currentType, setCurrentType] = useState();
+  const [currentCatalog, setCurrentCatalog] = useState();
 
   //set the url query params into state
   const [searchParams] = useSearchParams();
@@ -68,7 +117,12 @@ const SearchLibrary = ({
   if (searchParams.get("type") && currentType !== searchParams.get("type")) {
     setCurrentType(searchParams.get("type"));
   }
-
+  if (
+    searchParams.get("catalog") &&
+    currentCatalog !== searchParams.get("catalog")
+  ) {
+    setCurrentCatalog(searchParams.get("catalog"));
+  }
   // Call back functions used for updating values from the page
   //callback function to change the current page
   const onPageChange = (pageNumber) => {
@@ -115,10 +169,16 @@ const SearchLibrary = ({
     paginationUrl += "type=" + currentType + "&";
   }
 
+  let showCatalogFilter = catalogList && catalogList.length > 1;
   let showTypeFilter = typeList && typeList.length > 1;
   let catalogClasses = "usa-fieldset ";
-  if (showTypeFilter) {
+  let tableGridCol = "grid-col-9";
+  let hideFilterCol = false;
+  if (showTypeFilter && showCatalogFilter) {
     catalogClasses += "catalog-filter";
+  } else if (!showCatalogFilter && !showTypeFilter) {
+    tableGridCol = "grid-col-12";
+    hideFilterCol = true;
   }
 
   return (
@@ -142,43 +202,17 @@ const SearchLibrary = ({
         </div>
       </div>
       <div className="grid-row">
-        <div className="component-library-filter grid-col-2">
-          {showTypeFilter && (
-            <fieldset className="usa-fieldset">
-              <legend className="usa-legend">Type</legend>
-              {typeList.map((type, i) => (
-                <Checkbox
-                  id={type[0] + "-filter"}
-                  name={type[0] + "-filter"}
-                  label={type[0]}
-                  value={"type=" + type[0]}
-                  onChange={checkBoxHandler}
-                  key={i}
-                />
-              ))}
-            </fieldset>
-          )}
-
-          <fieldset className={catalogClasses}>
-            <legend className="usa-legend">Catalog</legend>
-            <Checkbox
-              id="ars-3-filter"
-              name="ars-3-filter"
-              label="ARS 3.1"
-              value="catalog=1"
-              onChange={checkBoxHandler}
-            />
-            <Checkbox
-              id="ars-5-filter"
-              name="ars-5-filter"
-              label="ARS 5.0"
-              value="catalog=2"
-              onChange={checkBoxHandler}
-            />
-          </fieldset>
-        </div>
-        <div className="grid-col-1"></div>
-        <div className="grid-col-9">
+        {!hideFilterCol && (
+          <FilterCol
+            showTypeFilter={showTypeFilter}
+            showCatalogFilter={showCatalogFilter}
+            catalogClasses={catalogClasses}
+            typeList={typeList}
+            catalogList={catalogList}
+            checkBoxHandler={checkBoxHandler}
+          />
+        )}
+        <div className={tableGridCol}>
           <table
             data-testid="table"
             className="usa-table width-full usa-table--striped"
