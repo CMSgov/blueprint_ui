@@ -14,6 +14,7 @@ const ComponentLibrary = () => {
 
   const [componentList, setComponentList] = useState([]);
   const [typeList, setTypeList] = useState([]);
+  const [catalogList, setCatalogList] = useState([]);
   const [hasError, setHasError] = useState(false);
 
   const getParams = urlParams.search;
@@ -42,10 +43,23 @@ const ComponentLibrary = () => {
     );
   };
 
+  const getCatalogs = () => {
+    RequestService.get(
+      `${Config("backendUrl")}/catalogs/`,
+      (response) => {
+        setCatalogList(response.data);
+      },
+      (err) => {
+        throw err;
+      }
+    );
+  };
+
   useEffect(() => {
     try {
       getSearch();
       getTypes();
+      getCatalogs();
     } catch (error) {
       return setHasError(true);
     }
@@ -66,6 +80,7 @@ const ComponentLibrary = () => {
       <SearchLibrary
         componentList={componentList}
         typeList={typeList}
+        catalogList={catalogList}
         totalItemCount={totalItemCount}
       />
     </>

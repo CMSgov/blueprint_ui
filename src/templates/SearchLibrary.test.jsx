@@ -55,6 +55,19 @@ const componentList = [
 
 const typeList = [["software"], ["service"]];
 
+const catalogList = [
+  {
+    id: 1,
+    name: "cms ars 3.1",
+    file_name: "/media/CMS_ARS_3_1_catalog_1.json",
+  },
+  {
+    id: 2,
+    name: "cms ars 5.0",
+    file_name: "/media/CMS_ARS_5_catalog_1.json",
+  },
+];
+
 test("renders page with link to component library", () => {
   render(
     <SearchLibrary
@@ -115,4 +128,57 @@ test("renders page with out type filters", () => {
   const labelService = screen.queryByLabelText("service");
   expect(labelSoftware).toBeNull();
   expect(labelService).toBeNull();
+});
+
+test("renders page with type & catalog filters", () => {
+  render(
+    <SearchLibrary
+      componentList={componentList}
+      totalItemCount={5}
+      typeList={typeList}
+      catalogList={catalogList}
+    />,
+    {
+      wrapper: MemoryRouter,
+    }
+  );
+  const labelSoftware = screen.getByLabelText("software");
+  const labelService = screen.getByLabelText("service");
+  expect(labelSoftware).toBeInTheDocument();
+  expect(labelService).toBeInTheDocument();
+  const labelCatalog1 = screen.getByLabelText("cms ars 3.1");
+  const labelCatalog2 = screen.getByLabelText("cms ars 5.0");
+  expect(labelCatalog1).toBeInTheDocument();
+  expect(labelCatalog2).toBeInTheDocument();
+});
+
+test("renders page with just catalog filters", () => {
+  render(
+    <SearchLibrary
+      componentList={componentList}
+      totalItemCount={5}
+      catalogList={catalogList}
+    />,
+    {
+      wrapper: MemoryRouter,
+    }
+  );
+  const labelSoftware = screen.queryByLabelText("software");
+  const labelService = screen.queryByLabelText("service");
+  expect(labelSoftware).toBeNull();
+  expect(labelService).toBeNull();
+  const labelCatalog1 = screen.getByLabelText("cms ars 3.1");
+  const labelCatalog2 = screen.getByLabelText("cms ars 5.0");
+  expect(labelCatalog1).toBeInTheDocument();
+  expect(labelCatalog2).toBeInTheDocument();
+});
+
+test("renders page with out catalog filters", () => {
+  render(<SearchLibrary componentList={componentList} totalItemCount={5} />, {
+    wrapper: MemoryRouter,
+  });
+  const labelCatalog1 = screen.queryByLabelText("cms ars 3.1");
+  const labelCatalog2 = screen.queryByLabelText("cms ars 5.0");
+  expect(labelCatalog1).toBeNull();
+  expect(labelCatalog2).toBeNull();
 });
