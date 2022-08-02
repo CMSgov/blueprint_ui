@@ -27,7 +27,7 @@ describe("breadcrumbs & h1 show correctly on healthcheck page", () => {
 describe("breadcrumbs show correctly on projects not found page", () => {
   it("does display on project not found page", () => {
     cy.visit(Cypress.env("BASE_URL") + "/projects/0");
-    cy.wait(3000); // @TODO: wait for the ajax call
+    cy.wait(3000);
     cy.get("header").should("exist");
     cy.get(".usa-breadcrumb").should("exist").contains("Home");
     cy.get(".usa-breadcrumb").contains("projects");

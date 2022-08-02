@@ -27,9 +27,7 @@ describe("Testing out project pages display header footer and breadcrumbs and ot
     cy.get("#radio-fisma-low").check({ force: true }).should("be.checked");
     cy.contains("Next").click();
     cy.get(".usa-input--success").should("exist");
-    cy.wait(3000); // @TODO:  testing Ajax calls then page change
-    // cy.route('POST', Cypress.env("BASE_URL")+':8000/api/projects/').as('project-create');
-    // cy.wait('@project-create').should('have.property', 'status', 200);
+    cy.wait(3000);
     cy.url().should(
       "contain",
       Cypress.env("BASE_URL") + "/project-setup/confirmation"
@@ -47,7 +45,7 @@ describe("Testing out project pages display header footer and breadcrumbs and ot
       "contain",
       Cypress.env("BASE_URL") + "/project-setup/confirmation/select-components"
     );
-    cy.wait(3000); // @TODO: wait for the ajax call
+    cy.wait(3000);
     cy.get("header").should("exist");
     cy.get(".usa-breadcrumb").should("exist").contains("Home");
     cy.get(".usa-breadcrumb").contains("project setup");
@@ -57,15 +55,16 @@ describe("Testing out project pages display header footer and breadcrumbs and ot
       .should("exist")
       .contains("Select components for your system technologies");
     cy.get("footer").should("exist");
-    cy.wait(3000); // @TODO: test the ajax call gets the components not in the project
+    cy.wait(3000);
     cy.get(".usa-table")
       .contains(/blueprint/i)
       .should("exist");
+    //@TODO: next two lines will be fixed with jira ticket ISPGBSS-1158
     // cy.get(".usa-table").contains(/ociso/i).should("not.exist");
     // cy.get(".usa-table").contains(/aws/i).should("not.exist");
     // Expecting a new page to be added in the future, it will go here
     cy.contains("Confirm").click();
-    cy.wait(3000); // @TODO: wait for the ajax call
+    cy.wait(3000);
     cy.url().should("contain", Cypress.env("BASE_URL") + "/projects");
     cy.get("h1").should("exist").contains(projectName);
     //set the project url to a variable for use in later test
@@ -76,7 +75,7 @@ describe("Testing out project pages display header footer and breadcrumbs and ot
 
   it("navigating project pages after project is setup", () => {
     cy.visit(projectUrl);
-    cy.wait(3000); // @TODO: wait for the ajax call
+    cy.wait(3000);
     cy.get("h1").should("exist").contains(projectName);
     cy.get(".usa-breadcrumb").should("exist").contains("Home");
     cy.get(".usa-breadcrumb").contains("projects");
@@ -85,7 +84,7 @@ describe("Testing out project pages display header footer and breadcrumbs and ot
     cy.get("header").should("exist");
     cy.get("footer").should("exist");
     cy.get(".gear-link").should("exist").click();
-    cy.wait(3000); // @TODO: wait for the ajax call
+    cy.wait(3000);
     cy.get("header").should("exist");
     cy.get("footer").should("exist");
     cy.get("h1").should("exist").contains(projectName);
@@ -94,9 +93,9 @@ describe("Testing out project pages display header footer and breadcrumbs and ot
     cy.get(".usa-breadcrumb").contains("projects");
     cy.get(".usa-breadcrumb").contains("settings");
     cy.get(".usa-breadcrumb").contains(projectName).click();
-    cy.wait(3000); // @TODO: wait for the ajax call
+    cy.wait(3000);
     cy.get(".usa-button").contains("Manage System Components").click();
-    cy.wait(3000); // @TODO: wait for the ajax call
+    cy.wait(3000);
     cy.get("header").should("exist");
     cy.get("footer").should("exist");
     cy.get("h1").should("exist").contains(projectName);
@@ -105,9 +104,9 @@ describe("Testing out project pages display header footer and breadcrumbs and ot
     cy.get(".usa-breadcrumb").contains("projects");
     cy.get(".usa-breadcrumb").contains("components");
     cy.get(".usa-breadcrumb").contains(projectName).click();
-    cy.wait(3000); // @TODO: wait for the ajax call
+    cy.wait(3000);
     cy.get(".usa-button").contains("Export Control Narratives").click();
-    cy.wait(3000); // @TODO: wait for the ajax call
+    cy.wait(3000);
     cy.get("header").should("exist");
     cy.get("footer").should("exist");
     cy.get("h1").should("exist").contains(projectName);
@@ -121,7 +120,7 @@ describe("Testing out project pages display header footer and breadcrumbs and ot
 
   it("testing individual control page", () => {
     cy.visit(projectUrl + "/controls/ac-1/");
-    cy.wait(3000); // @TODO: wait for the ajax call
+    cy.wait(3000);
     cy.get("header").should("exist");
     cy.get("footer").should("exist");
     cy.get(".usa-breadcrumb").should("exist").contains("Home");
@@ -140,15 +139,15 @@ describe("Testing out project pages display header footer and breadcrumbs and ot
     cy.get("footer").should("exist");
     cy.get("header").contains("Projects").should("exist").click();
     cy.url().should("contain", Cypress.env("BASE_URL") + "/projects");
-    cy.wait(3000); // @TODO: wait for the ajax call
+    cy.wait(3000);
     cy.get("header").should("exist");
     cy.get(".usa-breadcrumb").should("exist").contains("Home");
     cy.get(".usa-breadcrumb").contains("projects");
     cy.get("footer").should("exist");
     cy.get("h1").should("exist").contains("projects", { matchCase: false });
-    cy.wait(3000); // @TODO: wait for the ajax call
+    cy.wait(3000);
     cy.get(".usa-button").contains("View Project").click();
-    cy.wait(3000); // @TODO: wait for the ajax call
+    cy.wait(3000);
     cy.url().should("contain", Cypress.env("BASE_URL") + "/projects");
     cy.get("header").should("exist");
     cy.get(".usa-breadcrumb").should("exist").contains("Home");
