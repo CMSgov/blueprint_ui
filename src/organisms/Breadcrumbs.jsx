@@ -82,7 +82,6 @@ const Breadcrumbs = () => {
     if (pathArray.length === 2) {
       setPageName(title);
     }
-    console.log(pathArray);
     if (pathArray[1] !== undefined && pathArray[2] !== undefined) {
       appendToParentList(title, `/projects/${pathArray[1]}`);
     }
