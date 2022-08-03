@@ -24,10 +24,8 @@ const TableRow = ({ component }) => {
   );
 };
 
-const ProjectSetupSelectComponentsTemplate = ({ componentList }) => {
+const ProjectSetupSelectComponentsTemplate = ({ componentList, projectId }) => {
   const [response, setResponse] = useState(false);
-  const localStorageProject = JSON.parse(localStorage.getItem("project"));
-  const projectId = localStorageProject.id;
   const projectUrl = "/projects/" + projectId;
 
   function postProjectAddComponent(formValues) {
