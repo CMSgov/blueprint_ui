@@ -19,7 +19,6 @@ export default function Control() {
   const [isLoading, setIsLoading] = useState(false);
   const [control, setControl] = useState();
   const [componentData, setComponentData] = useState();
-  const [nextControlId, setNextControlId] = useState("");
 
   useEffect(() => {
     if (!state.project || state.project.id !== parseInt(id)) {
