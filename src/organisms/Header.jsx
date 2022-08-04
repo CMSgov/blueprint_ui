@@ -1,12 +1,11 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-import Logo from "../atoms/Logo";
-import { UserStub } from "../stub";
 import { MAIN_ROUTES } from "../AppRoutes";
+import AuthContext from "../AuthContext";
+import Logo from "../atoms/Logo";
 
 const Header = () => {
-  // @TODO: notification counter? needs functionality to be built
-  const count = 0;
-  const userName = UserStub.username;
+  let { user, authToken } = useContext(AuthContext);
   return (
     <header className="usa-header site-header site-header-dark" role="banner">
       <div className="usa-navbar site-header-navbar">
@@ -20,11 +19,10 @@ const Header = () => {
         <Link to={MAIN_ROUTES.COMPONENT_LIBRARY}>Component Library</Link>
         <div className="site-header-right">
           <Link to={MAIN_ROUTES.HELP}>Help</Link>
-          <span className="usa-media-block__img circle-4 bg-base display-flex flex-row flex-align-center flex-justify-center text-white">
-            {count}
-          </span>
-          {/* @TODO: change user to a link when it exists */}
-          <a href="/user">{userName}</a>
+          {/* TODO: Display username, update link */}
+          <a href="">
+            {JSON.stringify(user)} {authToken}
+          </a>
         </div>
       </div>
     </header>

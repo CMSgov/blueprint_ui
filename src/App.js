@@ -5,21 +5,24 @@ import Header from "./organisms/Header";
 import { useState } from "react";
 import Breadcrumbs from "./organisms/Breadcrumbs";
 import GlobalState from "./GlobalState";
+import { AuthProvider } from "./AuthContext";
 
 function App() {
   const [state, setState] = useState({});
   return (
     <div className="App">
-      <GlobalState.Provider value={[state, setState]}>
-        <Header />
-        <div className="grid-row">
-          <div className="grid-col-12 main-content-body">
-            <Breadcrumbs />
-            <Outlet />
+      <AuthProvider>
+        <GlobalState.Provider value={[state, setState]}>
+          <Header />
+          <div className="grid-row">
+            <div className="grid-col-12 main-content-body">
+              <Breadcrumbs />
+              <Outlet />
+            </div>
           </div>
-        </div>
-        <Footer />
-      </GlobalState.Provider>
+          <Footer />
+        </GlobalState.Provider>
+      </AuthProvider>
     </div>
   );
 }

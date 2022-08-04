@@ -1,5 +1,6 @@
-const config = {
+export const config = {
   backendUrl: `${process.env.REACT_APP_API_ENDPOINT}/api`,
+  backendUrlAuth: `${process.env.REACT_APP_API_ENDPOINT}/api-token-auth/`,
 };
 
 const Config = (key) => {
