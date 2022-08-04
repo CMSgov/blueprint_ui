@@ -69,7 +69,10 @@ const componentList = [
 
 test("renders page", () => {
   render(
-    <ProjectSetupSelectComponentsTemplate componentList={componentList} />,
+    <ProjectSetupSelectComponentsTemplate
+      componentList={componentList}
+      projectId={12}
+    />,
     {
       wrapper: MemoryRouter,
     }
