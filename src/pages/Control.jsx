@@ -11,50 +11,64 @@ import ErrorMessage from "../molecules/ErrorMessage";
 import GlobalState from "../GlobalState";
 import LoadingIndicator from "../atoms/LoadingIndicator";
 
-import {
-  mockControlData,
-  mockNextControlId,
-  mockInheritedComponentNarratives,
-} from "../mockData/ControlPage";
-
 const ERROR_MESSAGE = "Error loading project control";
 
 export default function Control() {
-  const { id } = useParams();
-
+  const { id, controlId } = useParams();
   const [state, setState] = useContext(GlobalState);
-  const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [control, setControl] = useState();
+  const [componentData, setComponentData] = useState();
+  const [nextControlId, setNextControlId] = useState("");
 
   useEffect(() => {
     if (!state.project || state.project.id !== parseInt(id)) {
       setIsLoading(true);
       RequestService.get(
-        `${Config("backendUrl")}/projects/${id}/`,
+        `${Config("backendUrl")}/projects/${id}/controls/${controlId}/`,
         (response) => {
           setState((state) => ({ ...state, project: response.data }));
+          let control = response.data.catalog_data;
+          if (control.guidance === "") {
+            control.guidance =
+              "No control guidance found for this control " + controlId;
+          }
+          if (control.implementation === "") {
+            control.implementation =
+              "No implementation standards found for this control " + controlId;
+          }
+          setControl(control);
+          let componentData = response.data.component_data;
+          if (typeof componentData.responsibility == "object") {
+            componentData.responsibility = componentData.responsibility[0];
+          }
+          setComponentData(componentData);
           setIsLoading(false);
         },
         (err) => {
-          setHasError(true);
           setIsLoading(false);
         }
       );
     }
-  }, [id, state, setState]);
+  }, [controlId, id, state, setState]);
 
   if (isLoading) {
     return <LoadingIndicator />;
+  } else if (
+    control !== undefined &&
+    !isEmpty(control) &&
+    state.project !== undefined &&
+    !isEmpty(state.project) &&
+    componentData !== undefined &&
+    !isEmpty(componentData)
+  ) {
+    return (
+      <ControlTemplate
+        project={state.project}
+        control={control}
+        componentData={componentData}
+      />
+    );
   }
-  if (hasError) {
-    return <ErrorMessage message={ERROR_MESSAGE} />;
-  }
-  if (state.project && !isEmpty(state.project)) {
-    <ControlTemplate
-      project={state.project}
-      control={mockControlData}
-      nextControlId={mockNextControlId}
-      inheritedComponentNarratives={mockInheritedComponentNarratives}
-    />;
-  }
+  return <ErrorMessage message={ERROR_MESSAGE} />;
 }

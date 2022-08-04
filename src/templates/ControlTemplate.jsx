@@ -2,29 +2,50 @@ import PropTypes from "prop-types";
 import { Accordion, Checkbox, Textarea } from "@trussworks/react-uswds";
 import ProjectHeader from "../molecules/ProjectHeader";
 import ResponsibilityBox from "../atoms/ResponsibilityBox";
+import { isEmpty } from "../utils";
+import Config from "../config";
+import RequestService from "../services/RequestService";
+import { useParams } from "react-router-dom";
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
 
-export default function ControlTemplate({
-  project,
-  control,
-  nextControlId,
-  inheritedComponentNarratives,
-}) {
+const InheritedComponentNarratives = ({ inherited }) => {
+  if (inherited === undefined) {
+    return "";
+  }
+  return (
+    <>
+      {Object.keys(inherited).map((component, i) => (
+        <div key={i}>
+          <b>{component}</b>
+          <p>{inherited[component].description}</p>
+        </div>
+      ))}
+    </>
+  );
+};
+
+export default function ControlTemplate({ project, control, componentData }) {
+  const { controlId } = useParams();
+  const [response, setResponse] = useState(false);
   const { id: projectId, acronym, title } = project;
   const {
-    controlId,
-    controlTitle,
+    label,
+    title: controlTitle,
     description,
     family,
-    guidance,
-    implementationStandards,
-    responsibility,
+    guidance = "No control guidance found for this control",
+    implementation = "No implementation standards found for this control",
     version,
+    next_id: nextControlId,
   } = control;
-
-  const accordionItemsProps = [
+  const { responsibility, components } = componentData;
+  const subtitle = `System Control: ${label.toUpperCase()} ${controlTitle}`;
+  const nextLink = `/projects/${projectId}/controls/${nextControlId}`;
+  let accordionItemsProps = [
     {
       title: "CMS Implementation Standards",
-      content: <p>{implementationStandards}</p>,
+      content: <p>{implementation}</p>,
       expanded: false,
       id: "implementation_standards",
       headingLevel: "h3",
@@ -38,7 +59,9 @@ export default function ControlTemplate({
     },
     {
       title: "Inherited Narratives",
-      content: <p>{inheritedComponentNarratives}</p>,
+      content: (
+        <InheritedComponentNarratives inherited={components.inherited} />
+      ),
       expanded: false,
       id: "inherited_narratives",
       headingLevel: "h3",
@@ -47,6 +70,7 @@ export default function ControlTemplate({
       title: "Private (System-Specific) Narratives",
       content: (
         <Textarea
+          id="textarea-private-narrative"
           placeholder="Add your private control narrative here."
           className={"control-page-textarea"}
         />
@@ -57,18 +81,42 @@ export default function ControlTemplate({
     },
   ];
 
-  const subtitle = `System Control: ${controlId.toUpperCase()} ${controlTitle}`;
+  if (isEmpty(components.inherited)) {
+    delete accordionItemsProps[2];
+  }
 
-  function getNextButtonLink() {
-    let nextButtonLink = `/projects/${projectId}/controls/`;
-    if (nextControlId) {
-      nextButtonLink = `/projects/${projectId}/controls/${nextControlId}`;
-    }
-    return nextButtonLink;
+  function postControlUpdate(postVariables) {
+    RequestService.post(
+      `${Config("backendUrl")}/projects/${projectId}/controls/${controlId}/`, // @TODO: need a real endpoint here
+      JSON.stringify(postVariables),
+      (response) => {
+        console.log(response);
+        setResponse(true);
+        // @TODO: handle response
+      }
+    );
+  }
+
+  function onClickNext() {
+    let postVariables = {};
+    postVariables["project_id"] = projectId;
+    postVariables["mark_completed"] = document.getElementById(
+      "is-complete-checkbox"
+    ).checked;
+    postVariables["private_narrative"] = document.getElementById(
+      "textarea-private-narrative"
+    ).value;
+    console.log(postVariables);
+    postControlUpdate(postVariables);
+  }
+  let saved = false;
+  if (response) {
+    saved = true;
   }
 
   return (
     <div className="control-page">
+      {saved && <Navigate to={nextLink} />}
       <ProjectHeader
         id={projectId}
         acronym={acronym}
@@ -93,10 +141,10 @@ export default function ControlTemplate({
       />
       <hr />
       <div className="bottom-section">
-        <Checkbox id="is_complete_checkbox" label="Mark as complete" />
-        <a href={getNextButtonLink()}>
-          <button className="usa-button">Save & next</button>
-        </a>
+        <Checkbox id="is-complete-checkbox" label="Mark as complete" />
+        <button className="usa-button" onClick={onClickNext}>
+          Save & next
+        </button>
       </div>
     </div>
   );
@@ -109,14 +157,17 @@ ControlTemplate.propTypes = {
     title: PropTypes.string,
   }).isRequired,
   control: PropTypes.shape({
-    controlId: PropTypes.string,
-    controlTitle: PropTypes.string,
+    title: PropTypes.string,
     description: PropTypes.string,
     family: PropTypes.string,
     guidance: PropTypes.string,
-    implementationStandards: PropTypes.string,
-    responsibility: PropTypes.oneOf(["none", "some", "all"]).isRequired,
+    implementation: PropTypes.string,
     version: PropTypes.string,
+    next_id: PropTypes.string,
   }),
-  nextControlId: PropTypes.string,
+  componentData: PropTypes.shape({
+    components: PropTypes.object,
+    responsibility: PropTypes.oneOf(["Inherited", "Hybrid", "Allocated"])
+      .isRequired,
+  }),
 };

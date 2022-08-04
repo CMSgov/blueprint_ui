@@ -2,8 +2,8 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import ResponsibilityBox from "./ResponsibilityBox";
 
-test("renders title and class for responsibility of none", () => {
-  render(<ResponsibilityBox responsibility="none" />);
+test("renders title and class for responsibility of Inherited", () => {
+  render(<ResponsibilityBox responsibility="Inherited" />);
 
   const expectedTitle =
     "Fully Inherited Control: No system responsibility for addressing this control";
@@ -14,8 +14,8 @@ test("renders title and class for responsibility of none", () => {
   expect(responsibilityBox).toHaveClass(expectedClass);
 });
 
-test("renders title and class for responsibility of some", () => {
-  render(<ResponsibilityBox responsibility="some" />);
+test("renders title and class for responsibility of Hybrid", () => {
+  render(<ResponsibilityBox responsibility="Hybrid" />);
 
   const expectedTitle =
     "Shared / Hybrid Control: System is partially responsible for addressing this control";
@@ -26,8 +26,8 @@ test("renders title and class for responsibility of some", () => {
   expect(responsibilityBox).toHaveClass(expectedClass);
 });
 
-test("renders title and class for responsibility of all", () => {
-  render(<ResponsibilityBox responsibility="all" />);
+test("renders title and class for responsibility of Allocated", () => {
+  render(<ResponsibilityBox responsibility="Allocated" />);
 
   const expectedTitle =
     "Allocated Control: System is fully responsible for addressing this control";

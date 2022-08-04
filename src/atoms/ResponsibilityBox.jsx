@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 export default function ResponsibilityBox({ responsibility }) {
   const RESPONSIBILITY_MAP = {
-    none: {
+    Inherited: {
       title:
         "Fully Inherited Control: No system responsibility for addressing this control",
       content: [
@@ -12,7 +12,7 @@ export default function ResponsibilityBox({ responsibility }) {
         "If you add a custom control narrative or a component, you will be enhancing the control, which will change the control status from Fully Inherited to a Shared Responsibility.",
       ],
     },
-    some: {
+    Hybrid: {
       title:
         "Shared / Hybrid Control: System is partially responsible for addressing this control",
       content: [
@@ -22,7 +22,7 @@ export default function ResponsibilityBox({ responsibility }) {
         "You can also visit the Component Library and search for a component that matches your system and addresses this control.",
       ],
     },
-    all: {
+    Allocated: {
       title:
         "Allocated Control: System is fully responsible for addressing this control",
       content: [
@@ -38,8 +38,8 @@ export default function ResponsibilityBox({ responsibility }) {
 
   const boxClass = classNames({
     "responsibility-box--yellow":
-      responsibility === "some" || responsibility === "all",
-    "responsibility-box--green": responsibility === "none",
+      responsibility === "Hybrid" || responsibility === "Allocated",
+    "responsibility-box--green": responsibility === "Inherited",
   });
 
   return (
@@ -57,5 +57,5 @@ export default function ResponsibilityBox({ responsibility }) {
 }
 
 ResponsibilityBox.propTypes = {
-  responsibility: PropTypes.oneOf(["none", "some", "all"]).isRequired,
+  responsibility: PropTypes.oneOf(["Inherited", "Hybrid", "Allocated"]),
 };
