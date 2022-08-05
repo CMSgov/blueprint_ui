@@ -332,6 +332,9 @@ nav.usa-breadcrumb {
 .usa-table--striped tbody tr:nth-child(even) td,
 .usa-table--striped tbody tr:nth-child(even) th {
   background-color: $gray-light;
+  .usa-checkbox {
+    background-color: $gray-light;
+  }
 }
 .usa-table--striped tbody tr:nth-child(odd) td,
 .usa-table--striped tbody tr:nth-child(odd) th {
@@ -347,6 +350,13 @@ nav.usa-breadcrumb {
     max-width: 22rem;
   }
 }
+.usa-prose .usa-collection__item,
+.usa-collection__item,
+.usa-prose > ul li,
+.usa-prose > ol li,
+.usa-list li {
+  max-width: fit-content;
+}
 .select-components {
   .usa-checkbox__label,
   .usa-radio__label {
@@ -360,4 +370,13 @@ nav.usa-breadcrumb {
 }
 .blueprint-tooltip {
   background-color: $blue-primary;
+}
+
+.checkbox-column {
+  width: 67px;
+}
+@media (max-width: $tablet-size-max-width) {
+  .checkbox-column {
+    width: 44px;
+  }
 }

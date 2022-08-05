@@ -10,7 +10,7 @@ const TableRow = ({ component }) => {
   }
   return (
     <>
-      <td>
+      <td className="checkbox-column">
         <Checkbox
           id={"component-id-" + component.id}
           name="component-id-list"
