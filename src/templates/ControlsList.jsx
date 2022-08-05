@@ -62,30 +62,30 @@ const FilterCol = ({ currentStatus, checkBoxHandler }) => {
           <legend className="usa-legend">Status</legend>
           <Checkbox
             id="completed-filter"
-            name="completed-filter"
+            name="status"
             label="Completed"
             value="3"
             onChange={checkBoxHandler}
             key="3"
-            checked={isCheckedStatus("completed")}
+            checked={isCheckedStatus("3")}
           />
           <Checkbox
             id="incomplete-filter"
-            name="incomplete-filter"
+            name="status"
             label="Incomplete"
             value="2"
             onChange={checkBoxHandler}
             key="2"
-            checked={isCheckedStatus("incomplete")}
+            checked={isCheckedStatus("2")}
           />
           <Checkbox
             id="notstarted-filter"
-            name="notstarted-filter"
+            name="status"
             label="Not Started"
             value="1"
             onChange={checkBoxHandler}
             key="1"
-            checked={isCheckedStatus("notstarted")}
+            checked={isCheckedStatus("1")}
           />
         </fieldset>
       </div>
@@ -150,9 +150,9 @@ const ProjectControls = ({ controlsList = [], totalItemCount = 0 }) => {
     );
 
     for (var checkbox of checkboxes) {
-      if (!newQuery.includes(checkbox.value)) {
-        newQuery += checkbox.value + "&";
-      }
+      // if (!newQuery.includes(checkbox.value)) {
+      newQuery += checkbox.name + "=" + checkbox.value + "&";
+      // }
     }
     navigate({
       pathname: baseUrl.pathname,
