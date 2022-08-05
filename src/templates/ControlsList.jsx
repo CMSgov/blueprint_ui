@@ -148,8 +148,8 @@ const ProjectControls = ({ controlsList = [], totalItemCount = 0 }) => {
     var checkboxes = document.querySelectorAll(
       'input[type="checkbox"]:checked'
     );
+
     for (var checkbox of checkboxes) {
-      console.log(checkbox.value);
       if (!newQuery.includes(checkbox.value)) {
         newQuery += checkbox.value + "&";
       }

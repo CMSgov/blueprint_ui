@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 
 import Config from "../config";
 import RequestService from "../services/RequestService";
+import { isEmpty } from "../utils";
 
 import LoadingIndicator from "../atoms/LoadingIndicator";
+import GlobalState from "../GlobalState";
 import ErrorMessage from "../molecules/ErrorMessage";
 import ProjectControlsTemplate from "../templates/ProjectControlsTemplate";
 
@@ -13,9 +15,8 @@ const ERROR_MESSAGE = "Error loading system controls";
 const ProjectControls = () => {
   const { id } = useParams();
 
-  const [projectData, setProjectData] = useState([]);
+  const [state, setState] = useContext(GlobalState);
   const [controlsList, setControlsList] = useState([]);
-  const [totalItemCount, setTotalItemCount] = useState(0);
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -26,30 +27,28 @@ const ProjectControls = () => {
     RequestService.get(
       `${Config("backendUrl")}/projects/${id}`,
       (response) => {
-        setProjectData(response.data);
-      },
-      (err) => {
-        throw err;
-      }
-    );
-  }, [id]);
-
-  const getControlsData = useCallback(() => {
-    RequestService.get(
-      `${Config("backendUrl")}/projects/${id}/controls/${getParams}`,
-      (response) => {
-        setControlsList(response.data);
-        let lastItem = controlsList[controlsList.length - 1];
-        if (lastItem !== undefined && lastItem.total_item_count !== undefined) {
-          setTotalItemCount(lastItem.total_item_count);
-        }
+        setState((state) => ({ ...state, project: response.data }));
+        setIsLoading(false);
         setIsLoading(false);
       },
       (err) => {
         throw err;
       }
     );
-  }, [id, controlsList, getParams]);
+  }, [id, state, setState]);
+
+  const getControlsData = () => {
+    RequestService.get(
+      `${Config("backendUrl")}/projects/${id}/controls/${getParams}`,
+      (response) => {
+        setControlsList(response.data);
+        setIsLoading(false);
+      },
+      (err) => {
+        throw err;
+      }
+    );
+  };
 
   useEffect(() => {
     try {
@@ -58,7 +57,13 @@ const ProjectControls = () => {
     } catch (error) {
       return setHasError(true);
     }
-  }, [getControlsData, getProjectData, setHasError]);
+  }, []);
+
+  let totalItemCount = 0;
+  let lastItem = controlsList[controlsList.length - 1];
+  if (lastItem !== undefined && lastItem.total_item_count !== undefined) {
+    totalItemCount = lastItem.total_item_count;
+  }
 
   if (isLoading) {
     return <LoadingIndicator />;
@@ -66,13 +71,15 @@ const ProjectControls = () => {
   if (hasError) {
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
-  return (
-    <ProjectControlsTemplate
-      project={projectData}
-      controlsList={controlsList}
-      totalItemCount={totalItemCount}
-    />
-  );
+  if (state.project && !isEmpty(state.project)) {
+    return (
+      <ProjectControlsTemplate
+        project={state.project}
+        controlsList={controlsList}
+        totalItemCount={totalItemCount}
+      />
+    );
+  }
 };
 
 export default ProjectControls;
