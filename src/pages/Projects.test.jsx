@@ -6,6 +6,7 @@ import Projects from "./Projects";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import Config from "../config";
+import { AuthProvider } from "../AuthContext";
 
 test("renders the ProjectTemplate page when projects data is successfully returned", async () => {
   const projectsData = [
@@ -26,7 +27,9 @@ test("renders the ProjectTemplate page when projects data is successfully return
 
   render(
     <MemoryRouter>
-      <Projects />
+      <AuthProvider>
+        <Projects />
+      </AuthProvider>
     </MemoryRouter>
   );
 
@@ -47,7 +50,9 @@ test("renders the ErrorMessage when projects data is NOT successfully returned",
 
   render(
     <MemoryRouter>
-      <Projects />
+      <AuthProvider>
+        <Projects />
+      </AuthProvider>
     </MemoryRouter>
   );
 
