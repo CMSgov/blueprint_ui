@@ -1,50 +1,38 @@
 import axios from "axios";
+import { config as configUrl } from "../config";
 
-// const config = (token) => ({
-//   headers: {
-//     "Access-Control-Allow-Origin": "*",
-//     "Content-type": "application/json; charset=UTF-8",
-//     "Authentication": `TOKEN ${token}`,
-//   },
-// });
-const config = (authToken) => {
-  console.log("Request service auth token: ", authToken);
-  return {
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Content-type": "application/json; charset=UTF-8",
-      Authorization: `TOKEN ${authToken}` || null,
-    },
-  };
-};
-
-const loginConfig = () => ({
+const config = {
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Content-type": "application/json; charset=UTF-8",
   },
-});
+};
+
+const authConfig = {
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+    "Content-type": "application/json; charset=UTF-8",
+    Authorization: `TOKEN ${sessionStorage.getItem("Token")}`,
+  },
+};
 
 const RequestService = {
-  get: async (url, authToken, callback, failureCallback) => {
+  get: async (url, callback, failureCallback) => {
     axios
-      .get(url, config(authToken))
+      .get(url, authConfig)
       .then((response) => {
         callback(response);
       })
       .catch((err) => failureCallback && failureCallback(err));
   },
   post: async (url, body, callback, failureCallback) => {
+    let postConfig = authConfig;
+
+    const isLoginPost = url === configUrl.backendUrlAuth;
+    if (isLoginPost) postConfig = config;
+
     axios
-      .post(url, body, config())
-      .then((response) => {
-        callback(response);
-      })
-      .catch((err) => failureCallback && failureCallback(err));
-  },
-  loginPost: async (url, body, callback, failureCallback) => {
-    axios
-      .post(url, body, loginConfig())
+      .post(url, body, postConfig)
       .then((response) => {
         callback(response);
       })
@@ -52,7 +40,7 @@ const RequestService = {
   },
   delete: async (url, callback, failureCallback) => {
     axios
-      .delete(url, config())
+      .delete(url, authConfig)
       .then((response) => {
         callback(response);
       })

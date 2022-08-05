@@ -2,37 +2,41 @@ import { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RequestService from "./services/RequestService";
 import { config } from "./config";
+import { MAIN_ROUTES } from "./AppRoutes";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  let [authToken, setAuthToken] = useState(null);
   let [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   let loginUser = async (e) => {
     e.preventDefault();
-    console.log("Form Submitted", e);
-    RequestService.loginPost(
+    RequestService.post(
       config.backendUrlAuth,
       JSON.stringify({
         username: e.target.username.value,
         password: e.target.password.value,
       }),
       (response) => {
-        console.log("Response", response);
-        setAuthToken(response.data.token);
-        setUser(true); // TODO save user data
-        navigate("/");
-      } // TODO Handle error response
+        setUser(response.data.user);
+        sessionStorage.setItem("Token", response.data.token);
+        sessionStorage.setItem("Username", response.data.user.username);
+        navigate(MAIN_ROUTES.HOME);
+      }
     );
   };
 
+  let logoutUser = async () => {
+    setUser(null);
+    sessionStorage.clear();
+    navigate(MAIN_ROUTES.LOGIN);
+  };
+
   let contextData = {
-    authToken,
-    authToken,
     user: user,
     loginUser: loginUser,
+    logoutUser: logoutUser,
   };
 
   return (

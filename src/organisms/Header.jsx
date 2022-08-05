@@ -1,11 +1,15 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { Button } from "@trussworks/react-uswds";
 import { MAIN_ROUTES } from "../AppRoutes";
 import AuthContext from "../AuthContext";
 import Logo from "../atoms/Logo";
 
 const Header = () => {
-  let { user, authToken } = useContext(AuthContext);
+  let { logoutUser } = useContext(AuthContext);
+
+  const username = sessionStorage.getItem("Username");
+
   return (
     <header className="usa-header site-header site-header-dark" role="banner">
       <div className="usa-navbar site-header-navbar">
@@ -19,10 +23,7 @@ const Header = () => {
         <Link to={MAIN_ROUTES.COMPONENT_LIBRARY}>Component Library</Link>
         <div className="site-header-right">
           <Link to={MAIN_ROUTES.HELP}>Help</Link>
-          {/* TODO: Display username, update link */}
-          <a href="">
-            {JSON.stringify(user)} {authToken}
-          </a>
+          {username && <Button onClick={logoutUser}>{username}</Button>}
         </div>
       </div>
     </header>
