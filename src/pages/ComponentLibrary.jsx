@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import Config from "../config";
+import config from "../config";
 import RequestService from "../services/RequestService";
 
 import ErrorMessage from "../molecules/ErrorMessage";
@@ -20,7 +20,7 @@ const ComponentLibrary = () => {
 
   const getSearch = useCallback(() => {
     RequestService.get(
-      `${Config("backendUrl")}/components/search/${getParams}`,
+      `${config.backendUrl}/components/search/${getParams}`,
       (response) => {
         setComponentList(response.data);
       },
@@ -32,7 +32,7 @@ const ComponentLibrary = () => {
 
   const getTypes = () => {
     RequestService.get(
-      `${Config("backendUrl")}/components/types/`,
+      `${config.backendUrl}/components/types/`,
       (response) => {
         setTypeList(response.data);
       },

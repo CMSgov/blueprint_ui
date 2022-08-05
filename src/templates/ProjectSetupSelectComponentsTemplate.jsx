@@ -1,7 +1,7 @@
 import { Checkbox } from "@trussworks/react-uswds";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import Config from "../config";
+import config from "../config";
 import RequestService from "../services/RequestService";
 
 const TableRow = ({ component }) => {
@@ -32,7 +32,7 @@ const ProjectSetupSelectComponentsTemplate = ({ componentList }) => {
 
   function postProjectAddComponent(formValues) {
     RequestService.post(
-      `${Config("backendUrl")}/projects/add-component/`,
+      `${config.backendUrl}/projects/add-component/`,
       JSON.stringify(formValues),
       (response) => {
         setResponse(true);

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { isEmpty } from "../utils";
 import { getControlData } from "../Helpers";
-import Config from "../config";
+import config from "../config";
 import RequestService from "../services/RequestService";
 
 import { ComponentTemplate } from "../templates/ComponentTemplate";
@@ -25,7 +25,7 @@ const Component = () => {
     if (!state.component || state.component.id !== parseInt(componentId)) {
       setIsLoading(true);
       RequestService.get(
-        `${Config("backendUrl")}/components/${componentId}/`,
+        `${config.backendUrl}/components/${componentId}/`,
         (response) => {
           setState((state) => ({ ...state, component: response.data }));
           setIsLoading(false);

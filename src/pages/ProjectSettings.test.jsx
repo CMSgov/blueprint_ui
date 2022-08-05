@@ -8,7 +8,7 @@ import "@testing-library/jest-dom";
 import ProjectSettings from "./ProjectSettings";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import Config from "../config";
+import config from "../config";
 
 test.skip("renders the ProjectSettingsTemplate page when project data is successfully returned", async () => {
   const projectData = {
@@ -19,7 +19,7 @@ test.skip("renders the ProjectSettingsTemplate page when project data is success
 
   let mock = new MockAdapter(axios);
   mock
-    .onGet(`${Config("backendUrl")}/projects/${projectData.id}/`)
+    .onGet(`${config.backendUrl}/projects/${projectData.id}/`)
     .reply(200, projectData);
 
   render(
@@ -47,7 +47,7 @@ test.skip("renders the ErrorMessage when projects data is NOT successfully retur
 
   let mock = new MockAdapter(axios);
   mock
-    .onGet(`${Config("backendUrl")}/projects/${nonExistentProjectId}`)
+    .onGet(`${config.backendUrl}/projects/${nonExistentProjectId}`)
     .reply(401);
 
   render(
@@ -78,7 +78,7 @@ test.skip("renders the LoadingIcon when waiting for data", async () => {
 
   let mock = new MockAdapter(axios);
   mock
-    .onGet(`${Config("backendUrl")}/projects/${projectData.id}/`)
+    .onGet(`${config.backendUrl}/projects/${projectData.id}/`)
     .reply(200, projectData);
 
   render(

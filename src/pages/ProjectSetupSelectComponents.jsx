@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import Config from "../config";
+import config from "../config";
 import RequestService from "../services/RequestService";
 
 import ErrorMessage from "../molecules/ErrorMessage";
@@ -16,7 +16,7 @@ const ProjectSetupSelectComponents = () => {
 
   useEffect(() => {
     RequestService.get(
-      `${Config("backendUrl")}/components/search/`,
+      `${config.backendUrl}/components/search/`,
       (response) => {
         setComponentList(response.data);
         setIsLoading(false);

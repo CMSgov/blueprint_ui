@@ -1,16 +1,8 @@
+const rootUrl = window._env_
+  ? window._env_.REACT_APP_API_ENDPOINT
+  : process.env.REACT_APP_API_ENDPOINT;
+
 export const config = {
-  backendUrl: `${process.env.REACT_APP_API_ENDPOINT}/api`,
-  backendUrlAuth: `${process.env.REACT_APP_API_ENDPOINT}/api-token-auth/`,
+  backendUrl: `${rootUrl}/api`,
+  backendUrlAuth: `${rootUrl}/api-token-auth/`,
 };
-
-const Config = (key) => {
-  if (key === "backendUrl") {
-    if (window._env_ === undefined) {
-      return config.backendUrl;
-    } else {
-      return `${window._env_.REACT_APP_API_ENDPOINT}/api`;
-    }
-  }
-};
-
-export default Config;
