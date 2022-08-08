@@ -150,9 +150,7 @@ const ProjectControls = ({ controlsList = [], totalItemCount = 0 }) => {
     );
 
     for (var checkbox of checkboxes) {
-      // if (!newQuery.includes(checkbox.value)) {
       newQuery += checkbox.name + "=" + checkbox.value + "&";
-      // }
     }
     navigate({
       pathname: baseUrl.pathname,

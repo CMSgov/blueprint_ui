@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 
 import Config from "../config";
@@ -16,69 +16,46 @@ const ProjectControls = () => {
   const { id } = useParams();
 
   const [state, setState] = useContext(GlobalState);
-  const [controlsList, setControlsList] = useState([]);
-  const [hasError, setHasError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
+  const [isLoading, setIsLoading] = useState(false);
   const urlParams = useLocation();
   const getParams = urlParams.search;
 
-  const getProjectData = useCallback(() => {
-    RequestService.get(
-      `${Config("backendUrl")}/projects/${id}`,
-      (response) => {
-        setState((state) => ({ ...state, project: response.data }));
-        setIsLoading(false);
-        setIsLoading(false);
-      },
-      (err) => {
-        throw err;
-      }
-    );
-  }, [id, state, setState]);
-
-  const getControlsData = () => {
-    RequestService.get(
-      `${Config("backendUrl")}/projects/${id}/controls/${getParams}`,
-      (response) => {
-        setControlsList(response.data);
-        setIsLoading(false);
-      },
-      (err) => {
-        throw err;
-      }
-    );
-  };
-
   useEffect(() => {
-    try {
-      getProjectData();
-      getControlsData();
-    } catch (error) {
-      return setHasError(true);
+    if (!state.project || state.project.id !== parseInt(id)) {
+      setIsLoading(true);
+      RequestService.get(
+        `${Config("backendUrl")}/projects/${id}/controls/${getParams}`,
+        (response) => {
+          setState((state) => ({
+            ...state,
+            project: response.data.project_data,
+          }));
+          setState((state) => ({ ...state, controls: response.data.controls }));
+          setState((state) => ({
+            ...state,
+            item_count: response.data.total_item_count,
+          }));
+          setIsLoading(false);
+        },
+        (err) => {
+          setIsLoading(false);
+        }
+      );
     }
-  }, []);
-
-  let totalItemCount = 0;
-  let lastItem = controlsList[controlsList.length - 1];
-  if (lastItem !== undefined && lastItem.total_item_count !== undefined) {
-    totalItemCount = lastItem.total_item_count;
-  }
+  }, [id, state, getParams, setState]);
 
   if (isLoading) {
     return <LoadingIndicator />;
-  }
-  if (hasError) {
-    return <ErrorMessage message={ERROR_MESSAGE} />;
-  }
-  if (state.project && !isEmpty(state.project)) {
+  } else if (state.project && !isEmpty(state.project)) {
     return (
       <ProjectControlsTemplate
         project={state.project}
-        controlsList={controlsList}
-        totalItemCount={totalItemCount}
+        controlsList={state.controls}
+        totalItemCount={state.item_count}
       />
     );
+  } else {
+    return <ErrorMessage message={ERROR_MESSAGE} />;
   }
 };
 
