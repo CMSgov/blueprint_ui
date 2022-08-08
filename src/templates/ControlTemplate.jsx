@@ -37,11 +37,11 @@ export default function ControlTemplate({ project, control, componentData }) {
     guidance = "No control guidance found for this control",
     implementation = "No implementation standards found for this control",
     version,
-    next_id: nextControlId,
+    next_id: nextControlLabel,
   } = control;
   const { responsibility, components } = componentData;
   const subtitle = `System Control: ${label.toUpperCase()} ${controlTitle}`;
-  const nextLink = `/projects/${projectId}/controls/${nextControlId}`;
+  const nextLink = `/projects/${projectId}/controls/${nextControlLabel}`;
   let accordionItemsProps = [
     {
       title: "CMS Implementation Standards",
@@ -164,7 +164,7 @@ ControlTemplate.propTypes = {
     implementation: PropTypes.string,
     version: PropTypes.string,
     next_id: PropTypes.string,
-  }),
+  }).isRequired,
   componentData: PropTypes.shape({
     components: PropTypes.object,
     responsibility: PropTypes.oneOf(["Inherited", "Hybrid", "Allocated"])

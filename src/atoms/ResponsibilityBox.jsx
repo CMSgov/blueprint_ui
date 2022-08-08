@@ -57,5 +57,6 @@ export default function ResponsibilityBox({ responsibility }) {
 }
 
 ResponsibilityBox.propTypes = {
-  responsibility: PropTypes.oneOf(["Inherited", "Hybrid", "Allocated"]),
+  responsibility: PropTypes.oneOf(["Inherited", "Hybrid", "Allocated"])
+    .isRequired,
 };
