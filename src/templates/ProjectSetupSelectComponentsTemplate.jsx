@@ -1,7 +1,7 @@
 import { Checkbox } from "@trussworks/react-uswds";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import config from "../config";
+import { config } from "../config";
 import RequestService from "../services/RequestService";
 
 const TableRow = ({ component }) => {

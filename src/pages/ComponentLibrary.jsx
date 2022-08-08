@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import config from "../config";
+import { config } from "../config";
 import RequestService from "../services/RequestService";
 
 import ErrorMessage from "../molecules/ErrorMessage";

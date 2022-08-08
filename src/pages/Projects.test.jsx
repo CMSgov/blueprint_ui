@@ -5,8 +5,7 @@ import "@testing-library/jest-dom";
 import Projects from "./Projects";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import config from "../config";
-import { AuthProvider } from "../AuthContext";
+import { config } from "../config";
 
 test("renders the ProjectTemplate page when projects data is successfully returned", async () => {
   const projectsData = [
@@ -27,9 +26,7 @@ test("renders the ProjectTemplate page when projects data is successfully return
 
   render(
     <MemoryRouter>
-      <AuthProvider>
-        <Projects />
-      </AuthProvider>
+      <Projects />
     </MemoryRouter>
   );
 
@@ -50,9 +47,7 @@ test("renders the ErrorMessage when projects data is NOT successfully returned",
 
   render(
     <MemoryRouter>
-      <AuthProvider>
-        <Projects />
-      </AuthProvider>
+      <Projects />
     </MemoryRouter>
   );
 

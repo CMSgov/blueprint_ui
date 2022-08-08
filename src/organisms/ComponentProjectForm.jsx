@@ -1,5 +1,5 @@
 import { Dropdown, Form } from "@trussworks/react-uswds";
-import config from "../config";
+import { config } from "../config";
 import RequestService from "../services/RequestService";
 
 const ComponentProjectForm = ({ project_data, component_id }) => {

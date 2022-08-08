@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { isEmpty } from "../utils";
 import { getControlData } from "../Helpers";
-import config from "../config";
+import { config } from "../config";
 import RequestService from "../services/RequestService";
 
 import { ComponentTemplate } from "../templates/ComponentTemplate";

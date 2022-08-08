@@ -8,7 +8,7 @@ import "@testing-library/jest-dom";
 import ProjectSettings from "./ProjectSettings";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import config from "../config";
+import { config } from "../config";
 
 test.skip("renders the ProjectSettingsTemplate page when project data is successfully returned", async () => {
   const projectData = {

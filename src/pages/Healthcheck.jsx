@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import config from "../config";
+import { config } from "../config";
 import RequestService from "../services/RequestService";
 
 const Healthcheck = () => {

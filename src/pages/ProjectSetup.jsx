@@ -2,7 +2,7 @@ import { Button, Form, Label, Radio, TextInput } from "@trussworks/react-uswds";
 import { useState, useRef } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { MAIN_ROUTES } from "../AppRoutes";
-import config from "../config";
+import { config } from "../config";
 import RequestService from "../services/RequestService";
 
 const ProjectSetup = () => {

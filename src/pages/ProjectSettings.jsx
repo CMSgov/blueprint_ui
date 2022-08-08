@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { isEmpty } from "../utils";
-import config from "../config";
+import { config } from "../config";
 import RequestService from "../services/RequestService";
 
 import { ProjectSettingsTemplate } from "../templates/ProjectSettingsTemplate";

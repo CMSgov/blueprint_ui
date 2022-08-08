@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Alert } from "@trussworks/react-uswds";
 import { MAIN_ROUTES } from "../AppRoutes";
-import config from "../config";
+import { config } from "../config";
 import RequestService from "../services/RequestService";
 
 const ProjectSetupConfirmation = () => {

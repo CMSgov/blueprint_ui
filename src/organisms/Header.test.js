@@ -1,9 +1,16 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import Header from "./Header";
+import { AuthProvider } from "../AuthContext";
 
 test("renders links", () => {
-  render(<Header />, { wrapper: MemoryRouter });
+  render(
+    <MemoryRouter>
+      <AuthProvider>
+        <Header />
+      </AuthProvider>
+    </MemoryRouter>
+  );
   const helpLinkElement = screen.getByText(/help/i);
   expect(helpLinkElement).toBeInTheDocument();
   const projectsLinkElement = screen.getByText(/projects/i);
