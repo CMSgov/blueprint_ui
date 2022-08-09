@@ -29,10 +29,10 @@ const ProjectComponents = () => {
     RequestService.get(
       `${Config("backendUrl")}/projects/${id}/search/${getParams}`,
       (response) => {
-        const projectData = response.data[0]["project"];
-        const componentsData = response.data[1]["components"];
-        const totalItemCountData = response.data[2]["total_item_count"];
-        const typeListData = response.data[3]["type_list"];
+        const projectData = response.data["project"];
+        const componentsData = response.data["components"];
+        const totalItemCountData = response.data["total_item_count"];
+        const typeListData = response.data["type_list"];
         setState((state) => ({ ...state, project: projectData }));
         setComponentList(componentsData);
         setTotalItemCount(totalItemCountData);
