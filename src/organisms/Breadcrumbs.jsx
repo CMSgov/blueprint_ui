@@ -27,12 +27,14 @@ const Breadcrumbs = () => {
     return "";
   } else if (topLevelList.includes(pathname)) {
     return (
-      <BreadcrumbBar>
-        <Breadcrumb>
-          <BreadcrumbLink href="/">{homePageName}</BreadcrumbLink>
-        </Breadcrumb>
-        <Breadcrumb current>{pathname.replaceAll("-", " ")}</Breadcrumb>
-      </BreadcrumbBar>
+      <div id="breadcrumbs-bar" data-testid="breadcrumbs-bar">
+        <BreadcrumbBar>
+          <Breadcrumb>
+            <BreadcrumbLink href="/">{homePageName}</BreadcrumbLink>
+          </Breadcrumb>
+          <Breadcrumb current>{pathname.replaceAll("-", " ")}</Breadcrumb>
+        </BreadcrumbBar>
+      </div>
     );
   }
   let parentList = [];
@@ -101,17 +103,19 @@ const Breadcrumbs = () => {
   }
 
   return (
-    <BreadcrumbBar>
-      <Breadcrumb>
-        <BreadcrumbLink href="/">{homePageName}</BreadcrumbLink>
-      </Breadcrumb>
-      {parentList.map((parent, i) => (
-        <Breadcrumb key={i}>
-          <ParentBreadcrumbs parent={parent} />
+    <div id="breadcrumbs-bar" data-testid="breadcrumbs-bar">
+      <BreadcrumbBar>
+        <Breadcrumb>
+          <BreadcrumbLink href="/">{homePageName}</BreadcrumbLink>
         </Breadcrumb>
-      ))}
-      <Breadcrumb current>{pageName}</Breadcrumb>
-    </BreadcrumbBar>
+        {parentList.map((parent, i) => (
+          <Breadcrumb key={i}>
+            <ParentBreadcrumbs parent={parent} />
+          </Breadcrumb>
+        ))}
+        <Breadcrumb current>{pageName}</Breadcrumb>
+      </BreadcrumbBar>
+    </div>
   );
 };
 
