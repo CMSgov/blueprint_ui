@@ -3,11 +3,6 @@ import { Accordion, Checkbox, Textarea } from "@trussworks/react-uswds";
 import ProjectHeader from "../molecules/ProjectHeader";
 import ResponsibilityBox from "../atoms/ResponsibilityBox";
 import { isEmpty } from "../utils";
-import Config from "../config";
-import RequestService from "../services/RequestService";
-import { useParams } from "react-router-dom";
-import { useState } from "react";
-import { Navigate } from "react-router-dom";
 
 const InheritedComponentNarratives = ({ inherited }) => {
   if (inherited === undefined) {
@@ -25,9 +20,12 @@ const InheritedComponentNarratives = ({ inherited }) => {
   );
 };
 
-export default function ControlTemplate({ project, control, componentData }) {
-  const { controlId } = useParams();
-  const [response, setResponse] = useState(false);
+export default function ControlTemplate({
+  project,
+  control,
+  componentData,
+  submitCallback,
+}) {
   const { id: projectId, acronym, title } = project;
   const {
     label,
@@ -41,7 +39,7 @@ export default function ControlTemplate({ project, control, componentData }) {
   } = control;
   const { responsibility, components } = componentData;
   const subtitle = `System Control: ${label.toUpperCase()} ${controlTitle}`;
-  const nextLink = `/projects/${projectId}/controls/${nextControlLabel}`;
+
   let accordionItemsProps = [
     {
       title: "CMS Implementation Standards",
@@ -85,18 +83,6 @@ export default function ControlTemplate({ project, control, componentData }) {
     delete accordionItemsProps[2];
   }
 
-  function postControlUpdate(postVariables) {
-    RequestService.post(
-      `${Config("backendUrl")}/projects/${projectId}/controls/${controlId}/`, // @TODO: need a real endpoint here
-      JSON.stringify(postVariables),
-      (response) => {
-        console.log(response);
-        setResponse(true);
-        // @TODO: handle response
-      }
-    );
-  }
-
   function onClickNext() {
     let postVariables = {};
     postVariables["project_id"] = projectId;
@@ -106,17 +92,11 @@ export default function ControlTemplate({ project, control, componentData }) {
     postVariables["private_narrative"] = document.getElementById(
       "textarea-private-narrative"
     ).value;
-    console.log(postVariables);
-    postControlUpdate(postVariables);
-  }
-  let saved = false;
-  if (response) {
-    saved = true;
+    submitCallback(postVariables);
   }
 
   return (
     <div className="control-page">
-      {saved && <Navigate to={nextLink} />}
       <ProjectHeader
         id={projectId}
         acronym={acronym}

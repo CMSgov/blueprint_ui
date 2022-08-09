@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { isEmpty } from "../utils";
 import Config from "../config";
 import RequestService from "../services/RequestService";
+import { Navigate } from "react-router-dom";
 
 import ControlTemplate from "../templates/ControlTemplate";
 import ErrorMessage from "../molecules/ErrorMessage";
@@ -19,6 +20,12 @@ export default function Control() {
   const [isLoading, setIsLoading] = useState(false);
   const [control, setControl] = useState();
   const [componentData, setComponentData] = useState();
+  const [response, setResponse] = useState(false);
+
+  if (response) {
+    const nextLink = `/projects/${id}/controls/${control.next_id}`;
+    <Navigate to={nextLink} />;
+  }
 
   useEffect(() => {
     if (!state.project || state.project.id !== parseInt(id)) {
@@ -51,6 +58,17 @@ export default function Control() {
     }
   }, [controlId, id, state, setState]);
 
+  function postControlUpdate(postVariables) {
+    RequestService.post(
+      `${Config("backendUrl")}/projects/${id}/controls/${controlId}/`, // @TODO: need a real endpoint here
+      JSON.stringify(postVariables),
+      (response) => {
+        // @TODO: handle response
+        setResponse(true);
+      }
+    );
+  }
+
   if (isLoading) {
     return <LoadingIndicator />;
   } else if (
@@ -66,6 +84,7 @@ export default function Control() {
         project={state.project}
         control={control}
         componentData={componentData}
+        submitCallback={postControlUpdate}
       />
     );
   }

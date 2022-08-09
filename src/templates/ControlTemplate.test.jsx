@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, within, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import "@testing-library/jest-dom";
 import ControlTemplate from "./ControlTemplate";
@@ -34,6 +34,22 @@ const componentData = {
     private: {},
   },
 };
+
+test("clicking next triggers correct function", () => {
+  const submitCallback = jest.fn();
+  render(
+    <MemoryRouter>
+      <ControlTemplate
+        project={projectData}
+        control={controlData}
+        componentData={componentData}
+        submitCallback={submitCallback}
+      />
+    </MemoryRouter>
+  );
+  fireEvent.click(screen.getByText("Save & next"));
+  expect(submitCallback).toHaveBeenCalledTimes(1);
+});
 
 test("renders each section on the page", () => {
   render(
