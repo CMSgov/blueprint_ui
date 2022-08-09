@@ -15,8 +15,8 @@ export const AuthProvider = ({ children }) => {
     RequestService.post(
       config.backendUrlAuth,
       JSON.stringify({
-        username: e.target.username.value,
-        password: e.target.password.value,
+        username: e.target.elements.username.value,
+        password: e.target.elements.password.value,
       }),
       (response) => {
         setUser(response.data.user);

@@ -28,6 +28,8 @@ const RequestService = {
   post: async (url, body, callback, failureCallback) => {
     let postConfig = authConfig;
 
+    // if post request is accessing login (auth) endpoint
+    // use generic config headers without Authorization info (since there isn't any yet)
     const isLoginPost = url === configUrl.backendUrlAuth;
     if (isLoginPost) postConfig = config;
 

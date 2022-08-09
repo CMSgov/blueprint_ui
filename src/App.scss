@@ -23,6 +23,9 @@ html,
 body {
   height: 100%;
 }
+h1 {
+  font-size: 40px;
+}
 .link-title {
   color: $blue-primary;
   text-decoration: none;
@@ -37,6 +40,12 @@ body {
 }
 .site-header-navbar {
   padding: 15px 0;
+  button {
+    &:hover {
+      background-color: $blue-dark-background;
+    }
+    font-weight: normal;
+  }
   a {
     margin: 0 50px;
     text-decoration: none;
@@ -151,7 +160,6 @@ nav.usa-breadcrumb {
   .title,
   a {
     @extend .link-title;
-    font-size: 40px;
     margin-top: 0;
     margin-bottom: 0;
   }
@@ -203,7 +211,6 @@ nav.usa-breadcrumb {
 
 .projects-page {
   h1 {
-    font-size: 40px;
     margin-top: 0px;
     margin-bottom: 18px;
   }

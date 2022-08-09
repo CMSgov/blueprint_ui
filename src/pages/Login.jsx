@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Button, Form, TextInput } from "@trussworks/react-uswds";
+import { Button, Form, Label, TextInput } from "@trussworks/react-uswds";
 import AuthContext from "../AuthContext";
 
 const Login = () => {
@@ -7,28 +7,24 @@ const Login = () => {
 
   return (
     <div>
-      <h1>Login</h1>
-      {/* <Form>
+      <h1>Sign in</h1>
+      <Form onSubmit={loginUser}>
+        <Label htmlFor="username">Username</Label>
         <TextInput
           type="text"
+          label="Username"
           name="username"
-          placeholder="Enter Username" 
+          placeholder="Enter Username"
         />
+        <Label htmlFor="username">Password</Label>
         <TextInput
           type="password"
+          label="Password"
           name="password"
-          placeholder="Enter Password" 
+          placeholder="Enter Password"
         />
-        <Button type="submit" onClick={loginUser} className="top-space-40">
-          Submit
-        </Button>
-      </Form> */}
-
-      <form onSubmit={loginUser}>
-        <input type="text" name="username" placeholder="Enter Username" />
-        <input type="password" name="password" placeholder="Enter Password" />
-        <input type="submit" />
-      </form>
+        <Button type="submit">Sign in</Button>
+      </Form>
     </div>
   );
 };

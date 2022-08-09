@@ -23,7 +23,11 @@ const Header = () => {
         <Link to={MAIN_ROUTES.COMPONENT_LIBRARY}>Component Library</Link>
         <div className="site-header-right">
           <Link to={MAIN_ROUTES.HELP}>Help</Link>
-          {username && <Button onClick={logoutUser}>{username}</Button>}
+          {username && (
+            <Button className="site-header-dark" onClick={logoutUser}>
+              {username}
+            </Button>
+          )}
         </div>
       </div>
     </header>
