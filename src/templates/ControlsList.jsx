@@ -26,9 +26,9 @@ const TableRow = ({ control }) => {
       </td>
       <td>{control.title}</td>
       <td>
-        {control.status === 3
-          ? "Complete"
-          : control.status === 2
+        {control.status === "completed"
+          ? "Completed"
+          : control.status === "incomplete"
           ? "Incomplete"
           : "Not started"}
       </td>
@@ -64,28 +64,28 @@ const FilterCol = ({ currentStatus, checkBoxHandler }) => {
             id="completed-filter"
             name="status"
             label="Completed"
-            value="3"
+            value="completed"
             onChange={checkBoxHandler}
             key="3"
-            checked={isCheckedStatus("3")}
+            checked={isCheckedStatus("completed")}
           />
           <Checkbox
             id="incomplete-filter"
             name="status"
             label="Incomplete"
-            value="2"
+            value="incomplete"
             onChange={checkBoxHandler}
             key="2"
-            checked={isCheckedStatus("2")}
+            checked={isCheckedStatus("incomplete")}
           />
           <Checkbox
             id="notstarted-filter"
             name="status"
             label="Not Started"
-            value="1"
+            value="not_started"
             onChange={checkBoxHandler}
             key="1"
-            checked={isCheckedStatus("1")}
+            checked={isCheckedStatus("not_started")}
           />
         </fieldset>
       </div>
