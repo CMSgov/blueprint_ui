@@ -3,12 +3,9 @@ import { useState } from "react";
 
 const GlobalState = React.createContext();
 
-export const GlobalStateProvider = ({ children, value }) => {
+export const GlobalStateProvider = ({ children }) => {
   const [state, setState] = useState({});
 
-  if (value && value !== undefined) {
-    setState((state) => ({ ...state, value }));
-  }
   return (
     <GlobalState.Provider value={[state, setState]}>
       {children}
