@@ -31,7 +31,9 @@ const RequestService = {
     // if post request is accessing login (auth) endpoint
     // use generic config headers without Authorization info (since there isn't any yet)
     const isLoginPost = url === configUrl.backendUrlAuth;
-    if (isLoginPost) postConfig = config;
+    if (isLoginPost) {
+      postConfig = config;
+    }
 
     axios
       .post(url, body, postConfig)
