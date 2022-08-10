@@ -1,13 +1,10 @@
 import React from "react";
 import { Button, Form, Label, TextInput } from "@trussworks/react-uswds";
-import { useNavigate } from "react-router-dom";
 import RequestService from "../services/RequestService";
 import { config } from "../config";
 import { MAIN_ROUTES } from "../AppRoutes";
 
 const Login = () => {
-  const navigate = useNavigate();
-
   const loginUser = (e) => {
     e.preventDefault();
     RequestService.post(
@@ -19,7 +16,7 @@ const Login = () => {
       (response) => {
         sessionStorage.setItem("Token", response.data.token);
         sessionStorage.setItem("Username", response.data.user.username);
-        navigate(MAIN_ROUTES.HOME);
+        window.location.assign(MAIN_ROUTES.HOME);
       }
     );
   };
