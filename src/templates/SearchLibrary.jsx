@@ -37,18 +37,83 @@ const EmptyResults = ({ length }) => {
     </p>
   );
 };
+
+const FilterCol = ({
+  showTypeFilter,
+  showCatalogFilter,
+  catalogClasses,
+  typeList,
+  catalogList,
+  currentType,
+  currentCatalog,
+  checkBoxHandler,
+}) => {
+  const isCheckedType = (value) => {
+    if (currentType.includes(value)) {
+      return true;
+    }
+    return false;
+  };
+  const isCheckedCatalog = (value) => {
+    if (currentCatalog.includes(value)) {
+      return true;
+    }
+    return false;
+  };
+  return (
+    <>
+      <div className="component-library-filter grid-col-2">
+        {showTypeFilter && (
+          <fieldset className="usa-fieldset">
+            <legend className="usa-legend">Type</legend>
+            {typeList.map((type, i) => (
+              <Checkbox
+                id={type[0] + "-filter"}
+                name={type[0] + "-filter"}
+                label={type[0]}
+                value={"type=" + type[0]}
+                onChange={checkBoxHandler}
+                key={i}
+                checked={isCheckedType(type[0])}
+              />
+            ))}
+          </fieldset>
+        )}
+        {showCatalogFilter && (
+          <fieldset className={catalogClasses}>
+            <legend className="usa-legend">Catalog</legend>
+            {catalogList.map((catalog, i) => (
+              <Checkbox
+                id={catalog.id + "-filter"}
+                name={catalog.name + "-filter"}
+                label={catalog.name}
+                value={"catalog=" + catalog.id}
+                onChange={checkBoxHandler}
+                key={i}
+                checked={isCheckedCatalog(catalog.id)}
+              />
+            ))}
+          </fieldset>
+        )}
+      </div>
+      <div className="grid-col-1"></div>
+    </>
+  );
+};
 // this seems overly complex when it is not doing much :/ defining variables, setting url params, callbacks, template varibles finished, template
 const SearchLibrary = ({
   componentList = [],
   linkToComponentLibrary = false,
   typeList = [],
+  catalogList = [],
   totalItemCount = 0,
 }) => {
   const baseUrl = useLocation();
-  const navigate = useNavigate();
+  let navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [currentSearch, setCurrentSearch] = useState("");
-  const [currentType, setCurrentType] = useState();
+  const [currentType, setCurrentType] = useState([]);
+  const [currentCatalog, setCurrentCatalog] = useState([]);
 
   //set the url query params into state
   const [searchParams] = useSearchParams();
@@ -65,9 +130,52 @@ const SearchLibrary = ({
     setCurrentSearch(searchParams.get("search"));
   }
 
-  if (searchParams.get("type") && currentType !== searchParams.get("type")) {
-    setCurrentType(searchParams.get("type"));
+  if (
+    searchParams.get("type") &&
+    !currentType.includes(searchParams.get("type"))
+  ) {
+    setCurrentType(searchParams.getAll("type"));
   }
+  if (
+    searchParams.get("catalog") &&
+    !currentCatalog.includes(Number(searchParams.get("catalog")))
+  ) {
+    let values = [];
+    searchParams.getAll("catalog").forEach((element) => {
+      values.push(Number(element));
+    });
+    setCurrentCatalog(values);
+  }
+
+  // Functions to generate query strings
+  const getSearchQuery = () => {
+    let url = "";
+    if (currentSearch) {
+      url += "search=" + currentSearch + "&";
+    }
+    return url;
+  };
+  const getFiltersQuery = () => {
+    let url = "";
+    if (currentType) {
+      currentType.forEach((element) => {
+        url += "type=" + element + "&";
+      });
+    }
+    if (currentCatalog) {
+      currentCatalog.forEach((element) => {
+        url += "catalog=" + element + "&";
+      });
+    }
+    return url;
+  };
+  const getPageQuery = () => {
+    let url = "";
+    if (currentPage) {
+      url += "page=" + currentPage + "&";
+    }
+    return url;
+  };
 
   // Call back functions used for updating values from the page
   //callback function to change the current page
@@ -75,25 +183,26 @@ const SearchLibrary = ({
     setCurrentPage(pageNumber);
   };
   //callback function from search component
-  const componentNameSearch = ({ query }) => {
-    if (query !== currentSearch) {
-      setCurrentSearch(query);
-    }
+  const componentNameSearch = () => {
+    const query = document.querySelector("#search-input").value;
+    let searchParams = "?";
+    searchParams += getFiltersQuery();
+    searchParams += "search=" + query;
+    navigate({
+      pathname: baseUrl.pathname,
+      search: searchParams,
+    });
+    window.location.reload();
   };
-  // callback function to gather values from checkboxes to be added to url query params
+  // callback function to gather values from checkboxes and update url query params
   const checkBoxHandler = () => {
     let newQuery = "?";
-    if (currentPage) {
-      newQuery += "page=" + currentPage + "&";
-    }
-    if (currentSearch) {
-      newQuery += "search=" + currentSearch + "&";
-    }
+    newQuery += getPageQuery();
+    newQuery += getSearchQuery();
 
     var checkboxes = document.querySelectorAll(
       'input[type="checkbox"]:checked'
     );
-
     for (var checkbox of checkboxes) {
       if (!newQuery.includes(checkbox.value)) {
         newQuery += checkbox.value + "&";
@@ -108,17 +217,20 @@ const SearchLibrary = ({
 
   // format url for pagination
   let paginationUrl = baseUrl.pathname + "?";
-  if (currentSearch) {
-    paginationUrl += "search=" + currentSearch + "&";
-  }
-  if (currentType) {
-    paginationUrl += "type=" + currentType + "&";
-  }
+  paginationUrl += getSearchQuery();
+  paginationUrl += getFiltersQuery();
 
+  // How to display filters
+  let showCatalogFilter = catalogList && catalogList.length > 1;
   let showTypeFilter = typeList && typeList.length > 1;
   let catalogClasses = "usa-fieldset ";
-  if (showTypeFilter) {
+  let tableGridCol = "grid-col-9";
+  let showFilterCol = true;
+  if (showTypeFilter && showCatalogFilter) {
     catalogClasses += "catalog-filter";
+  } else if (!showCatalogFilter && !showTypeFilter) {
+    tableGridCol = "grid-col-12";
+    showFilterCol = false;
   }
 
   return (
@@ -135,50 +247,31 @@ const SearchLibrary = ({
         </div>
         <div className="grid-col-7">
           <Search
-            onSubmit={componentNameSearch}
+            onSubmit={function (e) {
+              e.stopPropagation();
+              e.preventDefault();
+              componentNameSearch();
+            }}
             placeholder={currentSearch}
             className="width-full"
+            inputId="search-input"
           />
         </div>
       </div>
       <div className="grid-row">
-        <div className="component-library-filter grid-col-2">
-          {showTypeFilter && (
-            <fieldset className="usa-fieldset">
-              <legend className="usa-legend">Type</legend>
-              {typeList.map((type, i) => (
-                <Checkbox
-                  id={type[0] + "-filter"}
-                  name={type[0] + "-filter"}
-                  label={type[0]}
-                  value={"type=" + type[0]}
-                  onChange={checkBoxHandler}
-                  key={i}
-                />
-              ))}
-            </fieldset>
-          )}
-
-          <fieldset className={catalogClasses}>
-            <legend className="usa-legend">Catalog</legend>
-            <Checkbox
-              id="ars-3-filter"
-              name="ars-3-filter"
-              label="ARS 3.1"
-              value="catalog=1"
-              onChange={checkBoxHandler}
-            />
-            <Checkbox
-              id="ars-5-filter"
-              name="ars-5-filter"
-              label="ARS 5.0"
-              value="catalog=2"
-              onChange={checkBoxHandler}
-            />
-          </fieldset>
-        </div>
-        <div className="grid-col-1"></div>
-        <div className="grid-col-9">
+        {showFilterCol && (
+          <FilterCol
+            showTypeFilter={showTypeFilter}
+            showCatalogFilter={showCatalogFilter}
+            catalogClasses={catalogClasses}
+            typeList={typeList}
+            currentType={currentType}
+            currentCatalog={currentCatalog}
+            catalogList={catalogList}
+            checkBoxHandler={checkBoxHandler}
+          />
+        )}
+        <div className={tableGridCol}>
           <table
             data-testid="table"
             className="usa-table width-full usa-table--striped"

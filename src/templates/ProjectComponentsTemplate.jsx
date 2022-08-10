@@ -7,6 +7,7 @@ const ProjectComponentsTemplate = ({
   project,
   componentList,
   totalItemCount,
+  typeList,
 }) => {
   const { id, acronym, title } = project;
   const subtitle = "System Components";
@@ -32,6 +33,7 @@ const ProjectComponentsTemplate = ({
         componentList={componentList}
         linkToComponentLibrary={true}
         totalItemCount={totalItemCount}
+        typeList={typeList}
       />
     </>
   );

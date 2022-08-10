@@ -13,10 +13,11 @@ const ProjectSetupSelectComponents = () => {
   const [componentList, setComponentList] = useState([]);
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
+  const localStorageProject = JSON.parse(localStorage.getItem("project"));
+  const projectId = localStorageProject.id;
   useEffect(() => {
     RequestService.get(
-      `${config.backendUrl}/components/search/`,
+      `${config.backendUrl}/projects/${projectId}/components-not-added/`,
       (response) => {
         setComponentList(response.data);
         setIsLoading(false);
@@ -26,7 +27,7 @@ const ProjectSetupSelectComponents = () => {
         setIsLoading(false);
       }
     );
-  }, []);
+  }, [projectId]);
 
   if (isLoading) {
     return <LoadingIndicator />;
@@ -34,7 +35,12 @@ const ProjectSetupSelectComponents = () => {
   if (hasError) {
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
-  return <ProjectSetupSelectComponentsTemplate componentList={componentList} />;
+  return (
+    <ProjectSetupSelectComponentsTemplate
+      componentList={componentList}
+      projectId={projectId}
+    />
+  );
 };
 
 export default ProjectSetupSelectComponents;
