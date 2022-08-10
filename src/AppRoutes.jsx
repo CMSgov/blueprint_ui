@@ -8,6 +8,7 @@ import ComponentLibrary from "./pages/ComponentLibrary";
 import ContactUs from "./pages/ContactUs";
 import Control from "./pages/Control";
 import Controls from "./pages/Controls";
+import CreateAccount from "./pages/CreateAccount";
 import Faq from "./pages/Faq";
 import Healthcheck from "./pages/Healthcheck";
 import Help from "./pages/Help";
@@ -28,6 +29,7 @@ export const MAIN_ROUTES = {
   COMPONENT_LIBRARY: "/components",
   HELP: "/help",
   LOGIN: "/login",
+  CREATE_ACCOUNT: "/create-account",
   PROJECTS: "/projects",
   PROJECT_SETUP: "/project-setup",
 };
@@ -37,6 +39,7 @@ export const AppRoutes = () => (
     <Route path={MAIN_ROUTES.HOME} element={<App />}>
       <Route index element={<Private Component={Home} />} />
       <Route path={MAIN_ROUTES.LOGIN} element={<Login />} />
+      <Route path={MAIN_ROUTES.CREATE_ACCOUNT} element={<CreateAccount />} />
       <Route path={MAIN_ROUTES.HEALTHCHECK} element={<Healthcheck />} />
       <Route path={MAIN_ROUTES.HELP}>
         <Route index element={<Private Component={Help} />} />
