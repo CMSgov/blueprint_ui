@@ -1,27 +1,46 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Button, Form, Label, TextInput } from "@trussworks/react-uswds";
-import AuthContext from "../AuthContext";
+import { useNavigate } from "react-router-dom";
+import RequestService from "../services/RequestService";
+import { config } from "../config";
+import { MAIN_ROUTES } from "../AppRoutes";
 
 const Login = () => {
-  let { loginUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const loginUser = (e) => {
+    e.preventDefault();
+    RequestService.post(
+      config.backendUrlAuth,
+      JSON.stringify({
+        username: e.target.elements.username.value,
+        password: e.target.elements.password.value,
+      }),
+      (response) => {
+        sessionStorage.setItem("Token", response.data.token);
+        sessionStorage.setItem("Username", response.data.user.username);
+        navigate(MAIN_ROUTES.HOME);
+      }
+    );
+  };
 
   return (
     <div>
       <h1>Sign in</h1>
-      <Form onSubmit={loginUser}>
+      <Form data-testid="login_form" onSubmit={loginUser}>
         <Label htmlFor="username">Username</Label>
         <TextInput
-          type="text"
-          label="Username"
+          id="username"
           name="username"
           placeholder="Enter Username"
+          type="text"
         />
-        <Label htmlFor="username">Password</Label>
+        <Label htmlFor="password">Password</Label>
         <TextInput
-          type="password"
-          label="Password"
+          id="password"
           name="password"
           placeholder="Enter Password"
+          type="password"
         />
         <Button type="submit">Sign in</Button>
       </Form>

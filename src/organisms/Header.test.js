@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import Header from "./Header";
-import { AuthProvider } from "../AuthContext";
 
 const sessionStorageMock = (() => {
   let store = {};
@@ -29,9 +28,7 @@ Object.defineProperty(window, "sessionStorage", {
 test("renders links", () => {
   render(
     <MemoryRouter>
-      <AuthProvider>
-        <Header />
-      </AuthProvider>
+      <Header />
     </MemoryRouter>
   );
 
@@ -59,13 +56,13 @@ describe("user info in header", () => {
   test("renders username when user is authenticated", () => {
     const username = "admin";
     const getItemSpy = jest.spyOn(window.sessionStorage, "getItem");
+
+    // authenticated user is saved in session storage
     window.sessionStorage.setItem("Username", username);
 
     render(
       <MemoryRouter>
-        <AuthProvider>
-          <Header />
-        </AuthProvider>
+        <Header />
       </MemoryRouter>
     );
 
@@ -83,9 +80,7 @@ describe("user info in header", () => {
 
     render(
       <MemoryRouter>
-        <AuthProvider>
-          <Header />
-        </AuthProvider>
+        <Header />
       </MemoryRouter>
     );
 

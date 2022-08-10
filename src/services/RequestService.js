@@ -8,7 +8,7 @@ const config = {
   },
 };
 
-const authConfig = {
+let authConfig = {
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Content-type": "application/json; charset=UTF-8",
