@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Config from "../config";
+import { config } from "../config";
 import RequestService from "../services/RequestService";
 
 const Healthcheck = () => {
@@ -8,7 +8,7 @@ const Healthcheck = () => {
 
   useEffect(() => {
     RequestService.get(
-      `${Config("backendUrl")}/healthcheck/`,
+      `${config.backendUrl}/healthcheck/`,
       (response) => {
         setStatus(response.status);
       },

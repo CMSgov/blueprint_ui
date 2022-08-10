@@ -2,7 +2,7 @@ import { Button, Form, Label, Radio, TextInput } from "@trussworks/react-uswds";
 import { useState, useRef } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { MAIN_ROUTES } from "../AppRoutes";
-import Config from "../config";
+import { config } from "../config";
 import RequestService from "../services/RequestService";
 
 const ProjectSetup = () => {
@@ -27,7 +27,7 @@ const ProjectSetup = () => {
 
   function postProjectCreate(formValues) {
     RequestService.post(
-      `${Config("backendUrl")}/projects/`,
+      `${config.backendUrl}/projects/`,
       JSON.stringify(formValues),
       (response) => {
         setProject(response.data);

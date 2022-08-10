@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { isEmpty } from "../utils";
-import Config from "../config";
+import { config } from "../config";
 import RequestService from "../services/RequestService";
 
 import ControlTemplate from "../templates/ControlTemplate";
@@ -30,7 +30,7 @@ export default function Control() {
     if (!state.project || state.project.id !== parseInt(id)) {
       setIsLoading(true);
       RequestService.get(
-        `${Config("backendUrl")}/projects/${id}/`,
+        `${config.backendUrl}/projects/${id}/`,
         (response) => {
           setState((state) => ({ ...state, project: response.data }));
           setIsLoading(false);

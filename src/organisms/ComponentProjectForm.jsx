@@ -1,5 +1,5 @@
 import { Dropdown, Form } from "@trussworks/react-uswds";
-import Config from "../config";
+import { config } from "../config";
 import RequestService from "../services/RequestService";
 
 const ComponentProjectForm = ({ project_data, component_id }) => {
@@ -26,7 +26,7 @@ const ComponentProjectForm = ({ project_data, component_id }) => {
 
   function postProjectUpdate(formValues, path) {
     RequestService.post(
-      `${Config("backendUrl")}/${path}`,
+      `${config.backendUrl}/${path}`,
       JSON.stringify(formValues)
     );
   }

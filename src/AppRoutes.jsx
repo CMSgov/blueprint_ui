@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 
+import Private from "./atoms/Private";
 import App from "./App";
 import Component from "./pages/Component";
 import ComponentLibrary from "./pages/ComponentLibrary";
@@ -11,6 +12,7 @@ import Faq from "./pages/Faq";
 import Healthcheck from "./pages/Healthcheck";
 import Help from "./pages/Help";
 import Home from "./pages/Home";
+import Login from "./pages/Login";
 import Project from "./pages/Project";
 import Projects from "./pages/Projects";
 import ProjectSettings from "./pages/ProjectSettings";
@@ -25,6 +27,7 @@ export const MAIN_ROUTES = {
   HEALTHCHECK: "/healthcheck",
   COMPONENT_LIBRARY: "/components",
   HELP: "/help",
+  LOGIN: "/login",
   PROJECTS: "/projects",
   PROJECT_SETUP: "/project-setup",
 };
@@ -32,42 +35,58 @@ export const MAIN_ROUTES = {
 export const AppRoutes = () => (
   <Routes>
     <Route path={MAIN_ROUTES.HOME} element={<App />}>
-      <Route index element={<Home />} />
+      <Route index element={<Private Component={Home} />} />
+      <Route path={MAIN_ROUTES.LOGIN} element={<Login />} />
       <Route path={MAIN_ROUTES.HEALTHCHECK} element={<Healthcheck />} />
       <Route path={MAIN_ROUTES.HELP}>
-        <Route index element={<Help />} />
-        <Route path="contact-us" element={<ContactUs />} />
-        <Route path="faq" element={<Faq />} />
+        <Route index element={<Private Component={Help} />} />
+        <Route path="contact-us" element={<Private Component={ContactUs} />} />
+        <Route path="faq" element={<Private Component={Faq} />} />
       </Route>
       <Route path={MAIN_ROUTES.PROJECTS}>
-        <Route index element={<Projects />} />
+        <Route index element={<Private Component={Projects} />} />
         <Route path=":id">
-          <Route index element={<Project />} />
-          <Route path="settings" element={<ProjectSettings />} />
-          <Route path="components" element={<ProjectComponents />} />
+          <Route index element={<Private Component={Project} />} />
+          <Route
+            path="settings"
+            element={<Private Component={ProjectSettings} />}
+          />
+          <Route
+            path="components"
+            element={<Private Component={ProjectComponents} />}
+          />
           <Route path="controls">
-            <Route index element={<Controls />} />
-            <Route path=":controlId" element={<Control />} />
+            <Route index element={<Private Component={Controls} />} />
+            <Route
+              path=":controlId"
+              element={<Private Component={Control} />}
+            />
           </Route>
           <Route
             path="system-security-plan"
-            element={<ProjectSystemSecurityPlan />}
+            element={<Private Component={ProjectSystemSecurityPlan} />}
           />
         </Route>
       </Route>
       <Route path={MAIN_ROUTES.COMPONENT_LIBRARY}>
-        <Route index element={<ComponentLibrary />} />
+        <Route index element={<Private Component={ComponentLibrary} />} />
         <Route path="/components?page" />
         <Route path=":componentId">
-          <Route index element={<Component />} />
+          <Route index element={<Private Component={Component} />} />
         </Route>
       </Route>
       <Route path={MAIN_ROUTES.PROJECT_SETUP}>
-        <Route index element={<ProjectSetup />} />
+        <Route index element={<Private Component={ProjectSetup} />} />
         <Route path="confirmation">
-          <Route index element={<ProjectSetupConfirmation />} />
+          <Route
+            index
+            element={<Private Component={ProjectSetupConfirmation} />}
+          />
           <Route path="select-components">
-            <Route index element={<ProjectSetupSelectComponents />} />
+            <Route
+              index
+              element={<Private Component={ProjectSetupSelectComponents} />}
+            />
           </Route>
         </Route>
       </Route>

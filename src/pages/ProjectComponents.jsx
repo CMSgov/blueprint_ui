@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 
 import { isEmpty } from "../utils";
-import Config from "../config";
+import { config } from "../config";
 import RequestService from "../services/RequestService";
 
 import ErrorMessage from "../molecules/ErrorMessage";
@@ -27,7 +27,7 @@ const ProjectComponents = () => {
 
   useEffect(() => {
     RequestService.get(
-      `${Config("backendUrl")}/projects/${id}/search/${getParams}`,
+      `${config.backendUrl}/projects/${id}/search/${getParams}`,
       (response) => {
         const projectData = response.data["project"];
         const componentsData = response.data["components"];
