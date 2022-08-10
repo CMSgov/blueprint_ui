@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { isEmpty } from "../utils";
-import Config from "../config";
+import { config } from "../config";
 import RequestService from "../services/RequestService";
 import { Navigate } from "react-router-dom";
 
@@ -31,7 +31,7 @@ export default function Control() {
     if (!state.project || state.project.id !== parseInt(id)) {
       setIsLoading(true);
       RequestService.get(
-        `${Config("backendUrl")}/projects/${id}/controls/${controlId}/`,
+        `${config.backendUrl}/projects/${id}/controls/${controlId}/`,
         (response) => {
           setState((state) => ({ ...state, project: response.data }));
           let control = response.data.catalog_data;
@@ -60,7 +60,7 @@ export default function Control() {
 
   function postControlUpdate(postVariables) {
     RequestService.post(
-      `${Config("backendUrl")}/projects/${id}/controls/${controlId}/`, // @TODO: need a real endpoint here
+      `${config.backendUrl}/projects/${id}/controls/${controlId}/`, // @TODO: need a real endpoint here
       JSON.stringify(postVariables),
       (response) => {
         // @TODO: handle response

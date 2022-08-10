@@ -2,15 +2,13 @@ import { Outlet } from "react-router-dom";
 import "./App.scss";
 import Footer from "./organisms/Footer";
 import Header from "./organisms/Header";
-import { useState } from "react";
 import Breadcrumbs from "./organisms/Breadcrumbs";
-import GlobalState from "./GlobalState";
+import { GlobalStateProvider } from "./GlobalState";
 
 function App() {
-  const [state, setState] = useState({});
   return (
     <div className="App">
-      <GlobalState.Provider value={[state, setState]}>
+      <GlobalStateProvider>
         <Header />
         <div className="grid-row">
           <div className="grid-col-12 main-content-body">
@@ -19,7 +17,7 @@ function App() {
           </div>
         </div>
         <Footer />
-      </GlobalState.Provider>
+      </GlobalStateProvider>
     </div>
   );
 }

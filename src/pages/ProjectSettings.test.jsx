@@ -8,25 +8,27 @@ import "@testing-library/jest-dom";
 import ProjectSettings from "./ProjectSettings";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import Config from "../config";
+import { config } from "../config";
+import { GlobalStateProvider } from "../GlobalState";
 
-test.skip("renders the ProjectSettingsTemplate page when project data is successfully returned", async () => {
+test("renders the ProjectSettingsTemplate page when project data is successfully returned", async () => {
   const projectData = {
     title: "Test Project",
     acronym: "TP",
     id: 1,
   };
-
   let mock = new MockAdapter(axios);
   mock
-    .onGet(`${Config("backendUrl")}/projects/${projectData.id}/`)
+    .onGet(`${config.backendUrl}/projects/${projectData.id}/`)
     .reply(200, projectData);
 
   render(
     <MemoryRouter initialEntries={[`/projects/${projectData.id}/`]}>
-      <Routes>
-        <Route path="projects/:id" element={<ProjectSettings />} />
-      </Routes>
+      <GlobalStateProvider>
+        <Routes>
+          <Route path="projects/:id" element={<ProjectSettings />} />
+        </Routes>
+      </GlobalStateProvider>
     </MemoryRouter>
   );
 
@@ -42,19 +44,21 @@ test.skip("renders the ProjectSettingsTemplate page when project data is success
   });
 });
 
-test.skip("renders the ErrorMessage when projects data is NOT successfully returned", async () => {
+test("renders the ErrorMessage when projects data is NOT successfully returned", async () => {
   const nonExistentProjectId = 0;
 
   let mock = new MockAdapter(axios);
   mock
-    .onGet(`${Config("backendUrl")}/projects/${nonExistentProjectId}`)
+    .onGet(`${config.backendUrl}/projects/${nonExistentProjectId}`)
     .reply(401);
 
   render(
     <MemoryRouter initialEntries={[`/projects/${nonExistentProjectId}/`]}>
-      <Routes>
-        <Route path="projects/:id" element={<ProjectSettings />} />
-      </Routes>
+      <GlobalStateProvider>
+        <Routes>
+          <Route path="projects/:id" element={<ProjectSettings />} />
+        </Routes>
+      </GlobalStateProvider>
     </MemoryRouter>
   );
 
@@ -69,7 +73,7 @@ test.skip("renders the ErrorMessage when projects data is NOT successfully retur
   });
 });
 
-test.skip("renders the LoadingIcon when waiting for data", async () => {
+test("renders the LoadingIcon when waiting for data", async () => {
   const projectData = {
     title: "Test Project",
     acronym: "TP",
@@ -78,14 +82,16 @@ test.skip("renders the LoadingIcon when waiting for data", async () => {
 
   let mock = new MockAdapter(axios);
   mock
-    .onGet(`${Config("backendUrl")}/projects/${projectData.id}/`)
+    .onGet(`${config.backendUrl}/projects/${projectData.id}/`)
     .reply(200, projectData);
 
   render(
     <MemoryRouter initialEntries={[`/projects/${projectData.id}/`]}>
-      <Routes>
-        <Route path="projects/:id" element={<ProjectSettings />} />
-      </Routes>
+      <GlobalStateProvider>
+        <Routes>
+          <Route path="projects/:id" element={<ProjectSettings />} />
+        </Routes>
+      </GlobalStateProvider>
     </MemoryRouter>
   );
 

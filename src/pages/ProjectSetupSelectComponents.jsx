@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import Config from "../config";
+import { config } from "../config";
 import RequestService from "../services/RequestService";
 
 import ErrorMessage from "../molecules/ErrorMessage";
@@ -17,7 +17,7 @@ const ProjectSetupSelectComponents = () => {
   const projectId = localStorageProject.id;
   useEffect(() => {
     RequestService.get(
-      `${Config("backendUrl")}/projects/${projectId}/components-not-added/`,
+      `${config.backendUrl}/projects/${projectId}/components-not-added/`,
       (response) => {
         setComponentList(response.data);
         setIsLoading(false);

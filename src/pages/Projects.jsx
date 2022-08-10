@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 
-import Config from "../config";
+import { config } from "../config";
 import RequestService from "../services/RequestService";
 
 import ErrorMessage from "../molecules/ErrorMessage";
@@ -17,7 +17,7 @@ export default function Projects() {
 
   useEffect(() => {
     RequestService.get(
-      `${Config("backendUrl")}/projects/`,
+      `${config.backendUrl}/projects/`,
       (response) => {
         setProjects(response.data);
         setIsLoading(false);
