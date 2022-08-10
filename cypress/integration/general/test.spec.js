@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-/* eslint-disable cypress/no-unnecessary-waiting */
 
 describe("breadcrumbs & h1 show correctly on home page", () => {
   it("does not display on home page", () => {
@@ -26,8 +25,11 @@ describe("breadcrumbs & h1 show correctly on healthcheck page", () => {
 
 describe("breadcrumbs show correctly on projects not found page", () => {
   it("does display on project not found page", () => {
+    cy.intercept("GET", Cypress.env("API_URL") + "/projects/0/").as(
+      "getProject"
+    );
     cy.visit(Cypress.env("BASE_URL") + "/projects/0");
-    cy.wait(3000);
+    cy.wait("@getProject").its("response.statusCode").should("eq", 404);
     cy.get("header").should("exist");
     cy.get(".usa-breadcrumb").should("exist").contains("Home");
     cy.get(".usa-breadcrumb").contains("projects");

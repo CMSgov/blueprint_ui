@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-/* eslint-disable cypress/no-unnecessary-waiting */
 
 describe("Testing out component library pages", () => {
   it("Starting from the home page, create a new project happy path, and verify the project specific pages", () => {
