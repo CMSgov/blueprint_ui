@@ -1,4 +1,5 @@
 import { Checkbox } from "@trussworks/react-uswds";
+import PropTypes from "prop-types";
 import { useState } from "react";
 import {
   createSearchParams,
@@ -210,3 +211,15 @@ const ProjectControls = ({ controlsList = [], totalItemCount = 0 }) => {
 };
 
 export default ProjectControls;
+
+ProjectControls.propTypes = {
+  controlsList: PropTypes.arrayOf(
+    PropTypes.shape({
+      project: PropTypes.number.isRequired,
+      control_id: PropTypes.string.isRequired,
+      control_label: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      status: PropTypes.string.isRequired,
+    })
+  ),
+};

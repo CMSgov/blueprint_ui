@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import ProjectHeader from "../molecules/ProjectHeader";
 import ControlsList from "./ControlsList";
 
@@ -36,3 +37,14 @@ const ProjectControlsTemplate = ({ project, controlsList, totalItemCount }) => {
 };
 
 export default ProjectControlsTemplate;
+
+ProjectControlsTemplate.propTypes = {
+  projects: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      acronym: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      impact_level: PropTypes.string.isRequired,
+    })
+  ),
+};
