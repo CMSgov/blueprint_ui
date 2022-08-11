@@ -43,31 +43,23 @@ test("renders links", () => {
   expect(componentsLinkElement).toHaveAttribute("href", "/components");
 });
 
-const oldWindowLocation = window.location;
-
-beforeAll(() => {
-  delete window.location;
-
-  window.location = Object.defineProperties(
-    {},
-    {
-      ...Object.getOwnPropertyDescriptors(oldWindowLocation),
-      assign: {
-        configurable: true,
-        value: jest.fn(),
-      },
-    }
-  );
-});
-beforeEach(() => {
-  window.location.assign.mockReset();
-});
-afterAll(() => {
-  // restore `window.location` to the `jsdom` `Location` object
-  window.location = oldWindowLocation;
-});
-
 describe("user info in header", () => {
+  const oldWindowLocation = window.location;
+
+  beforeAll(() => {
+    delete window.location;
+
+    window.location = Object.defineProperties(
+      {},
+      {
+        ...Object.getOwnPropertyDescriptors(oldWindowLocation),
+        assign: {
+          configurable: true,
+          value: jest.fn(),
+        },
+      }
+    );
+  });
   beforeEach(() => {
     window.sessionStorage.clear();
     window.location.assign.mockReset();
@@ -99,9 +91,10 @@ describe("user info in header", () => {
     expect(userButtonElement).toHaveTextContent(username);
   });
 
-  test.skip("clicking username will log out the user", () => {
+  test("clicking username will log out the user", () => {
     const username = "admin";
     const clearSessionSpy = jest.spyOn(window.sessionStorage, "clear");
+    const windowLocationSpy = jest.spyOn(window.location, "assign");
     window.sessionStorage.setItem("Username", username);
 
     render(
@@ -118,5 +111,9 @@ describe("user info in header", () => {
 
     // username no longer exists in session storage
     expect(window.sessionStorage.getItem("Username")).toEqual(null);
+
+    // user is redirected to login page
+    expect(windowLocationSpy).toHaveBeenCalledTimes(1);
+    expect(windowLocationSpy).toBeCalledWith("/login");
   });
 });
