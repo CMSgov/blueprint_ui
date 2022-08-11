@@ -41,7 +41,6 @@ const ProjectSetupSelectComponentsTemplate = ({ componentList, projectId }) => {
   const formSubmit = () => {
     let postVariables = {};
     postVariables["project_id"] = projectId;
-    postVariables["creator"] = 2; // @TODO: change for your local environment/demo
     let checkedList = document.querySelectorAll(
       "input[type='checkbox']:checked"
     );
