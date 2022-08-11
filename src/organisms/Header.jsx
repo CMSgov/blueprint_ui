@@ -1,15 +1,12 @@
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@trussworks/react-uswds";
 import { MAIN_ROUTES } from "../AppRoutes";
 import Logo from "../atoms/Logo";
 
 const Header = () => {
-  const navigate = useNavigate();
-
   const logoutUser = () => {
     sessionStorage.clear();
-    navigate(MAIN_ROUTES.LOGIN);
+    window.location.assign(MAIN_ROUTES.LOGIN);
   };
 
   const username = sessionStorage.getItem("Username");
