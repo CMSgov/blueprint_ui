@@ -43,7 +43,7 @@ const Login = () => {
         <Button type="submit">Sign in</Button>
         <p className="margin-top-5">
           {"Don't have an account? "}
-          <Link to={MAIN_ROUTES.LOGIN}>Create your account now</Link>
+          <Link to={MAIN_ROUTES.CREATE_ACCOUNT}>Create your account now</Link>
           {"."}
         </p>
       </Form>
