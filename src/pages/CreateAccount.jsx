@@ -5,27 +5,27 @@ import RequestService from "../services/RequestService";
 import { config } from "../config";
 import { MAIN_ROUTES } from "../AppRoutes";
 
-const createUser = (e) => {
-  e.preventDefault();
-  RequestService.post(
-    `${config.backendUrl}/users/`,
-    JSON.stringify({
-      username: e.target.elements.username.value,
-      password: e.target.elements.password.value,
-      passwordConfirm: e.target.elements.passwordConfirm.value,
-      firstName: e.target.elements.firstName.value,
-      lastName: e.target.elements.lastName.value,
-      email: e.target.elements.email.value,
-    }),
-    (response) => {
-      sessionStorage.setItem("Token", response.data.token);
-      sessionStorage.setItem("Username", response.data.user.username);
-      window.location.assign(MAIN_ROUTES.HOME);
-    }
-  );
-};
-
 const CreateAccount = () => {
+  const createUser = (e) => {
+    e.preventDefault();
+    RequestService.post(
+      `${config.backendUrl}/users/`,
+      JSON.stringify({
+        username: e.target.elements.username.value,
+        password: e.target.elements.password.value,
+        passwordConfirm: e.target.elements.passwordConfirm.value,
+        firstName: e.target.elements.firstName.value,
+        lastName: e.target.elements.lastName.value,
+        email: e.target.elements.email.value,
+      }),
+      (response) => {
+        sessionStorage.setItem("Token", response.data.auth_token);
+        sessionStorage.setItem("Username", response.data.username);
+        window.location.assign(MAIN_ROUTES.HOME);
+      }
+    );
+  };
+
   return (
     <div>
       <h1 className="margin-bottom-4">Create account</h1>

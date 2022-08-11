@@ -16,6 +16,17 @@ let authConfig = {
   },
 };
 
+// returns true when
+// post request is accessing login (auth) endpoint
+// or posting to the users endpoint (account creation)
+export function isAuthPost(url) {
+  const loginUrl = configUrl.backendUrlAuth;
+  const usersUrl = `${configUrl.backendUrl}/users/`;
+  if (url === loginUrl || url === usersUrl) {
+    return true;
+  }
+}
+
 const RequestService = {
   get: async (url, callback, failureCallback) => {
     axios
@@ -28,10 +39,9 @@ const RequestService = {
   post: async (url, body, callback, failureCallback) => {
     let postConfig = authConfig;
 
-    // if post request is accessing login (auth) endpoint
+    // if post request is an authentication post (user login or user creation)
     // use generic config headers without Authorization info (since there isn't any yet)
-    const isLoginPost = url === configUrl.backendUrlAuth;
-    if (isLoginPost) {
+    if (isAuthPost(url)) {
       postConfig = config;
     }
 
