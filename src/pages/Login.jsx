@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Button, Form, Label, TextInput } from "@trussworks/react-uswds";
 import RequestService from "../services/RequestService";
 import { config } from "../config";
@@ -40,6 +41,11 @@ const Login = () => {
           type="password"
         />
         <Button type="submit">Sign in</Button>
+        <p className="margin-top-5">
+          {"Don't have an account? "}
+          <Link to={MAIN_ROUTES.LOGIN}>Create your account now</Link>
+          {"."}
+        </p>
       </Form>
     </div>
   );
