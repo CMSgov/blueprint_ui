@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 
-import Private from "./atoms/Private";
+import { Private, Authentication } from "./services/ComponentType";
 import App from "./App";
 import Component from "./pages/Component";
 import ComponentLibrary from "./pages/ComponentLibrary";
@@ -38,8 +38,14 @@ export const AppRoutes = () => (
   <Routes>
     <Route path={MAIN_ROUTES.HOME} element={<App />}>
       <Route index element={<Private Component={Home} />} />
-      <Route path={MAIN_ROUTES.LOGIN} element={<Login />} />
-      <Route path={MAIN_ROUTES.CREATE_ACCOUNT} element={<CreateAccount />} />
+      <Route
+        path={MAIN_ROUTES.LOGIN}
+        element={<Authentication Component={Login} />}
+      />
+      <Route
+        path={MAIN_ROUTES.CREATE_ACCOUNT}
+        element={<Authentication Component={CreateAccount} />}
+      />
       <Route path={MAIN_ROUTES.HEALTHCHECK} element={<Healthcheck />} />
       <Route path={MAIN_ROUTES.HELP}>
         <Route index element={<Private Component={Help} />} />
