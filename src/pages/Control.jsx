@@ -60,10 +60,9 @@ export default function Control() {
 
   function postControlUpdate(postVariables) {
     RequestService.post(
-      `${config.backendUrl}/projects/${id}/controls/${controlId}/`, // @TODO: need a real endpoint here
+      `${config.backendUrl}/projects/${id}/controls/${controlId}/`,
       JSON.stringify(postVariables),
       (response) => {
-        // @TODO: handle response
         setResponse(true);
       }
     );
