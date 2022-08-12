@@ -7,7 +7,6 @@ import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  // @TODO: https://jiraent.cms.gov/browse/ISPGBSS-1209
   <React.StrictMode>
     <BrowserRouter>
       <AppRoutes />
