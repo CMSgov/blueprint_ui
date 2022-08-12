@@ -44,12 +44,30 @@ test("renders links", () => {
 });
 
 describe("user info in header", () => {
+  const oldWindowLocation = window.location;
+
+  beforeAll(() => {
+    delete window.location;
+
+    window.location = Object.defineProperties(
+      {},
+      {
+        ...Object.getOwnPropertyDescriptors(oldWindowLocation),
+        assign: {
+          configurable: true,
+          value: jest.fn(),
+        },
+      }
+    );
+  });
   beforeEach(() => {
     window.sessionStorage.clear();
+    window.location.assign.mockReset();
     jest.restoreAllMocks();
   });
   afterAll(() => {
     window.sessionStorage.clear();
+    window.location = oldWindowLocation;
     jest.restoreAllMocks();
   });
 
@@ -76,6 +94,7 @@ describe("user info in header", () => {
   test("clicking username will log out the user", () => {
     const username = "admin";
     const clearSessionSpy = jest.spyOn(window.sessionStorage, "clear");
+    const windowLocationSpy = jest.spyOn(window.location, "assign");
     window.sessionStorage.setItem("Username", username);
 
     render(
@@ -90,11 +109,11 @@ describe("user info in header", () => {
     fireEvent.click(userButtonElement);
     expect(clearSessionSpy).toHaveBeenCalledTimes(1);
 
-    // username is removed from header and no longer exists in session storage
-    const rerenderedUserButtonElement = screen.queryByRole("button", {
-      name: username,
-    });
-    expect(rerenderedUserButtonElement).toBeNull();
+    // username no longer exists in session storage
     expect(window.sessionStorage.getItem("Username")).toEqual(null);
+
+    // user is redirected to login page
+    expect(windowLocationSpy).toHaveBeenCalledTimes(1);
+    expect(windowLocationSpy).toBeCalledWith("/login");
   });
 });

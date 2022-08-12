@@ -1,6 +1,7 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import RequestService from "./RequestService";
+import RequestService, { isAuthPost } from "./RequestService";
+import { config } from "../config";
 
 describe("<RequestService />", () => {
   const data = { response: true };
@@ -44,5 +45,25 @@ describe("<RequestService />", () => {
     return RequestService.delete("fake.url", null, (err) => {
       expect(err.response.status).toBe(500);
     });
+  });
+});
+
+describe("isAuthPost function", () => {
+  it("returns true when url is the login endpoint", () => {
+    const loginUrl = config.backendUrlAuth;
+    const isAuthPostReturn = isAuthPost(loginUrl);
+    expect(isAuthPostReturn).toEqual(true);
+  });
+
+  it("returns true when url is the users endpoint", () => {
+    const usersUrl = `${config.backendUrl}/users/`;
+    const isAuthPostReturn = isAuthPost(usersUrl);
+    expect(isAuthPostReturn).toEqual(true);
+  });
+
+  it("is falsy when another url (not login url nor users endpoint) is passed in", () => {
+    const notUsersUrlAndNotLoginUrl = `${config.backendUrl}/projects/`;
+    const isAuthPostReturn = isAuthPost(notUsersUrlAndNotLoginUrl);
+    expect(isAuthPostReturn).toBeFalsy();
   });
 });

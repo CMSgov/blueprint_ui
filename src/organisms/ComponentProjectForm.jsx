@@ -20,7 +20,6 @@ const ComponentProjectForm = ({ project_data, component_id }) => {
     let path = "projects/remove-component/";
     postVariables["project_id"] = event.target.value;
     postVariables["component_id"] = component_id;
-    postVariables["creator"] = 2;
     postProjectUpdate(postVariables, path);
   };
 
