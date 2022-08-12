@@ -2,7 +2,7 @@
 
 ## Local Development Setup
 
-For with access to our current pipeline repository, please visit the infrastructure repo for setting up a local development environment at <https://github.com/CMSgov/blueprint_infra> 
+For those with access to our current pipeline repository, please visit the infrastructure repo for setting up a local development environment at <https://github.com/CMSgov/blueprint_infra> 
 
 For those without access to the blueprint_infra repository, this repository is built along with (https://github.com/CMSgov/blueprint_api) as the backend, and the setup steps can be found under the Local Development Setup steps in the README.md file (https://github.com/CMSgov/blueprint_api#readme)
 
