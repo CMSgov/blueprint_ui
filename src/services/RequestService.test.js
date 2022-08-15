@@ -7,43 +7,75 @@ describe("<RequestService />", () => {
   const data = { response: true };
   let mock = new MockAdapter(axios);
 
-  it("gets", () => {
+  it("gets", (done) => {
     mock.onGet("fake.url").reply(200, data);
-    return RequestService.get("fake.url", (response) => {
-      expect(response.status).toBe(200);
-      expect(response.data).toStrictEqual(data);
+    RequestService.get("fake.url", (response) => {
+      try {
+        expect(response.status).toBe(200);
+        expect(response.data).toStrictEqual(data);
+        done();
+      } catch (error) {
+        done(error);
+      }
     });
   });
-  it("gets and fails", () => {
+  it("gets and fails", (done) => {
     mock.onGet("fake.url").reply(500, data);
-    return RequestService.get("fake.url", null, (err) => {
-      expect(err.response.status).toBe(500);
+    RequestService.get("fake.url", null, (err) => {
+      try {
+        expect(err.response.status).toBe(500);
+        done();
+      } catch (error) {
+        done(error);
+      }
     });
   });
-  it("posts", () => {
+
+  it("posts", (done) => {
     mock.onPost("fake.url").reply(200, data);
-    return RequestService.post("fake.url", {}, (response) => {
-      expect(response.status).toBe(200);
-      expect(response.data).toStrictEqual(data);
+    RequestService.post("fake.url", {}, (response) => {
+      try {
+        expect(response.status).toBe(200);
+        expect(response.data).toStrictEqual(data);
+        done();
+      } catch (error) {
+        done(error);
+      }
     });
   });
-  it("posts and fails", () => {
+  it("posts and fails", (done) => {
     mock.onPost("fake.url").reply(500, data);
-    return RequestService.post("fake.url", {}, null, (err) => {
-      expect(err.response.status).toBe(500);
+    RequestService.post("fake.url", {}, null, (err) => {
+      try {
+        expect(err.response.status).toBe(500);
+        done();
+      } catch (error) {
+        done(error);
+      }
     });
   });
-  it("deletes", () => {
+
+  it("deletes", (done) => {
     mock.onDelete("fake.url").reply(200, data);
-    return RequestService.delete("fake.url", (response) => {
-      expect(response.status).toBe(200);
-      expect(response.data).toStrictEqual(data);
+    RequestService.delete("fake.url", (response) => {
+      try {
+        expect(response.status).toBe(200);
+        expect(response.data).toStrictEqual(data);
+        done();
+      } catch (error) {
+        done(error);
+      }
     });
   });
-  it("deletes and fails", () => {
+  it("deletes and fails", (done) => {
     mock.onDelete("fake.url").reply(500, data);
-    return RequestService.delete("fake.url", null, (err) => {
-      expect(err.response.status).toBe(500);
+    RequestService.delete("fake.url", null, (err) => {
+      try {
+        expect(err.response.status).toBe(500);
+        done();
+      } catch (error) {
+        done(error);
+      }
     });
   });
 });
