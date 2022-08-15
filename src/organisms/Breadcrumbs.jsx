@@ -27,12 +27,14 @@ const Breadcrumbs = () => {
     return "";
   } else if (topLevelList.includes(pathname)) {
     return (
-      <BreadcrumbBar>
-        <Breadcrumb>
-          <BreadcrumbLink href="/">{homePageName}</BreadcrumbLink>
-        </Breadcrumb>
-        <Breadcrumb current>{pathname.replaceAll("-", " ")}</Breadcrumb>
-      </BreadcrumbBar>
+      <div id="breadcrumbs-bar" data-testid="breadcrumbs-bar">
+        <BreadcrumbBar>
+          <Breadcrumb>
+            <BreadcrumbLink href="/">{homePageName}</BreadcrumbLink>
+          </Breadcrumb>
+          <Breadcrumb current>{pathname.replaceAll("-", " ")}</Breadcrumb>
+        </BreadcrumbBar>
+      </div>
     );
   }
   let parentList = [];
@@ -63,8 +65,15 @@ const Breadcrumbs = () => {
     }
   } else if (pathArray[0] === "project-setup") {
     appendToParentList("project setup", "/project-setup");
-    if (pathArray.length === 3) {
-      appendToParentList("Confirmation", "/project-setup/confirmation");
+    if (pathArray[1] !== undefined && pathArray[2] !== undefined) {
+      appendToParentList(pathArray[1], `/project-setup/${pathArray[1]}`);
+    }
+    //Adding this one since HCD is working on adding an extra page after selecting components
+    if (pathArray[2] !== undefined && pathArray[3] !== undefined) {
+      appendToParentList(
+        pathArray[2],
+        `/project-setup/${pathArray[1]}/${pathArray[2]}`
+      );
     }
   } else if (pathArray[0] === "projects") {
     appendToParentList("projects", "/projects");
@@ -72,27 +81,41 @@ const Breadcrumbs = () => {
     if (state.project !== undefined && state.project.title !== undefined) {
       title = state.project.title;
     }
-
     if (pathArray.length === 2) {
       setPageName(title);
-    } else if (pathArray.length === 3) {
-      //potential pages they are on "Add Team Member", "Project Team", "Project Settings", "System Security Plan", "Manage Components", "System Controls"
+    }
+    if (pathArray[1] !== undefined && pathArray[2] !== undefined) {
       appendToParentList(title, `/projects/${pathArray[1]}`);
+    }
+    if (pathArray[2] !== undefined && pathArray[3] !== undefined) {
+      appendToParentList(
+        pathArray[2],
+        `/projects/${pathArray[1]}/${pathArray[2]}`
+      );
+    }
+    //Adding this for handling potential future pages being added
+    if (pathArray[3] !== undefined && pathArray[4] !== undefined) {
+      appendToParentList(
+        pathArray[3],
+        `/projects/${pathArray[1]}/${pathArray[2]}/${pathArray[3]}`
+      );
     }
   }
 
   return (
-    <BreadcrumbBar>
-      <Breadcrumb>
-        <BreadcrumbLink href="/">{homePageName}</BreadcrumbLink>
-      </Breadcrumb>
-      {parentList.map((parent, i) => (
-        <Breadcrumb key={i}>
-          <ParentBreadcrumbs parent={parent} />
+    <div id="breadcrumbs-bar" data-testid="breadcrumbs-bar">
+      <BreadcrumbBar>
+        <Breadcrumb>
+          <BreadcrumbLink href="/">{homePageName}</BreadcrumbLink>
         </Breadcrumb>
-      ))}
-      <Breadcrumb current>{pageName}</Breadcrumb>
-    </BreadcrumbBar>
+        {parentList.map((parent, i) => (
+          <Breadcrumb key={i}>
+            <ParentBreadcrumbs parent={parent} />
+          </Breadcrumb>
+        ))}
+        <Breadcrumb current>{pageName}</Breadcrumb>
+      </BreadcrumbBar>
+    </div>
   );
 };
 
