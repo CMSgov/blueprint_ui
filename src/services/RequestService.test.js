@@ -5,7 +5,19 @@ import { config } from "../config";
 
 describe("<RequestService />", () => {
   const data = { response: true };
-  let mock = new MockAdapter(axios);
+  let mock;
+
+  beforeAll(() => {
+    mock = new MockAdapter(axios);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
 
   it("gets", (done) => {
     mock.onGet("fake.url").reply(200, data);
