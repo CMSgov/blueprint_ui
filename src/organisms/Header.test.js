@@ -93,9 +93,11 @@ describe("user info in header", () => {
 
   test("clicking username will log out the user", () => {
     const username = "admin";
+    const token = "1234567890token";
     const clearSessionSpy = jest.spyOn(window.sessionStorage, "clear");
     const windowLocationSpy = jest.spyOn(window.location, "assign");
     window.sessionStorage.setItem("Username", username);
+    window.sessionStorage.setItem("Token", token);
 
     render(
       <MemoryRouter>
@@ -111,6 +113,7 @@ describe("user info in header", () => {
 
     // username no longer exists in session storage
     expect(window.sessionStorage.getItem("Username")).toEqual(null);
+    expect(window.sessionStorage.getItem("Token")).toEqual(null);
 
     // user is redirected to login page
     expect(windowLocationSpy).toHaveBeenCalledTimes(1);
