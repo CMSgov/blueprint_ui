@@ -1,5 +1,6 @@
 import axios from "axios";
 import { config as configUrl } from "../config";
+import { MAIN_ROUTES } from "../AppRoutes";
 
 const config = {
   headers: {
@@ -27,14 +28,24 @@ export function isAuthPost(url) {
   }
 }
 
+// Checks if error is a 401 (Unauthorized)
+// if so, will clear session storage and redirect user to login
+export function handleExpiredToken() {
+  sessionStorage.clear();
+  window.location.assign(MAIN_ROUTES.LOGIN);
+}
+
 const RequestService = {
   get: async (url, callback, failureCallback) => {
     axios
       .get(url, authConfig)
       .then((response) => {
-        callback(response);
+        callback && callback(response);
       })
-      .catch((err) => failureCallback && failureCallback(err));
+      .catch((err) => {
+        err.response.status === 401 && handleExpiredToken();
+        failureCallback && failureCallback(err);
+      });
   },
   post: async (url, body, callback, failureCallback) => {
     let postConfig = authConfig;
@@ -48,17 +59,23 @@ const RequestService = {
     axios
       .post(url, body, postConfig)
       .then((response) => {
-        callback(response);
+        callback && callback(response);
       })
-      .catch((err) => failureCallback && failureCallback(err));
+      .catch((err) => {
+        err.response.status === 401 && handleExpiredToken();
+        failureCallback && failureCallback(err);
+      });
   },
   delete: async (url, callback, failureCallback) => {
     axios
       .delete(url, authConfig)
       .then((response) => {
-        callback(response);
+        callback && callback(response);
       })
-      .catch((err) => failureCallback && failureCallback(err));
+      .catch((err) => {
+        err.response.status === 401 && handleExpiredToken();
+        failureCallback && failureCallback(err);
+      });
   },
 };
 
