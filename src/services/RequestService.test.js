@@ -1,9 +1,6 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import RequestService, {
-  handleExpiredToken,
-  isAuthPost,
-} from "./RequestService";
+import RequestService, { isAuthPost } from "./RequestService";
 import { config } from "../config";
 
 describe("<RequestService />", () => {
@@ -112,77 +109,5 @@ describe("isAuthPost function", () => {
     const notUsersUrlAndNotLoginUrl = `${config.backendUrl}/projects/`;
     const isAuthPostReturn = isAuthPost(notUsersUrlAndNotLoginUrl);
     expect(isAuthPostReturn).toBeFalsy();
-  });
-});
-
-describe("handleExpiredToken function", () => {
-  const oldWindowLocation = window.location;
-  const sessionStorageMock = (() => {
-    let store = {};
-
-    return {
-      getItem(key) {
-        return store[key] || null;
-      },
-      setItem(key, value) {
-        store[key] = value.toString();
-      },
-      removeItem(key) {
-        delete store[key];
-      },
-      clear() {
-        store = {};
-      },
-    };
-  })();
-
-  Object.defineProperty(window, "sessionStorage", {
-    value: sessionStorageMock,
-  });
-
-  beforeAll(() => {
-    delete window.location;
-    window.location = Object.defineProperties(
-      {},
-      {
-        ...Object.getOwnPropertyDescriptors(oldWindowLocation),
-        assign: {
-          configurable: true,
-          value: jest.fn(),
-        },
-      }
-    );
-  });
-
-  beforeEach(() => {
-    window.sessionStorage.clear();
-    window.location.assign.mockReset();
-    jest.restoreAllMocks();
-  });
-
-  afterAll(() => {
-    window.sessionStorage.clear();
-    window.location = oldWindowLocation;
-    jest.restoreAllMocks();
-  });
-
-  it("clears session storage and returns user to login page", () => {
-    const username = "admin";
-    const token = "1234567890token";
-    const clearSessionSpy = jest.spyOn(window.sessionStorage, "clear");
-    const windowLocationSpy = jest.spyOn(window.location, "assign");
-    window.sessionStorage.setItem("Username", username);
-    window.sessionStorage.setItem("Token", token);
-
-    handleExpiredToken();
-
-    // sessionStorage is cleared removing authentication info
-    expect(clearSessionSpy).toHaveBeenCalledTimes(1);
-    expect(window.sessionStorage.getItem("Username")).toEqual(null);
-    expect(window.sessionStorage.getItem("Token")).toEqual(null);
-
-    // user is redirected to home page
-    expect(windowLocationSpy).toHaveBeenCalledTimes(1);
-    expect(windowLocationSpy).toBeCalledWith("/login");
   });
 });
