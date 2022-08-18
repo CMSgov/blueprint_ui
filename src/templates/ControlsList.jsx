@@ -13,19 +13,19 @@ import { MAIN_ROUTES } from "../AppRoutes";
 import Pagination from "../molecules/Pagination";
 
 const TableRow = ({ control }) => {
-  if (control.title === undefined) {
+  if (control.control.title === undefined) {
     return "";
   }
   return (
     <>
       <td>
         <Link
-          to={`/projects/${control.project}/controls/${control.control_id}`}
+          to={`/projects/${control.project}/controls/${control.control.control_id}`}
         >
-          {control.control_label}
+          {control.control.control_label}
         </Link>
       </td>
-      <td>{control.title}</td>
+      <td>{control.control.title}</td>
       <td>
         {control.status === "completed"
           ? "Completed"
@@ -63,7 +63,7 @@ const FilterCol = ({ currentStatus, checkBoxHandler }) => {
           <legend className="usa-legend">Status</legend>
           <Checkbox
             id="completed-filter"
-            name="status"
+            name="status__in"
             label="Completed"
             value="completed"
             onChange={checkBoxHandler}
@@ -72,7 +72,7 @@ const FilterCol = ({ currentStatus, checkBoxHandler }) => {
           />
           <Checkbox
             id="incomplete-filter"
-            name="status"
+            name="status__in"
             label="Incomplete"
             value="incomplete"
             onChange={checkBoxHandler}
@@ -81,7 +81,7 @@ const FilterCol = ({ currentStatus, checkBoxHandler }) => {
           />
           <Checkbox
             id="notstarted-filter"
-            name="status"
+            name="status__in"
             label="Not Started"
             value="not_started"
             onChange={checkBoxHandler}
@@ -98,8 +98,9 @@ const FilterCol = ({ currentStatus, checkBoxHandler }) => {
 const ProjectControls = ({ controlsList = [], totalItemCount = 0 }) => {
   const baseUrl = useLocation();
   let navigate = useNavigate();
-  const [currentStatus, setCurrentStatus] = useState([]);
+  const [currentStatus, setCurrentStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [queryString, setQueryString] = useState("");
 
   //set the url query params into state
   const [searchParams] = useSearchParams();
@@ -111,20 +112,20 @@ const ProjectControls = ({ controlsList = [], totalItemCount = 0 }) => {
   }
 
   if (
-    searchParams.get("status") &&
-    !currentStatus.includes(searchParams.get("status"))
+    searchParams.get("status__in") &&
+    !currentStatus.includes(searchParams.get("status__in"))
   ) {
-    setCurrentStatus(searchParams.getAll("status"));
+    setCurrentStatus(searchParams.get("status__in"));
+    setQueryString("status__in=" + searchParams.get("status__in"));
   }
 
   // Functions to generate query strings
   const getFiltersQuery = () => {
     let url = "";
     if (currentStatus) {
-      currentStatus.forEach((element) => {
-        url += "status=" + element + "&";
-      });
+      url += "status__in=" + currentStatus;
     }
+    setQueryString("status__in=" + currentStatus);
     return url;
   };
   const getPageQuery = () => {
@@ -143,15 +144,18 @@ const ProjectControls = ({ controlsList = [], totalItemCount = 0 }) => {
 
   // callback function to gather values from checkboxes and update url query params
   const checkBoxHandler = () => {
-    let newQuery = "?";
-    newQuery += getPageQuery();
+    let newQuery = "?page=1";
 
     var checkboxes = document.querySelectorAll(
       'input[type="checkbox"]:checked'
     );
 
+    let statuses = "";
     for (var checkbox of checkboxes) {
-      newQuery += checkbox.name + "=" + checkbox.value + "&";
+      statuses += checkbox.value + ",";
+    }
+    if (statuses.length > 0) {
+      newQuery += "&status__in=" + statuses.slice(0, -1);
     }
     navigate({
       pathname: baseUrl.pathname,
@@ -161,8 +165,7 @@ const ProjectControls = ({ controlsList = [], totalItemCount = 0 }) => {
   };
 
   // format url for pagination
-  let paginationUrl = baseUrl.pathname + "?";
-  paginationUrl += getFiltersQuery();
+  let paginationUrl = baseUrl.pathname;
 
   // How to display filters
   let tableGridCol = "grid-col-9";
@@ -202,6 +205,7 @@ const ProjectControls = ({ controlsList = [], totalItemCount = 0 }) => {
             onPageChange={onPageChange}
             totalCount={totalItemCount}
             currentPage={currentPage}
+            queryString={queryString}
             baseUrl={paginationUrl}
           />
         </div>
@@ -215,11 +219,11 @@ export default ProjectControls;
 ProjectControls.propTypes = {
   controlsList: PropTypes.arrayOf(
     PropTypes.shape({
-      project: PropTypes.number.isRequired,
-      control_id: PropTypes.string.isRequired,
-      control_label: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      status: PropTypes.string.isRequired,
+      project: PropTypes.number,
+      control_id: PropTypes.string,
+      control_label: PropTypes.string,
+      title: PropTypes.string,
+      status: PropTypes.string,
     })
   ),
 };

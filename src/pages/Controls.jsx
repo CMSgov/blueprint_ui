@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 
-import Config from "../config";
+import { config } from "../config";
 import RequestService from "../services/RequestService";
 import { isEmpty } from "../utils";
 
@@ -16,42 +16,50 @@ const ProjectControls = () => {
   const { id } = useParams();
 
   const [state, setState] = useContext(GlobalState);
-  const [isLoading, setIsLoading] = useState(false);
+  const [controls, setControls] = useState(false);
+  const [isLoadingProject, setIsLoadingProject] = useState(false);
+  const [isLoadingControls, setIsLoadingControls] = useState(false);
   const urlParams = useLocation();
   const getParams = urlParams.search;
 
   useEffect(() => {
     if (!state.project || state.project.id !== parseInt(id)) {
-      setIsLoading(true);
+      setIsLoadingProject(true);
       RequestService.get(
-        `${Config("backendUrl")}/projects/${id}/controls/${getParams}`,
+        `${config.backendUrl}/projects/${id}/`,
         (response) => {
-          setState((state) => ({
-            ...state,
-            project: response.data.project_data,
-          }));
-          setState((state) => ({ ...state, controls: response.data.controls }));
-          setState((state) => ({
-            ...state,
-            item_count: response.data.total_item_count,
-          }));
-          setIsLoading(false);
+          setState((state) => ({ ...state, project: response.data }));
+          setIsLoadingProject(false);
         },
         (err) => {
-          setIsLoading(false);
+          setIsLoadingProject(false);
         }
       );
     }
-  }, [id, state, getParams, setState]);
+  }, []);
 
-  if (isLoading) {
+  useEffect(() => {
+    setIsLoadingControls(true);
+    RequestService.get(
+      `${config.backendUrl}/projects/${id}/controls/${getParams}`,
+      (response) => {
+        setControls(response.data);
+        setIsLoadingControls(false);
+      },
+      (err) => {
+        setIsLoadingControls(false);
+      }
+    );
+  }, []);
+
+  if (isLoadingControls || isLoadingProject) {
     return <LoadingIndicator />;
   } else if (state.project && !isEmpty(state.project)) {
     return (
       <ProjectControlsTemplate
         project={state.project}
-        controlsList={state.controls}
-        totalItemCount={state.item_count}
+        controlsList={controls.results}
+        totalItemCount={controls.count}
       />
     );
   } else {
