@@ -7,7 +7,7 @@ const ProjectControlsTemplate = ({ project, controlsList, totalItemCount }) => {
   const subtitle = "System Controls";
 
   return (
-    <>
+    <div className="project-controls-page" data-testid="project_controls_page">
       <ProjectHeader
         id={id}
         acronym={acronym}
@@ -32,7 +32,7 @@ const ProjectControlsTemplate = ({ project, controlsList, totalItemCount }) => {
           totalItemCount={totalItemCount}
         />
       }
-    </>
+    </div>
   );
 };
 
