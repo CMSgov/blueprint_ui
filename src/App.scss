@@ -280,7 +280,13 @@ nav.usa-breadcrumb {
     border: none;
     max-width: 100%;
   }
-  .bottom-section {
+  [data-testid] {
+    white-space: break-spaces;
+  }
+  .usa-accordion__content {
+    white-space: break-spaces;
+  }
+  .bottom-setion {
     display: flex;
     justify-content: space-between;
     button {
