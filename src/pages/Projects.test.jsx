@@ -6,6 +6,7 @@ import Projects from "./Projects";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { config } from "../config";
+const ERROR_MESSAGE = "Error loading projects";
 
 test("renders the ProjectTemplate page when projects data is successfully returned", async () => {
   const projectsData = [
@@ -29,7 +30,8 @@ test("renders the ProjectTemplate page when projects data is successfully return
       <Projects />
     </MemoryRouter>
   );
-
+  expect(screen.getByTestId("loading_indicator")).toBeInTheDocument();
+  expect(screen.queryByText(ERROR_MESSAGE)).toBeNull();
   await waitFor(() => {
     // ensures component has finished running async code and has rendered data
     screen.getByText(`You have access to ${projectsData.length} project(s).`);
@@ -43,17 +45,17 @@ test("renders the ProjectTemplate page when projects data is successfully return
 
 test("renders the ErrorMessage when projects data is NOT successfully returned", async () => {
   let mock = new MockAdapter(axios);
-  mock.onGet(`${config.backendUrl}/projects/`).reply(401);
+  mock.onGet(`${config.backendUrl}/projects/`).reply(404);
 
   render(
     <MemoryRouter>
       <Projects />
     </MemoryRouter>
   );
-
+  expect(screen.getByTestId("loading_indicator")).toBeInTheDocument();
   await waitFor(() => {
     // ensures component has finished running async code and has rendered data
-    screen.getByText(`Error loading projects`);
+    screen.getByText(ERROR_MESSAGE);
     // checks that ErrorMessage component has rendered
     const errorMessage = screen.getByTestId("error_message");
     expect(within(errorMessage).getByRole("heading")).toHaveTextContent(

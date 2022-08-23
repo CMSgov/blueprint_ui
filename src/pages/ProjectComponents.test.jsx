@@ -31,6 +31,7 @@ const pageData = {
   total_item_count: 2,
   type_list: [["software"]],
 };
+const ERROR_MESSAGE = "Error loading system components";
 
 test("renders the LoadingIcon when waiting for data, then renders the pageTemplate when page data is successfully returned", async () => {
   let mock = new MockAdapter(axios);
@@ -52,7 +53,8 @@ test("renders the LoadingIcon when waiting for data, then renders the pageTempla
       </GlobalStateProvider>
     </MemoryRouter>
   );
-  screen.getByTestId("loading_indicator");
+  expect(screen.getByTestId("loading_indicator")).toBeInTheDocument();
+  expect(screen.queryByText(ERROR_MESSAGE)).toBeNull();
   const expectedTitle = `${pageData.project.title} (${pageData.project.acronym})`;
   await waitFor(() => {
     // ensures component has finished running async code and has rendered data
@@ -65,7 +67,7 @@ test("renders the ErrorMessage when page data is NOT successfully returned", asy
   let mock = new MockAdapter(axios);
   mock
     .onGet(`${config.backendUrl}/projects/${nonExistentId}/search/`)
-    .reply(401);
+    .reply(404);
 
   render(
     <MemoryRouter initialEntries={[`/projects/${nonExistentId}/components`]}>
@@ -79,10 +81,10 @@ test("renders the ErrorMessage when page data is NOT successfully returned", asy
       </GlobalStateProvider>
     </MemoryRouter>
   );
-
+  expect(screen.getByTestId("loading_indicator")).toBeInTheDocument();
   await waitFor(() => {
     // ensures component has finished running async code and has rendered data
-    screen.getByText("Error loading system components");
+    screen.getByText(ERROR_MESSAGE);
     // checks that ErrorMessage component has rendered
     const errorMessage = screen.getByTestId("error_message");
     expect(within(errorMessage).getByRole("heading")).toHaveTextContent(

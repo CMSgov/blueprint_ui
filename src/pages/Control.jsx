@@ -86,6 +86,7 @@ export default function Control() {
         submitCallback={postControlUpdate}
       />
     );
+  } else {
+    return <ErrorMessage message={ERROR_MESSAGE} />;
   }
-  return <ErrorMessage message={ERROR_MESSAGE} />;
 }

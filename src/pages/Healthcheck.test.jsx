@@ -9,7 +9,7 @@ import { config } from "../config";
 import { GlobalStateProvider } from "../GlobalState";
 
 const pageData = { content: "Healthy" };
-
+const ERROR_MESSAGE = "Api healthcheck is not reachable";
 test("renders the LoadingIcon when waiting for data, then renders the pageTemplate when page data is successfully returned", async () => {
   let mock = new MockAdapter(axios);
   const status = 200;
@@ -24,7 +24,8 @@ test("renders the LoadingIcon when waiting for data, then renders the pageTempla
       </GlobalStateProvider>
     </MemoryRouter>
   );
-  screen.getByTestId("loading_indicator");
+  expect(screen.getByTestId("loading_indicator")).toBeInTheDocument();
+  expect(screen.queryByText(ERROR_MESSAGE)).toBeNull();
   const expectedTitle = `Api healthcheck status: ${status}`;
   await waitFor(() => {
     // ensures component has finished running async code and has rendered data
@@ -35,7 +36,7 @@ test("renders the LoadingIcon when waiting for data, then renders the pageTempla
 test("renders the ErrorMessage when page data is NOT successfully returned", async () => {
   const nonExistentId = 0;
   let mock = new MockAdapter(axios);
-  mock.onGet(`${config.backendUrl}/healthcheck/`).reply(401);
+  mock.onGet(`${config.backendUrl}/healthcheck/`).reply(404);
 
   render(
     <MemoryRouter initialEntries={[`/healthcheck`]}>
@@ -46,10 +47,10 @@ test("renders the ErrorMessage when page data is NOT successfully returned", asy
       </GlobalStateProvider>
     </MemoryRouter>
   );
-
+  expect(screen.getByTestId("loading_indicator")).toBeInTheDocument();
   await waitFor(() => {
     // ensures component has finished running async code and has rendered data
-    screen.getByText("Api healthcheck is not reachable");
+    screen.getByText(ERROR_MESSAGE);
     // checks that ErrorMessage component has rendered
     const errorMessage = screen.getByTestId("error_message");
     expect(within(errorMessage).getByRole("heading")).toHaveTextContent(

@@ -1,4 +1,3 @@
-import { act } from "react-dom/test-utils";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { within } from "@testing-library/dom";
@@ -8,6 +7,7 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { config } from "../config";
 import { GlobalStateProvider } from "../GlobalState";
+import RequestService from "../services/RequestService";
 
 const projectData = {
   id: 21,
@@ -42,7 +42,7 @@ const projectData = {
     },
   },
 };
-
+const ERROR_MESSAGE = "Error loading project control";
 test("renders the LoadingIcon when waiting for data, then renders the pageTemplate when project data is successfully returned", async () => {
   let mock = new MockAdapter(axios);
   const controlId = "ac-1";
@@ -66,7 +66,8 @@ test("renders the LoadingIcon when waiting for data, then renders the pageTempla
       </GlobalStateProvider>
     </MemoryRouter>
   );
-  screen.getByTestId("loading_indicator");
+  expect(screen.getByTestId("loading_indicator")).toBeInTheDocument();
+  expect(screen.queryByText(ERROR_MESSAGE)).toBeNull();
   const expectedTitle = `${projectData.title} (${projectData.acronym})`;
   await waitFor(() => {
     // ensures component has finished running async code and has rendered data
@@ -86,7 +87,7 @@ test("renders the ErrorMessage when projects data is NOT successfully returned",
     .onGet(
       `${config.backendUrl}/projects/${nonExistentProjectId}/controls/${controlId}`
     )
-    .reply(401);
+    .reply(404);
 
   render(
     <MemoryRouter
@@ -104,10 +105,10 @@ test("renders the ErrorMessage when projects data is NOT successfully returned",
       </GlobalStateProvider>
     </MemoryRouter>
   );
-
+  expect(screen.getByTestId("loading_indicator")).toBeInTheDocument();
   await waitFor(() => {
     // ensures component has finished running async code and has rendered data
-    screen.getByText("Error loading project control");
+    screen.getByText(ERROR_MESSAGE);
     // checks that ErrorMessage component has rendered
     const errorMessage = screen.getByTestId("error_message");
     expect(within(errorMessage).getByRole("heading")).toHaveTextContent(
@@ -119,13 +120,9 @@ test("renders the ErrorMessage when projects data is NOT successfully returned",
 test("renders the the page and marks control as completed and clicks next", async () => {
   let mock = new MockAdapter(axios);
   const controlId = "ac-1";
+  RequestService.post = jest.fn();
   mock
     .onGet(
-      `${config.backendUrl}/projects/${projectData.id}/controls/${controlId}/`
-    )
-    .reply(200, projectData);
-  mock
-    .onPost(
       `${config.backendUrl}/projects/${projectData.id}/controls/${controlId}/`
     )
     .reply(200, projectData);
@@ -151,5 +148,13 @@ test("renders the the page and marks control as completed and clicks next", asyn
 
   const checkbox = screen.getByLabelText("Mark as complete");
   fireEvent.click(checkbox);
+  const expectedRequestBody = `{\"project_id\":${projectData.id},\"mark_completed\":true,\"private_narrative\":\"\"}`;
   fireEvent.click(screen.getByRole("button", { name: "Save & next" }));
+  await waitFor(() => {
+    expect(RequestService.post).toHaveBeenCalledWith(
+      `${config.backendUrl}/projects/${projectData.id}/controls/${controlId}/`,
+      expectedRequestBody,
+      expect.anything()
+    );
+  });
 });

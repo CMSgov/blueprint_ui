@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 
 import { config } from "../config";
 import RequestService from "../services/RequestService";
-
+import LoadingIndicator from "../atoms/LoadingIndicator";
 import ErrorMessage from "../molecules/ErrorMessage";
 import SearchLibrary from "../templates/SearchLibrary";
 
@@ -11,11 +11,11 @@ const ERROR_MESSAGE = "Error loading components";
 
 const ComponentLibrary = () => {
   const urlParams = useLocation();
-
   const [componentList, setComponentList] = useState([]);
   const [typeList, setTypeList] = useState([]);
   const [catalogList, setCatalogList] = useState([]);
   const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getParams = urlParams.search;
 
@@ -26,6 +26,7 @@ const ComponentLibrary = () => {
         setComponentList(response.data);
       },
       (err) => {
+        setHasError(true);
         throw err;
       }
     );
@@ -38,6 +39,7 @@ const ComponentLibrary = () => {
         setTypeList(response.data);
       },
       (err) => {
+        setHasError(true);
         throw err;
       }
     );
@@ -50,6 +52,7 @@ const ComponentLibrary = () => {
         setCatalogList(response.data);
       },
       (err) => {
+        setHasError(true);
         throw err;
       }
     );
@@ -61,6 +64,7 @@ const ComponentLibrary = () => {
       getTypes();
       getCatalogs();
     } catch (error) {
+      setIsLoading(false);
       return setHasError(true);
     }
   }, [getSearch]);
@@ -71,20 +75,23 @@ const ComponentLibrary = () => {
     totalItemCount = lastItem.total_item_count;
   }
 
-  if (hasError) {
+  if (isLoading) {
+    return <LoadingIndicator />;
+  } else if (!hasError && componentList) {
+    return (
+      <>
+        <h1>Component Library</h1>
+        <SearchLibrary
+          componentList={componentList}
+          typeList={typeList}
+          catalogList={catalogList}
+          totalItemCount={totalItemCount}
+        />
+      </>
+    );
+  } else {
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
-  return (
-    <>
-      <h1>Component Library</h1>
-      <SearchLibrary
-        componentList={componentList}
-        typeList={typeList}
-        catalogList={catalogList}
-        totalItemCount={totalItemCount}
-      />
-    </>
-  );
 };
 
 export default ComponentLibrary;

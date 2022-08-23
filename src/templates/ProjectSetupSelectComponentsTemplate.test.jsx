@@ -2,20 +2,6 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import ProjectSetupSelectComponentsTemplate from "./ProjectSetupSelectComponentsTemplate";
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useParams: () => ({
-    id: "12",
-  }),
-}));
-
-const projectData = {
-  title: "Test Project",
-  acronym: "TP",
-  id: 12,
-  impact_level: "low",
-};
-localStorage.setItem("project", JSON.stringify(projectData));
 const componentList = [
   {
     id: 60,

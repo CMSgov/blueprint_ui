@@ -16,7 +16,6 @@ const Project = () => {
   const { id } = useParams();
 
   const [state, setState] = useContext(GlobalState);
-  const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -29,7 +28,6 @@ const Project = () => {
           setIsLoading(false);
         },
         (err) => {
-          setHasError(true);
           setIsLoading(false);
         }
       );
@@ -38,12 +36,10 @@ const Project = () => {
 
   if (isLoading) {
     return <LoadingIndicator />;
-  }
-  if (hasError) {
-    return <ErrorMessage message={ERROR_MESSAGE} />;
-  }
-  if (state.project && !isEmpty(state.project)) {
+  } else if (state.project && !isEmpty(state.project)) {
     return <ProjectTemplate project={state.project} />;
+  } else {
+    return <ErrorMessage message={ERROR_MESSAGE} />;
   }
 };
 

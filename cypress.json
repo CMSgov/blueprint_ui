@@ -1,6 +1,9 @@
 {
   "env": {
     "BASE_URL": "localhost:3001",
-    "API_URL": "http://localhost:8000/api"
+    "API_URL": "http://localhost:8000/api",
+    "AUTH_URL": "http://localhost:8000/api-token-auth/",
+    "username": "Tester",
+    "password": "Password1"
   }
 }

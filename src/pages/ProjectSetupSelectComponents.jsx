@@ -31,16 +31,16 @@ const ProjectSetupSelectComponents = () => {
 
   if (isLoading) {
     return <LoadingIndicator />;
-  }
-  if (hasError) {
+  } else if (!hasError && componentList) {
+    return (
+      <ProjectSetupSelectComponentsTemplate
+        componentList={componentList}
+        projectId={projectId}
+      />
+    );
+  } else {
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
-  return (
-    <ProjectSetupSelectComponentsTemplate
-      componentList={componentList}
-      projectId={projectId}
-    />
-  );
 };
 
 export default ProjectSetupSelectComponents;

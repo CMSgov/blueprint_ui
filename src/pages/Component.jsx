@@ -18,7 +18,6 @@ const Component = () => {
 
   const [selectedControl, setSelectedControl] = useState(false);
   const [state, setState] = useContext(GlobalState);
-  const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -31,7 +30,6 @@ const Component = () => {
           setIsLoading(false);
         },
         (err) => {
-          setHasError(true);
           setIsLoading(false);
         }
       );
@@ -46,11 +44,7 @@ const Component = () => {
 
   if (isLoading) {
     return <LoadingIndicator />;
-  }
-  if (hasError) {
-    return <ErrorMessage message={ERROR_MESSAGE} />;
-  }
-  if (state.component && !isEmpty(state.component)) {
+  } else if (state.component && !isEmpty(state.component)) {
     return (
       <ComponentTemplate
         component={state.component}
@@ -58,6 +52,8 @@ const Component = () => {
         catalogData={getControl}
       />
     );
+  } else {
+    return <ErrorMessage message={ERROR_MESSAGE} />;
   }
 };
 

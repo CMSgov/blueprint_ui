@@ -2,6 +2,14 @@
 
 describe("Testing out links between static pages", () => {
   it("Starting from the home page, all the static page links work to navigate between them", () => {
+    //login script start
+    cy.visit(Cypress.env("BASE_URL"));
+    cy.get("#username").focus().type(Cypress.env("username"));
+    cy.get("#password").focus().type(Cypress.env("password"));
+    cy.intercept("POST", Cypress.env("AUTH_URL")).as("login");
+    cy.get(".usa-button").contains("Sign in").click();
+    cy.wait("@login").its("response.statusCode").should("eq", 200);
+    //login script end
     cy.visit(Cypress.env("BASE_URL"));
     cy.get("header").should("exist");
     cy.get(".usa-breadcrumb").should("not.exist");

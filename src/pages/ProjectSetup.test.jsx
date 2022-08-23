@@ -1,9 +1,8 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import ProjectSetup from "./ProjectSetup";
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
 import { config } from "../config";
+import RequestService from "../services/RequestService";
 
 test("renders page", () => {
   render(<ProjectSetup />, { wrapper: MemoryRouter });
@@ -48,15 +47,11 @@ test("Testing inputs work makes post call", async () => {
     acronym: "TP",
     id: 1,
   };
-  let mock = new MockAdapter(axios);
-  mock.onPost(`${config.backendUrl}/projects/`).reply(200, pageData);
+  RequestService.post = jest.fn();
   render(<ProjectSetup />, { wrapper: MemoryRouter });
   fireEvent.click(screen.getByRole("button", { name: "Next" }));
-  fireEvent.change(screen.getByLabelText("Full name"), {
-    target: { value: "Full Name" },
-  });
   fireEvent.change(screen.getByLabelText("Acronym"), {
-    target: { value: "Acronym" },
+    target: { value: pageData.acronym },
   });
   fireEvent.click(screen.getByLabelText("CMS AWS Commercial East-West"));
   fireEvent.click(screen.getByRole("button", { name: "Next" }));
@@ -71,5 +66,17 @@ test("Testing inputs work makes post call", async () => {
   fireEvent.click(screen.getByText("Moderate"));
   fireEvent.click(screen.getByRole("button", { name: "Next" }));
   fireEvent.click(screen.getByText("High"));
+  fireEvent.change(screen.getByLabelText("Full name"), {
+    target: { value: pageData.title },
+  });
   fireEvent.click(screen.getByRole("button", { name: "Next" }));
+  await waitFor(() => {
+    const expectedRequestBody = `{\"catalog\":1,\"acronym\":\"${pageData.acronym}\",\"title\":\"${pageData.title}\",\"location\":\"other\",\"impact_level\":\"high\"}`;
+    // const expectedRequestBody = "{\"catalog\":1,\"acronym\":\"TP\",\"title\":\"Test Project\",\"location\":\"other\",\"impact_level\":\"high\"}"
+    expect(RequestService.post).toHaveBeenCalledWith(
+      `${config.backendUrl}/projects/`,
+      expectedRequestBody,
+      expect.anything()
+    );
+  });
 });

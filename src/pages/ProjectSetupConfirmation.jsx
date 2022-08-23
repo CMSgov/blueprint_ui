@@ -1,59 +1,47 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Alert } from "@trussworks/react-uswds";
-import { MAIN_ROUTES } from "../AppRoutes";
 import { config } from "../config";
 import RequestService from "../services/RequestService";
+import ProjectSetupConfirmationTemplate from "../templates/ProjectSetupConfirmationTemplate";
+import LoadingIndicator from "../atoms/LoadingIndicator";
+import ErrorMessage from "../molecules/ErrorMessage";
+
+const ERROR_MESSAGE = "Error loading project components";
 
 const ProjectSetupConfirmation = () => {
   const [project, setProject] = useState({});
-  const [error, setError] = useState(false);
+  const [components, setComponents] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const localStorageProject = JSON.parse(localStorage.getItem("project"));
 
   useEffect(() => {
     if (localStorageProject.components !== undefined && !project.id) {
+      setIsLoading(false);
+      setComponents(localStorageProject.components);
       return setProject(localStorageProject);
     } else if (project.id !== localStorageProject.id) {
+      setIsLoading(true);
       RequestService.get(
         `${config.backendUrl}/projects/${localStorageProject.id}/`,
         (response) => {
           localStorage.setItem("project", JSON.stringify(response.data));
           setProject(response.data);
+          setComponents(response.data.components);
+          setIsLoading(false);
         },
         (err) => {
-          setError(true);
+          setIsLoading(false);
         }
       );
     }
   }, [localStorageProject, project, setProject]);
-  const components = project.components || [];
 
-  return (
-    <>
-      {error && <Alert type="error">{error}</Alert>}
-      <h1>Inherited policies and procedures</h1>
-      <p>
-        Blueprint automatically adds components for systems on the CMS AWS
-        environment. Each component includes controls for policies and
-        procedures needed for your System Security Plan (SSP).{" "}
-      </p>
-      <ul className="usa-list">
-        {components.map((component, i) => (
-          <li key={i}>{component.title}</li>
-        ))}
-      </ul>
-      <p>
-        All included controls are fully inherited and added to your SSP. No
-        additonal action is required.
-      </p>
-      <Link to={MAIN_ROUTES.PROJECT_SETUP}>
-        <button className="usa-button usa-button--outline">Back</button>
-      </Link>
-      <a href="/project-setup/confirmation/select-components">
-        <button className="usa-button">Next</button>
-      </a>
-    </>
-  );
+  if (isLoading) {
+    return <LoadingIndicator />;
+  } else if (components !== undefined) {
+    return <ProjectSetupConfirmationTemplate components={components} />;
+  } else {
+    return <ErrorMessage message={ERROR_MESSAGE} />;
+  }
 };
 
 export default ProjectSetupConfirmation;
