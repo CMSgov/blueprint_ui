@@ -17,7 +17,7 @@ const ERROR_MESSAGE = "Error loading project control";
 export default function Control() {
   const { id, controlId } = useParams();
   const [state, setState] = useContext(GlobalState);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [control, setControl] = useState();
   const [componentData, setComponentData] = useState();
   const [response, setResponse] = useState(false);
@@ -69,6 +69,7 @@ export default function Control() {
   }
 
   if (isLoading) {
+    console.log("isLoading state displayed");
     return <LoadingIndicator />;
   } else if (
     control !== undefined &&
@@ -78,6 +79,7 @@ export default function Control() {
     componentData !== undefined &&
     !isEmpty(componentData)
   ) {
+    console.log("success state displayed");
     return (
       <ControlTemplate
         project={state.project}
@@ -87,6 +89,7 @@ export default function Control() {
       />
     );
   } else {
+    console.log("error state displayed");
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
 }

@@ -16,7 +16,7 @@ const Project = () => {
   const { id } = useParams();
 
   const [state, setState] = useContext(GlobalState);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!state.project || state.project.id !== parseInt(id)) {
@@ -35,10 +35,13 @@ const Project = () => {
   }, [id, state, setState]);
 
   if (isLoading) {
+    console.log("isLoading state displayed");
     return <LoadingIndicator />;
   } else if (state.project && !isEmpty(state.project)) {
+    console.log("template displayed");
     return <ProjectTemplate project={state.project} />;
   } else {
+    console.log("error state displayed");
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
 };

@@ -18,7 +18,7 @@ const Component = () => {
 
   const [selectedControl, setSelectedControl] = useState(false);
   const [state, setState] = useContext(GlobalState);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!state.component || state.component.id !== parseInt(componentId)) {
@@ -43,8 +43,10 @@ const Component = () => {
   };
 
   if (isLoading) {
+    console.log("isLoading state displayed");
     return <LoadingIndicator />;
   } else if (state.component && !isEmpty(state.component)) {
+    console.log("template displayed");
     return (
       <ComponentTemplate
         component={state.component}
@@ -53,6 +55,7 @@ const Component = () => {
       />
     );
   } else {
+    console.log("error state displayed");
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
 };
