@@ -40,12 +40,7 @@ const EmptyResults = ({ length }) => {
   if (length !== 0) {
     return "";
   }
-  return (
-    <p>
-      There are no controls in your project yet. Add one by visiting the{" "}
-      <Link to={MAIN_ROUTES.COMPONENT_LIBRARY}>Component Library</Link>.
-    </p>
-  );
+  return <p>There were no controls found for this project.</p>;
 };
 
 const FilterCol = ({ currentStatus, checkBoxHandler }) => {
