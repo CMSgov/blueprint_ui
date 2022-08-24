@@ -37,18 +37,14 @@ const ProjectSystemSecurityPlan = () => {
   }, [id, state, setState]);
 
   if (isLoading) {
-    console.log("isLoading state displayed");
     return <LoadingIndicator />;
   }
   if (hasError) {
-    console.log("error state displayed");
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
   if (state.project && !isEmpty(state.project)) {
-    console.log("template displayed");
     return <SystemSecurityPlanTemplate project={state.project} />;
   }
-  console.log("implicit else return nothing");
 };
 
 export default ProjectSystemSecurityPlan;

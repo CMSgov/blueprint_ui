@@ -10,9 +10,9 @@ import ProjectSetupSelectComponentsTemplate from "../templates/ProjectSetupSelec
 const ERROR_MESSAGE = "Error loading components for project setup";
 
 const ProjectSetupSelectComponents = () => {
-  const [componentList, setComponentList] = useState([]);
+  const [componentList, setComponentList] = useState();
   const [hasError, setHasError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const localStorageProject = JSON.parse(localStorage.getItem("project"));
   const projectId = localStorageProject.id;
   useEffect(() => {
@@ -31,14 +31,16 @@ const ProjectSetupSelectComponents = () => {
 
   if (isLoading) {
     return <LoadingIndicator />;
-  } else if (!hasError && componentList) {
+  }
+  if (componentList) {
     return (
       <ProjectSetupSelectComponentsTemplate
         componentList={componentList}
         projectId={projectId}
       />
     );
-  } else {
+  }
+  if (hasError) {
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
 };

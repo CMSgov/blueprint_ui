@@ -11,6 +11,7 @@ const ProjectSetupConfirmation = () => {
   const [project, setProject] = useState({});
   const [components, setComponents] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const localStorageProject = JSON.parse(localStorage.getItem("project"));
 
   useEffect(() => {
@@ -29,6 +30,7 @@ const ProjectSetupConfirmation = () => {
           setIsLoading(false);
         },
         (err) => {
+          setHasError(true);
           setIsLoading(false);
         }
       );
@@ -37,9 +39,11 @@ const ProjectSetupConfirmation = () => {
 
   if (isLoading) {
     return <LoadingIndicator />;
-  } else if (components !== undefined) {
+  }
+  if (components !== undefined) {
     return <ProjectSetupConfirmationTemplate components={components} />;
-  } else {
+  }
+  if (hasError) {
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
 };

@@ -77,7 +77,11 @@ const ComponentLibrary = () => {
 
   if (isLoading) {
     return <LoadingIndicator />;
-  } else if (!hasError && componentList) {
+  }
+  if (hasError) {
+    return <ErrorMessage message={ERROR_MESSAGE} />;
+  }
+  if (componentList) {
     return (
       <>
         <h1>Component Library</h1>
@@ -89,8 +93,6 @@ const ComponentLibrary = () => {
         />
       </>
     );
-  } else {
-    return <ErrorMessage message={ERROR_MESSAGE} />;
   }
 };
 

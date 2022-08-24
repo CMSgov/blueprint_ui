@@ -15,10 +15,10 @@ const ERROR_MESSAGE = "Error loading component";
 
 const Component = () => {
   const { componentId } = useParams();
-
+  const [hasError, setHasError] = useState(false);
   const [selectedControl, setSelectedControl] = useState(false);
   const [state, setState] = useContext(GlobalState);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!state.component || state.component.id !== parseInt(componentId)) {
@@ -30,6 +30,7 @@ const Component = () => {
           setIsLoading(false);
         },
         (err) => {
+          setHasError(true);
           setIsLoading(false);
         }
       );
@@ -43,10 +44,9 @@ const Component = () => {
   };
 
   if (isLoading) {
-    console.log("isLoading state displayed");
     return <LoadingIndicator />;
-  } else if (state.component && !isEmpty(state.component)) {
-    console.log("template displayed");
+  }
+  if (state.component && !isEmpty(state.component)) {
     return (
       <ComponentTemplate
         component={state.component}
@@ -54,8 +54,8 @@ const Component = () => {
         catalogData={getControl}
       />
     );
-  } else {
-    console.log("error state displayed");
+  }
+  if (hasError) {
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
 };
