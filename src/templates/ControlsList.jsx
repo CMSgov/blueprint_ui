@@ -1,5 +1,4 @@
 import { Checkbox } from "@trussworks/react-uswds";
-import PropTypes from "prop-types";
 import { useState } from "react";
 import {
   createSearchParams,

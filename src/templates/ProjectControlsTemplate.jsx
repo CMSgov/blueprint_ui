@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import ProjectHeader from "../molecules/ProjectHeader";
 import ControlsList from "./ControlsList";
 
