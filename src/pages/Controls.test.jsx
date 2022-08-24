@@ -1,6 +1,20 @@
-import { render, screen, within } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
-import ProjectControls from "./ControlsList";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { render, screen, waitFor } from "@testing-library/react";
+import { within } from "@testing-library/dom";
+import "@testing-library/jest-dom";
+import ProjectControls from "./Controls";
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
+import { config } from "../config";
+import { GlobalStateProvider } from "../GlobalState";
+import Project from "./Project";
+
+const projectData = {
+  title: "Test Project One",
+  acronym: "TPO",
+  impact_level: "low",
+  id: 1,
+};
 
 const controlData = {
   count: 323,
@@ -251,40 +265,24 @@ const controlData = {
   ],
 };
 
-test("renders page with pagination", () => {
+test("Check page header values", async () => {
+  let mock = new MockAdapter(axios);
+  mock
+    .onGet(`${config.backendUrl}/projects/${projectData.id}/`)
+    .reply(200, projectData);
+
   render(
-    <ProjectControls
-      controlData={controlData.results}
-      totalItemCount={controlData.count}
-    />,
-    {
-      wrapper: MemoryRouter,
-    }
+    <MemoryRouter initialEntries={[`/projects/${projectData.id}/controls`]}>
+      <GlobalStateProvider>
+        <Routes>
+          <Route path="projects/:id/controls" element={<ProjectControls />} />
+        </Routes>
+      </GlobalStateProvider>
+    </MemoryRouter>
   );
-
-  const linkToNextPage = screen.getByText("Next");
-  expect(linkToNextPage).toBeInTheDocument();
-});
-
-test("renders page with controls", () => {
-  render(
-    <ProjectControls
-      controlsList={controlData.results}
-      totalItemCount={controlData.count}
-    />,
-    {
-      wrapper: MemoryRouter,
-    }
-  );
-
-  const controlFirstName = screen.getByText(
-    /Access Control Policy and Procedures/
-  );
-  const controlFirstId = screen.getByText("AC-01");
-  expect(controlFirstName).toBeInTheDocument();
-  expect(controlFirstId).toBeInTheDocument();
-  const controlLastName = screen.getByText(/Session Termination/);
-  const controlLastId = screen.getByText("AC-12");
-  expect(controlLastName).toBeInTheDocument();
-  expect(controlLastId).toBeInTheDocument();
+  screen.getByTestId("loading_indicator");
+  const expectedTitle = `${projectData.title} (${projectData.acronym})`;
+  await waitFor(() => {
+    screen.getByText(expectedTitle);
+  });
 });

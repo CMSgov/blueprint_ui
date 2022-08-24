@@ -20,7 +20,7 @@ const TableRow = ({ control }) => {
     <>
       <td>
         <Link
-          to={`/projects/${control.project}/controls/${control.control.control_id}`}
+          to={`/projects/${control.project.id}/controls/${control.control.control_id}`}
         >
           {control.control.control_label}
         </Link>
