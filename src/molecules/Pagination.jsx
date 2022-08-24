@@ -84,7 +84,6 @@ const Pagination = (props) => {
     onPageChange,
     totalCount,
     currentPage,
-    queryString = "",
     pageSize = 20,
     baseUrl,
   } = props;
@@ -100,12 +99,7 @@ const Pagination = (props) => {
     return "";
   }
   const getUrl = (pageNumber) => {
-    return (
-      baseUrl +
-      "?page=" +
-      pageNumber +
-      (queryString.length > 0 ? "&" + queryString : "")
-    );
+    return baseUrl + "page=" + pageNumber;
   };
   const onNext = () => {
     onPageChange(currentPage + 1);

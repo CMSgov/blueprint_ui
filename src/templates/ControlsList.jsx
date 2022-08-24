@@ -119,23 +119,6 @@ const ProjectControls = ({ controlsList = [], totalItemCount = 0 }) => {
     setQueryString("status__in=" + searchParams.get("status__in"));
   }
 
-  // Functions to generate query strings
-  const getFiltersQuery = () => {
-    let url = "";
-    if (currentStatus) {
-      url += "status__in=" + currentStatus;
-    }
-    setQueryString("status__in=" + currentStatus);
-    return url;
-  };
-  const getPageQuery = () => {
-    let url = "";
-    if (currentPage) {
-      url += "page=" + currentPage + "&";
-    }
-    return url;
-  };
-
   // Call back functions used for updating values from the page
   //callback function to change the current page
   const onPageChange = (pageNumber) => {
@@ -146,7 +129,7 @@ const ProjectControls = ({ controlsList = [], totalItemCount = 0 }) => {
   const checkBoxHandler = () => {
     let newQuery = "?page=1";
 
-    var checkboxes = document.querySelectorAll(
+    let checkboxes = document.querySelectorAll(
       'input[type="checkbox"]:checked'
     );
 
@@ -165,7 +148,10 @@ const ProjectControls = ({ controlsList = [], totalItemCount = 0 }) => {
   };
 
   // format url for pagination
-  let paginationUrl = baseUrl.pathname;
+  let paginationUrl = baseUrl.pathname + "?";
+  if (currentStatus.length > 0) {
+    paginationUrl += currentStatus + "&";
+  }
 
   // How to display filters
   let tableGridCol = "grid-col-9";
@@ -205,7 +191,6 @@ const ProjectControls = ({ controlsList = [], totalItemCount = 0 }) => {
             onPageChange={onPageChange}
             totalCount={totalItemCount}
             currentPage={currentPage}
-            queryString={queryString}
             baseUrl={paginationUrl}
           />
         </div>
