@@ -200,15 +200,3 @@ const ProjectControls = ({ controlsList = [], totalItemCount = 0 }) => {
 };
 
 export default ProjectControls;
-
-ProjectControls.propTypes = {
-  controlsList: PropTypes.arrayOf(
-    PropTypes.shape({
-      project: PropTypes.number,
-      control_id: PropTypes.string,
-      control_label: PropTypes.string,
-      title: PropTypes.string,
-      status: PropTypes.string,
-    })
-  ),
-};

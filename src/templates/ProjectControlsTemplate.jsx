@@ -37,14 +37,3 @@ const ProjectControlsTemplate = ({ project, controlsList, totalItemCount }) => {
 };
 
 export default ProjectControlsTemplate;
-
-ProjectControlsTemplate.propTypes = {
-  projects: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      acronym: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      impact_level: PropTypes.string.isRequired,
-    })
-  ),
-};
