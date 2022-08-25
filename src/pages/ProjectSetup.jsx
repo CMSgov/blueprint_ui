@@ -38,7 +38,7 @@ const ProjectSetup = () => {
   const formSubmit = () => {
     // Validate and set form post values
     let postVariables = {};
-    postVariables["catalog"] = 1; // @TODO: This should be ARS 3.1 catalog or list of catalogs to choose from
+    postVariables["catalog_version"] = "CMS ARS 3.1";
 
     if (textInputAcronym.current.value) {
       postVariables["acronym"] = textInputAcronym.current.value;
@@ -88,7 +88,7 @@ const ProjectSetup = () => {
     }
 
     if (
-      postVariables["catalog"] &&
+      postVariables["catalog_version"] &&
       postVariables["acronym"] &&
       postVariables["title"] &&
       postVariables["location"] &&
