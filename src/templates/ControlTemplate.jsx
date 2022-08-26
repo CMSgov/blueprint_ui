@@ -109,7 +109,7 @@ export default function ControlTemplate({
       <p data-testid="control_family">
         <b>Control Family:</b> {family}
       </p>
-      <p data-testid="control_description">
+      <p className="control-description" data-testid="control_description">
         <b>Control Description:</b> {description}
       </p>
       <ResponsibilityBox responsibility={responsibility} />
