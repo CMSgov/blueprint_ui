@@ -21,6 +21,40 @@ const Component = () => {
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const handleProjectUpdate = (formValues, path) => {
+    RequestService.post(
+      `${config.backendUrl}/${path}`,
+      JSON.stringify(formValues),
+      (response) => {
+        const alert = {
+          type: "success",
+          message: response.data.message,
+        };
+        setState((state) => ({ ...state, alert: alert }));
+
+        // get updated component data to get the updated list of projects
+        // that the component can be added to/removed from
+        getUpdatedComponentData();
+      },
+      (err) => {
+        const alert = {
+          type: "error",
+          message: err.message,
+        };
+        setState((state) => ({ ...state, alert: alert }));
+      }
+    );
+  };
+
+  const getUpdatedComponentData = () => {
+    RequestService.get(
+      `${config.backendUrl}/components/${componentId}/`,
+      (response) => {
+        setState((state) => ({ ...state, component: response.data }));
+      }
+    );
+  };
+
   useEffect(() => {
     if (!state.component || state.component.id !== parseInt(componentId)) {
       setIsLoading(true);
@@ -36,7 +70,7 @@ const Component = () => {
         }
       );
     }
-  }, [componentId, state, setState]);
+  }, [componentId, state.component, setState]);
 
   const getControl = (controlId) => {
     let control = getControlData(state.component, controlId);
@@ -56,6 +90,7 @@ const Component = () => {
         component={state.component}
         controlText={selectedControl}
         catalogData={getControl}
+        handleProjectUpdate={handleProjectUpdate}
       />
     );
   }

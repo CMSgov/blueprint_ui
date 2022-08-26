@@ -155,6 +155,32 @@ nav.usa-breadcrumb {
   }
 }
 
+.alert-container {
+  display: flex;
+  justify-content: flex-end;
+
+  .alert-override {
+    position: absolute;
+    margin-top: 20px;
+    width: 285px;
+    z-index: 2;
+
+    .close-alert {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 10px;
+      button {
+        display: flex;
+        align-items: center;
+        height: 30px;
+        img {
+          padding-left: 7px;
+        }
+      }
+    }
+  }
+}
+
 .project-header {
   margin-bottom: 30px;
   .title,
@@ -367,4 +393,17 @@ nav.usa-breadcrumb {
 }
 .blueprint-tooltip {
   background-color: $blue-primary;
+}
+
+.component-project-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  input {
+    min-width: 340px;
+  }
+  label {
+    font-size: 16px;
+    font-weight: bold;
+  }
 }

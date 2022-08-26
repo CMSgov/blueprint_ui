@@ -5,7 +5,12 @@ import ResponsibilityBox from "../atoms/ResponsibilityBox";
 import ComponentProjectForm from "../organisms/ComponentProjectForm";
 import ControlHeader from "../organisms/ControlHeader";
 
-export function ComponentTemplate({ component, controlText, catalogData }) {
+export function ComponentTemplate({
+  component,
+  controlText,
+  catalogData,
+  handleProjectUpdate,
+}) {
   const { title, description, standard, source } = component.component_data;
 
   const accordionItemsProps = [
@@ -32,39 +37,42 @@ export function ComponentTemplate({ component, controlText, catalogData }) {
     },
   ];
 
+  function renderTopSection() {
+    return (
+      <div className="grid-row">
+        <div className="tablet:grid-col padding-top-1">
+          <p>
+            <b>Standard:</b> {standard}
+          </p>
+          <p>
+            <b>Source link:</b> <a href={source}>Source</a>
+          </p>
+          <p>
+            <b>Vetted Status:</b>{" "}
+            {component.vetted ? component.vetted : "No data available"}
+          </p>
+          <p>
+            <b>Assessment Status:</b>{" "}
+            {component.assessment ? component.assessment : "No data available"}
+          </p>
+        </div>
+        <div className=" tablet:grid-col">
+          <ComponentProjectForm
+            project_data={component.project_data}
+            component_id={component.id}
+            handleProjectUpdate={handleProjectUpdate}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <h1>{title}</h1>
       <p>{description}</p>
-      <div className="grid-container">
-        <div className="grid-row">
-          <div className="tablet:grid-col padding-top-1">
-            <p>
-              <b>Standard:</b> {standard}
-            </p>
-            <p>
-              <b>Source link:</b> <a href={source}>Source</a>
-            </p>
-            <p>
-              <b>Vetted Status:</b>{" "}
-              {component.vetted ? component.vetted : "No data available"}
-            </p>
-            <p>
-              <b>Assessment Status:</b>{" "}
-              {component.assessment
-                ? component.assessment
-                : "No data available"}
-            </p>
-          </div>
-          <div className="tablet:grid-col">
-            <ComponentProjectForm
-              project_data={component.project_data}
-              component_id={component.id}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="grid-container border-top margin-top-4" id="controls">
+      {renderTopSection()}
+      <div className="border-top margin-top-4" id="controls">
         <div className="grid-row">
           <div className="grid-col-2">
             <h3 className="text-bold margin-bottom-2 margin-top-1">Controls</h3>
@@ -144,4 +152,5 @@ ComponentTemplate.propTypes = {
     responsibility: PropTypes.oneOf(["none", "some", "all"]).isRequired,
     version: PropTypes.string,
   }),
+  handleProjectUpdate: PropTypes.func,
 };
