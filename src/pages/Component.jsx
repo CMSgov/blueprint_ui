@@ -7,6 +7,7 @@ import { config } from "../config";
 import RequestService from "../services/RequestService";
 
 import { ComponentTemplate } from "../templates/ComponentTemplate";
+import AlertContext from "../AlertContext";
 import ErrorMessage from "../molecules/ErrorMessage";
 import GlobalState from "../GlobalState";
 import LoadingIndicator from "../atoms/LoadingIndicator";
@@ -15,6 +16,10 @@ const ERROR_MESSAGE = "Error loading component";
 
 const Component = () => {
   const { componentId } = useParams();
+
+  const { type, message } = useContext(AlertContext);
+  const [alertMessage, setAlertMessage] = message;
+  const [alertType, setAlertType] = type;
 
   const [selectedControl, setSelectedControl] = useState(false);
   const [state, setState] = useContext(GlobalState);
@@ -26,22 +31,16 @@ const Component = () => {
       `${config.backendUrl}/${path}`,
       JSON.stringify(formValues),
       (response) => {
-        const alert = {
-          type: "success",
-          message: response.data.message,
-        };
-        setState((state) => ({ ...state, alert: alert }));
+        setAlertMessage(response.data.message);
+        setAlertType("success");
 
         // get updated component data to get the updated list of projects
         // that the component can be added to/removed from
         getUpdatedComponentData();
       },
       (err) => {
-        const alert = {
-          type: "error",
-          message: err.message,
-        };
-        setState((state) => ({ ...state, alert: alert }));
+        setAlertMessage(err.message);
+        setAlertType("error");
       }
     );
   };

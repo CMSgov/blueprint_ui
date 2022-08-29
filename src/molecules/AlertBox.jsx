@@ -1,19 +1,22 @@
 import { useContext } from "react";
 import { Alert, Button } from "@trussworks/react-uswds";
-import GlobalState from "../GlobalState";
+import AlertContext from "../AlertContext";
 
 const AlertBox = () => {
-  const [state, setState] = useContext(GlobalState);
+  const { type, message } = useContext(AlertContext);
+  const [alertMessage, setAlertMessage] = message;
+  const [alertType, setAlertType] = type; // Options: "success", "warning", "error", "info". Default is "info"
 
   const clearAlert = () => {
-    setState((state) => ({ ...state, alert: null }));
+    setAlertMessage(null);
+    setAlertType(null);
   };
 
-  if (state.alert) {
+  if (alertMessage) {
     return (
       <div className="alert-container">
-        <Alert className="alert-override" type={state.alert.type} slim>
-          {state.alert.message}
+        <Alert className="alert-override" type={alertType} slim>
+          {alertMessage}
           <span />
           <span className="close-alert">
             <Button unstyled onClick={() => clearAlert()}>
