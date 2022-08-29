@@ -3,9 +3,10 @@ import { Alert, Button } from "@trussworks/react-uswds";
 import AlertContext from "../AlertContext";
 
 const AlertBox = () => {
-  const { type, message } = useContext(AlertContext);
-  const [alertMessage, setAlertMessage] = message;
-  const [alertType, setAlertType] = type; // Options: "success", "warning", "error", "info". Default is "info"
+  // alertType options: "success", "warning", "error", "info"
+  // Default is "info"
+  const { alertType, alertMessage, setAlertMessage, setAlertType } =
+    useContext(AlertContext);
 
   const clearAlert = () => {
     setAlertMessage(null);

@@ -17,9 +17,7 @@ const ERROR_MESSAGE = "Error loading component";
 const Component = () => {
   const { componentId } = useParams();
 
-  const { type, message } = useContext(AlertContext);
-  const [alertMessage, setAlertMessage] = message;
-  const [alertType, setAlertType] = type;
+  const { setAlertMessage, setAlertType } = useContext(AlertContext);
 
   const [selectedControl, setSelectedControl] = useState(false);
   const [state, setState] = useContext(GlobalState);
@@ -28,7 +26,7 @@ const Component = () => {
 
   const handleProjectUpdate = (formValues, path) => {
     RequestService.post(
-      `${config.backendUrl}/${path}`,
+      `${config.backendUrl}/projects/${path}`,
       JSON.stringify(formValues),
       (response) => {
         setAlertMessage(response.data.message);
