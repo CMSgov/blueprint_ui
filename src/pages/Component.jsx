@@ -37,7 +37,7 @@ const Component = () => {
         getUpdatedComponentData();
       },
       (err) => {
-        setAlertMessage(err.message);
+        setAlertMessage("Something went wrong, try again.");
         setAlertType("error");
       }
     );
