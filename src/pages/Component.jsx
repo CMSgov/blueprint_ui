@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import { isEmpty } from "../utils";
 import { getControlData } from "../Helpers";
@@ -7,17 +8,15 @@ import { config } from "../config";
 import RequestService from "../services/RequestService";
 
 import { ComponentTemplate } from "../templates/ComponentTemplate";
-import AlertContext from "../AlertContext";
 import ErrorMessage from "../molecules/ErrorMessage";
 import GlobalState from "../GlobalState";
+import AlertToast from "../atoms/AlertToast";
 import LoadingIndicator from "../atoms/LoadingIndicator";
 
 const ERROR_MESSAGE = "Error loading component";
 
 const Component = () => {
   const { componentId } = useParams();
-
-  const { setAlertMessage, setAlertType } = useContext(AlertContext);
 
   const [selectedControl, setSelectedControl] = useState(false);
   const [state, setState] = useContext(GlobalState);
@@ -29,16 +28,14 @@ const Component = () => {
       `${config.backendUrl}/projects/${path}`,
       JSON.stringify(formValues),
       (response) => {
-        setAlertMessage(response.data.message);
-        setAlertType("success");
+        toast(AlertToast("success", response.data.message));
 
         // get updated component data to get the updated list of projects
         // that the component can be added to/removed from
         getUpdatedComponentData();
       },
       (err) => {
-        setAlertMessage("Something went wrong, try again.");
-        setAlertType("error");
+        toast(AlertToast("error", "Something went wrong, try again."));
       }
     );
   };

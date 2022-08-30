@@ -19,6 +19,22 @@ $tablet-size-max-width: 640px;
 $card-collection-two-per-row-width: 900px;
 $card-collection-three-per-row-width: 901px;
 
+// Global override of React-Toastify alerts
+.Toastify__toast-container--top-right {
+  top: 70px !important;
+  right: 95px !important;
+  .Toastify__toast {
+    border-radius: 0;
+    padding: 0 !important;
+    .Toastify__toast-body {
+      padding: 0;
+    }
+    .Toastify__close-button {
+      display: none;
+    }
+  }
+}
+
 html,
 body {
   height: 100%;
@@ -151,32 +167,6 @@ nav.usa-breadcrumb {
     }
     a {
       padding-top: 16px;
-    }
-  }
-}
-
-.alert-container {
-  display: flex;
-  justify-content: flex-end;
-
-  .alert-override {
-    position: absolute;
-    margin-top: 20px;
-    width: 285px;
-    z-index: 2;
-
-    .close-alert {
-      display: flex;
-      justify-content: flex-end;
-      padding-top: 10px;
-      button {
-        display: flex;
-        align-items: center;
-        height: 30px;
-        img {
-          padding-left: 7px;
-        }
-      }
     }
   }
 }

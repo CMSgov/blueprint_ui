@@ -5,7 +5,6 @@ import "@testing-library/jest-dom";
 import Component from "./Component";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { AlertProvider } from "../AlertContext";
 import { config } from "../config";
 import { GlobalStateProvider } from "../GlobalState";
 
@@ -44,13 +43,11 @@ test("renders the LoadingIcon when waiting for data, then renders the pageTempla
 
   render(
     <MemoryRouter initialEntries={[`/components/${pageData.id}`]}>
-      <AlertProvider>
-        <GlobalStateProvider>
-          <Routes>
-            <Route path="components/:componentId" element={<Component />} />
-          </Routes>
-        </GlobalStateProvider>
-      </AlertProvider>
+      <GlobalStateProvider>
+        <Routes>
+          <Route path="components/:componentId" element={<Component />} />
+        </Routes>
+      </GlobalStateProvider>
     </MemoryRouter>
   );
   screen.getByTestId("loading_indicator");
@@ -68,13 +65,11 @@ test("renders the ErrorMessage when page data is NOT successfully returned", asy
 
   render(
     <MemoryRouter initialEntries={[`/components/${nonExistentId}`]}>
-      <AlertProvider>
-        <GlobalStateProvider>
-          <Routes>
-            <Route path="components/:id" element={<Component />} />
-          </Routes>
-        </GlobalStateProvider>
-      </AlertProvider>
+      <GlobalStateProvider>
+        <Routes>
+          <Route path="components/:id" element={<Component />} />
+        </Routes>
+      </GlobalStateProvider>
     </MemoryRouter>
   );
 
