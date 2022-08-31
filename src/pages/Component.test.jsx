@@ -70,9 +70,9 @@ describe("Component page", () => {
     const nonExistentId = 0;
     const errorResponse = {
       response: {
-        message: "Request failed with status code 401",
+        message: "Request failed with status code 400",
         code: "ERR_BAD_REQUEST",
-        status: 403,
+        status: 400,
       },
     };
     axios.get.mockImplementation(() => Promise.reject(errorResponse));
@@ -204,6 +204,60 @@ describe("Component page", () => {
     // initial get call for pageData
     // second get call after post was made to get updated pageData
     expect(mockGet).toHaveBeenCalledTimes(2);
+    expect(mockPost).toHaveBeenCalledTimes(1);
+  });
+
+  test("failed call to change component on a project displays toast alert error", async () => {
+    let dataToRender = Object.assign(pageData);
+    dataToRender.project_data.remove = [{ label: "Project C", value: 1 }];
+
+    const getResponse = { status: 200, data: dataToRender };
+    const postError = {
+      response: {
+        message: "Request failed with status code 400",
+        code: "ERR_BAD_REQUEST",
+        status: 400,
+      },
+    };
+    const mockGet = jest.spyOn(axios, "get");
+    const mockPost = jest.spyOn(axios, "post");
+    mockGet.mockImplementation(() => Promise.resolve(getResponse));
+    mockPost.mockImplementation(() => Promise.reject(postError));
+
+    render(
+      <MemoryRouter initialEntries={[`/components/${pageData.id}`]}>
+        <ToastContainer />
+        <GlobalStateProvider>
+          <Routes>
+            <Route path="components/:componentId" element={<Component />} />
+          </Routes>
+        </GlobalStateProvider>
+      </MemoryRouter>
+    );
+
+    // wait for page data to load
+    await waitFor(() => {
+      screen.getAllByText(pageData.title);
+    });
+
+    // selecting a project in the Add to Project section
+    const removeSection = screen.getByTestId("remove-section");
+    await userEvent.type(
+      within(removeSection).getByTestId("combo-box-input"),
+      "Project C"
+    );
+    // tab onto option
+    await userEvent.tab();
+    // tab to select the option
+    await userEvent.tab();
+
+    const expectedAlertError = "Something went wrong, try again.";
+    await waitFor(() => {
+      // Toast alert shows up!
+      screen.getByText(expectedAlertError);
+    });
+
+    expect(mockGet).toHaveBeenCalledTimes(1);
     expect(mockPost).toHaveBeenCalledTimes(1);
   });
 });
