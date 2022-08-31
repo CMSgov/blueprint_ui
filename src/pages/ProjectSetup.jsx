@@ -38,7 +38,7 @@ const ProjectSetup = () => {
   const formSubmit = () => {
     // Validate and set form post values
     let postVariables = {};
-    postVariables["catalog_version"] = "CMS ARS 3.1";
+    postVariables["catalog_version"] = "CMS_ARS_3_1";
 
     if (textInputAcronym.current.value) {
       postVariables["acronym"] = textInputAcronym.current.value;
