@@ -19,6 +19,22 @@ $tablet-size-max-width: 640px;
 $card-collection-two-per-row-width: 900px;
 $card-collection-three-per-row-width: 901px;
 
+// Global override of React-Toastify alerts
+.Toastify__toast-container--top-right {
+  top: 70px !important;
+  right: 95px !important;
+  .Toastify__toast {
+    border-radius: 0;
+    padding: 0 !important;
+    .Toastify__toast-body {
+      padding: 0;
+    }
+    .Toastify__close-button {
+      display: none;
+    }
+  }
+}
+
 html,
 body {
   height: 100%;
@@ -373,4 +389,17 @@ nav.usa-breadcrumb {
 }
 .blueprint-tooltip {
   background-color: $blue-primary;
+}
+
+.component-project-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  input {
+    min-width: 340px;
+  }
+  label {
+    font-size: 16px;
+    font-weight: bold;
+  }
 }

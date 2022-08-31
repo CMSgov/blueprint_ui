@@ -1,78 +1,52 @@
-import { Dropdown, Form } from "@trussworks/react-uswds";
-import { config } from "../config";
-import RequestService from "../services/RequestService";
+import { ComboBox, Label } from "@trussworks/react-uswds";
 
-const ComponentProjectForm = ({ project_data, component_id }) => {
+const ComponentProjectForm = ({
+  project_data,
+  component_id,
+  handleProjectUpdate,
+}) => {
   const postVariables = {};
 
-  const addComponent = (event) => {
-    let path = "projects/add-component/";
-    let project_id = event.target.value;
-    if (!isNaN(project_id)) {
-      postVariables["project_id"] = project_id;
+  const addComponent = (value) => {
+    if (value) {
+      let path = "add-component/";
+      postVariables["project_id"] = value;
       postVariables["component_id"] = component_id;
-      postVariables["creator"] = 2;
-      postProjectUpdate(postVariables, path);
+      handleProjectUpdate(postVariables, path);
     }
   };
 
-  const removeComponent = (event) => {
-    let path = "projects/remove-component/";
-    postVariables["project_id"] = event.target.value;
-    postVariables["component_id"] = component_id;
-    postProjectUpdate(postVariables, path);
+  const removeComponent = (value) => {
+    if (value) {
+      let path = "remove-component/";
+      postVariables["project_id"] = value;
+      postVariables["component_id"] = component_id;
+      handleProjectUpdate(postVariables, path);
+    }
   };
 
-  function postProjectUpdate(formValues, path) {
-    RequestService.post(
-      `${config.backendUrl}/${path}`,
-      JSON.stringify(formValues)
-    );
-  }
-
   return (
-    <>
-      <Form>
-        <label className="usa-label" htmlFor="project-add">
-          Add to Project
-        </label>
-        <Dropdown
-          className="usa-select"
+    <div className="component-project-form">
+      <div data-testid="add-section">
+        <Label htmlFor="project-add">Add to Project</Label>
+        <ComboBox
           id="project-add"
           name="project-add"
+          options={project_data.add}
           onChange={addComponent}
-        >
-          <option value key="add-none">
-            - Select -
-          </option>
-          {project_data.add.map(({ value, label }, index) => (
-            <option value={value} key={index}>
-              {label}
-            </option>
-          ))}
-        </Dropdown>
-      </Form>
-      <Form>
-        <label className="usa-label" htmlFor="project-remove">
-          Remove from Project
-        </label>
-        <Dropdown
-          className="usa-select"
+        />
+      </div>
+
+      <div data-testid="remove-section">
+        <Label htmlFor="project-remove">Remove from Project</Label>
+        <ComboBox
           id="project-remove"
           name="project-remove"
+          options={project_data.remove}
           onChange={removeComponent}
-        >
-          <option value key="remove-none">
-            - Select -
-          </option>
-          {project_data.remove.map(({ value, label }, index) => (
-            <option value={value} key={index}>
-              {label}
-            </option>
-          ))}
-        </Dropdown>
-      </Form>
-    </>
+        />
+      </div>
+    </div>
   );
 };
 
