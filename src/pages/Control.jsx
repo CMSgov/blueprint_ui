@@ -1,11 +1,10 @@
 import React from "react";
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { isEmpty } from "../utils";
 import { config } from "../config";
 import RequestService from "../services/RequestService";
-import { Navigate } from "react-router-dom";
 
 import ControlTemplate from "../templates/ControlTemplate";
 import ErrorMessage from "../molecules/ErrorMessage";
@@ -15,77 +14,78 @@ import LoadingIndicator from "../atoms/LoadingIndicator";
 const ERROR_MESSAGE = "Error loading project control";
 
 export default function Control() {
+  const navigate = useNavigate();
   const { id, controlId } = useParams();
   const [state, setState] = useContext(GlobalState);
-  const [isLoading, setIsLoading] = useState(false);
+  const [project, setProject] = useState();
   const [control, setControl] = useState();
   const [componentData, setComponentData] = useState();
-  const [response, setResponse] = useState(false);
-
-  if (response) {
-    const nextLink = `/projects/${id}/controls/${control.next_id}`;
-    <Navigate to={nextLink} />;
-  }
+  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!state.project || state.project.id !== parseInt(id)) {
-      setIsLoading(true);
-      RequestService.get(
-        `${config.backendUrl}/projects/${id}/controls/${controlId}/`,
-        (response) => {
-          setState((state) => ({ ...state, project: response.data }));
-          let control = response.data.catalog_data;
-          if (control.guidance === "") {
-            control.guidance =
-              "No control guidance found for this control " + controlId;
-          }
-          if (control.implementation === "") {
-            control.implementation =
-              "No implementation standards found for this control " + controlId;
-          }
-          setControl(control);
-          let componentData = response.data.component_data;
-          if (typeof componentData.responsibility == "object") {
-            componentData.responsibility = componentData.responsibility[0];
-          }
-          setComponentData(componentData);
-          setIsLoading(false);
-        },
-        (err) => {
-          setIsLoading(false);
+    setIsLoading(true);
+    RequestService.get(
+      `${config.backendUrl}/projects/${id}/controls/${controlId}/`,
+      (response) => {
+        setState((state) => ({ ...state, project: response.data.project })); // TODO: This can be removed or updated accordingly when Breadcrumbs is refactored
+        setProject(response.data.project);
+        let control = response.data.catalog_data;
+        if (control.guidance === "") {
+          control.guidance =
+            "No control guidance found for this control " + controlId;
         }
-      );
-    }
-  }, [controlId, id, state, setState]);
+        if (control.implementation === "") {
+          control.implementation =
+            "No implementation standards found for this control " + controlId;
+        }
+        setControl(control);
+        let componentData = response.data.component_data;
+        if (typeof componentData.responsibility == "object") {
+          componentData.responsibility = componentData.responsibility[0];
+        }
+        setComponentData(componentData);
+        setIsLoading(false);
+      },
+      (err) => {
+        setHasError(true);
+        setIsLoading(false);
+      }
+    );
+  }, [controlId, id, setState]);
 
   function postControlUpdate(postVariables) {
     RequestService.post(
       `${config.backendUrl}/projects/${id}/controls/${controlId}/`,
       JSON.stringify(postVariables),
       (response) => {
-        setResponse(true);
+        const nextLink = `/projects/${id}/controls/${control.next_id}`;
+        navigate(nextLink);
       }
     );
   }
 
   if (isLoading) {
     return <LoadingIndicator />;
-  } else if (
+  }
+  if (hasError) {
+    return <ErrorMessage message={ERROR_MESSAGE} />;
+  }
+  if (
     control !== undefined &&
     !isEmpty(control) &&
-    state.project !== undefined &&
-    !isEmpty(state.project) &&
+    project !== undefined &&
+    !isEmpty(project) &&
     componentData !== undefined &&
     !isEmpty(componentData)
   ) {
     return (
       <ControlTemplate
-        project={state.project}
+        project={project}
         control={control}
         componentData={componentData}
         submitCallback={postControlUpdate}
       />
     );
   }
-  return <ErrorMessage message={ERROR_MESSAGE} />;
 }
