@@ -17,8 +17,8 @@ const ProjectControls = () => {
 
   const [state, setState] = useContext(GlobalState);
   const [controls, setControls] = useState(false);
-  const [isLoadingProject, setIsLoadingProject] = useState(true);
-  const [isLoadingControls, setIsLoadingControls] = useState(true);
+  const [isLoadingProject, setIsLoadingProject] = useState(false);
+  const [isLoadingControls, setIsLoadingControls] = useState(false);
   const urlParams = useLocation();
   const getParams = urlParams.search;
 
