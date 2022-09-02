@@ -157,4 +157,5 @@ ControlTemplate.propTypes = {
     responsibility: PropTypes.oneOf(["Inherited", "Hybrid", "Allocated"])
       .isRequired,
   }),
+  submitCallback: PropTypes.func,
 };

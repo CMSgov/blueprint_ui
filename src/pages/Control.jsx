@@ -1,6 +1,8 @@
 import React from "react";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import AlertToast from "../atoms/AlertToast";
 
 import { config } from "../config";
 import RequestService from "../services/RequestService";
@@ -37,13 +39,17 @@ export default function Control() {
   }, [controlId, id, setState]);
 
   function postControlUpdate(postVariables) {
-    let nextPageId = pageData.catalog_data.next_id;
+    const nextPageId = pageData.catalog_data.next_id;
     RequestService.post(
       `${config.backendUrl}/projects/${id}/controls/${controlId}/`,
       JSON.stringify(postVariables),
       (response) => {
+        toast(AlertToast("success", `Control ${controlId} has been saved.`));
         const nextLink = `/projects/${id}/controls/${nextPageId}`;
         navigate(nextLink);
+      },
+      (err) => {
+        toast(AlertToast("error", `Something went wrong, try again.`));
       }
     );
   }
