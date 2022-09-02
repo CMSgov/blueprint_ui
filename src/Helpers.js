@@ -1,9 +1,4 @@
 export const getControlData = (component = {}, controlId) => {
-  const getControlResponsiblity = () => {
-    let r = controls[controlId].responsibility;
-    return r === "Hybrid" ? "some" : r === "Inherited" ? "none" : "some";
-  };
-
   const getControlText = () => {
     if (Object.prototype.hasOwnProperty.call(controls, controlId)) {
       return controls[controlId].narrative;
@@ -30,7 +25,7 @@ export const getControlData = (component = {}, controlId) => {
     guidance: getCatalogControlData("guidance"),
     implementationStandards: getCatalogControlData("implementation"),
     narrative: controlId ? getControlText() : "",
-    responsibility: getControlResponsiblity(),
+    responsibility: getCatalogControlData("responsibility"),
   };
 
   return controlData;

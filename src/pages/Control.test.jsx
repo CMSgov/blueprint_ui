@@ -31,12 +31,12 @@ const projectData = {
       inherited: {
         OCISO: {
           description: "This is a hybrid control.",
-          responsibility: ["Hybrid"],
+          responsibility: "Hybrid",
           provider: "Yes",
         },
         AWS: {
           description: "CMS Cloud is responsible",
-          responsibility: ["Hybrid"],
+          responsibility: "Hybrid",
           provider: "Yes",
         },
       },

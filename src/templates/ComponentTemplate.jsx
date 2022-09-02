@@ -149,7 +149,8 @@ ComponentTemplate.propTypes = {
     family: PropTypes.string,
     guidance: PropTypes.string,
     implementationStandards: PropTypes.string,
-    responsibility: PropTypes.oneOf(["none", "some", "all"]).isRequired,
+    responsibility: PropTypes.oneOf(["Inherited", "Hybrid", "Allocated"])
+      .isRequired,
     version: PropTypes.string,
   }),
   handleProjectUpdate: PropTypes.func,
