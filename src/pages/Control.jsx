@@ -2,7 +2,6 @@ import React from "react";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { isEmpty } from "../utils";
 import { config } from "../config";
 import RequestService from "../services/RequestService";
 
@@ -17,9 +16,7 @@ export default function Control() {
   const navigate = useNavigate();
   const { id, controlId } = useParams();
   const [state, setState] = useContext(GlobalState);
-  const [project, setProject] = useState();
-  const [control, setControl] = useState();
-  const [componentData, setComponentData] = useState();
+  const [pageData, setPageData] = useState();
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,22 +26,7 @@ export default function Control() {
       `${config.backendUrl}/projects/${id}/controls/${controlId}/`,
       (response) => {
         setState((state) => ({ ...state, project: response.data.project })); // TODO: This can be removed or updated accordingly when Breadcrumbs is refactored
-        setProject(response.data.project);
-        let control = response.data.catalog_data;
-        if (control.guidance === "") {
-          control.guidance =
-            "No control guidance found for this control " + controlId;
-        }
-        if (control.implementation === "") {
-          control.implementation =
-            "No implementation standards found for this control " + controlId;
-        }
-        setControl(control);
-        let componentData = response.data.component_data;
-        if (typeof componentData.responsibility == "object") {
-          componentData.responsibility = componentData.responsibility[0];
-        }
-        setComponentData(componentData);
+        setPageData(response.data);
         setIsLoading(false);
       },
       (err) => {
@@ -55,11 +37,12 @@ export default function Control() {
   }, [controlId, id, setState]);
 
   function postControlUpdate(postVariables) {
+    let nextPageId = pageData.catalog_data.next_id;
     RequestService.post(
       `${config.backendUrl}/projects/${id}/controls/${controlId}/`,
       JSON.stringify(postVariables),
       (response) => {
-        const nextLink = `/projects/${id}/controls/${control.next_id}`;
+        const nextLink = `/projects/${id}/controls/${nextPageId}`;
         navigate(nextLink);
       }
     );
@@ -71,19 +54,12 @@ export default function Control() {
   if (hasError) {
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
-  if (
-    control !== undefined &&
-    !isEmpty(control) &&
-    project !== undefined &&
-    !isEmpty(project) &&
-    componentData !== undefined &&
-    !isEmpty(componentData)
-  ) {
+  if (pageData) {
     return (
       <ControlTemplate
-        project={project}
-        control={control}
-        componentData={componentData}
+        project={pageData.project}
+        control={pageData.catalog_data}
+        componentData={pageData.component_data}
         submitCallback={postControlUpdate}
       />
     );

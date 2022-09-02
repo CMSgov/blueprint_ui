@@ -32,8 +32,8 @@ export default function ControlTemplate({
     title: controlTitle,
     description,
     family,
-    guidance = "No control guidance found for this control",
-    implementation = "No implementation standards found for this control",
+    guidance,
+    implementation,
     version,
     next_id: nextControlLabel,
   } = control;
@@ -43,14 +43,21 @@ export default function ControlTemplate({
   let accordionItemsProps = [
     {
       title: "CMS Implementation Standards",
-      content: <p>{implementation}</p>,
+      content: (
+        <p>
+          {implementation ||
+            "No implementation standards found for this control."}
+        </p>
+      ),
       expanded: false,
       id: "implementation_standards",
       headingLevel: "h3",
     },
     {
       title: "CMS Control Guidance",
-      content: <p>{guidance}</p>,
+      content: (
+        <p>{guidance || "No control guidance found for this control."}</p>
+      ),
       expanded: false,
       id: "control_guidance",
       headingLevel: "h3",
