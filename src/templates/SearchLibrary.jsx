@@ -10,6 +10,7 @@ import {
 import { Link } from "react-router-dom";
 import { MAIN_ROUTES } from "../AppRoutes";
 import Pagination from "../molecules/Pagination";
+import { formatCatalogTitle } from "../Helpers";
 
 const TableRow = ({ component }) => {
   if (component.title === undefined) {
@@ -86,7 +87,7 @@ const FilterCol = ({
               <Checkbox
                 id={catalog.id + "-filter"}
                 name={catalog.name + "-filter"}
-                label={catalog.name}
+                label={formatCatalogTitle(catalog.name)}
                 value={"catalog=" + catalog.id}
                 onChange={checkBoxHandler}
                 key={i}
