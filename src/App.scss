@@ -367,6 +367,10 @@ nav.usa-breadcrumb {
   background-color: white;
 }
 
+.usa-table--striped .usa-checkbox {
+  background: none;
+}
+
 .usa-checkbox__input--tile + [class*="__label"],
 .usa-radio__input--tile + [class*="__label"] {
   background: #f0f0f0;
