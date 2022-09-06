@@ -82,7 +82,7 @@ const Component = () => {
     return (
       <ComponentTemplate
         component={state.component}
-        controlText={selectedControl}
+        selectedControl={selectedControl}
         catalogData={getControl}
         handleProjectUpdate={handleProjectUpdate}
       />

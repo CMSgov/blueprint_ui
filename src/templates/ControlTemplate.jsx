@@ -118,7 +118,7 @@ export default function ControlTemplate({
       <p className="control-description" data-testid="control_description">
         <b>Control Description:</b> {description}
       </p>
-      <ResponsibilityBox responsibility={responsibility} />
+      <ResponsibilityBox responsibilityForControl={responsibility} />
       <Accordion
         items={accordionItemsProps}
         multiselectable
@@ -153,8 +153,12 @@ ControlTemplate.propTypes = {
   }).isRequired,
   componentData: PropTypes.shape({
     components: PropTypes.object,
-    responsibility: PropTypes.oneOf(["Inherited", "Hybrid", "Allocated"])
-      .isRequired,
+    responsibilityForControl: PropTypes.oneOf([
+      "Inherited",
+      "Hybrid",
+      "Allocated",
+      null,
+    ]),
   }),
   submitCallback: PropTypes.func,
 };

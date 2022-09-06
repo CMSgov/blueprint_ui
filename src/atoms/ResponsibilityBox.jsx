@@ -1,7 +1,10 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 
-export default function ResponsibilityBox({ responsibility }) {
+export default function ResponsibilityBox({ responsibilityForControl }) {
+  // sets default responsibility as Allocated
+  let responsibility = responsibilityForControl || "Allocated";
+
   const RESPONSIBILITY_MAP = {
     Inherited: {
       title:
@@ -57,6 +60,10 @@ export default function ResponsibilityBox({ responsibility }) {
 }
 
 ResponsibilityBox.propTypes = {
-  responsibility: PropTypes.oneOf(["Inherited", "Hybrid", "Allocated"])
-    .isRequired,
+  responsibilityForControl: PropTypes.oneOf([
+    "Inherited",
+    "Hybrid",
+    "Allocated",
+    null,
+  ]),
 };
