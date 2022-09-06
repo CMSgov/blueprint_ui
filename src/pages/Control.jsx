@@ -40,8 +40,8 @@ export default function Control() {
 
   function postControlUpdate(postVariables) {
     const nextPageId = pageData.catalog_data.next_id;
-    RequestService.post(
-      `${config.backendUrl}/projects/${id}/controls/${controlId}/`,
+    RequestService.patch(
+      `${config.backendUrl}/projects/${id}/controls/${nextPageId}/`,
       JSON.stringify(postVariables),
       (response) => {
         toast(AlertToast("success", `Control ${controlId} has been saved.`));

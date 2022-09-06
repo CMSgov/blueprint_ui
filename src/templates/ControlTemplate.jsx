@@ -35,7 +35,6 @@ export default function ControlTemplate({
     guidance,
     implementation,
     version,
-    next_id: nextControlLabel,
   } = control;
   const { responsibility, components } = componentData;
   const subtitle = `System Control: ${label.toUpperCase()} ${controlTitle}`;
