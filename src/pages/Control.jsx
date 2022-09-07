@@ -44,7 +44,12 @@ export default function Control() {
       `${config.backendUrl}/projects/${id}/controls/${nextPageId}/`,
       JSON.stringify(postVariables),
       (response) => {
-        toast(AlertToast("success", `Control ${controlId} has been saved.`));
+        toast(
+          AlertToast(
+            "success",
+            `Control ${controlId.toUpperCase()} has been saved.`
+          )
+        );
         const nextLink = `/projects/${id}/controls/${nextPageId}`;
         navigate(nextLink);
       },
