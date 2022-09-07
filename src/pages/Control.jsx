@@ -17,7 +17,7 @@ const ERROR_MESSAGE = "Error loading project control";
 export default function Control() {
   const navigate = useNavigate();
   const { id, controlId } = useParams();
-  const [state, setState] = useContext(GlobalState);
+  const [, setState] = useContext(GlobalState);
   const [pageData, setPageData] = useState();
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

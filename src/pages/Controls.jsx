@@ -36,7 +36,7 @@ const ProjectControls = () => {
         }
       );
     }
-  }, []);
+  }, [id, setState, state.project]);
 
   useEffect(() => {
     setIsLoadingControls(true);
@@ -50,7 +50,7 @@ const ProjectControls = () => {
         setIsLoadingControls(false);
       }
     );
-  }, []);
+  }, [id, getParams]);
 
   if (isLoadingControls || isLoadingProject) {
     return <LoadingIndicator />;
