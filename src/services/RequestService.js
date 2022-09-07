@@ -66,6 +66,19 @@ const RequestService = {
         failureCallback && failureCallback(err);
       });
   },
+  patch: async (url, body, callback, failureCallback) => {
+    let postConfig = authConfig;
+
+    axios
+      .patch(url, body, postConfig)
+      .then((response) => {
+        callback && callback(response);
+      })
+      .catch((err) => {
+        err.response.status === 401 && handleExpiredToken();
+        failureCallback && failureCallback(err);
+      });
+  },
   delete: async (url, callback, failureCallback) => {
     axios
       .delete(url, authConfig)

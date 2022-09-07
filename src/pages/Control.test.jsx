@@ -1,27 +1,26 @@
-import { act } from "react-dom/test-utils";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { within } from "@testing-library/dom";
 import "@testing-library/jest-dom";
 import Control from "./Control";
 import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-import { config } from "../config";
 import { GlobalStateProvider } from "../GlobalState";
 
 const projectData = {
-  id: 21,
-  title: "Name Full Test",
-  acronym: "NFT",
+  project: {
+    id: 21,
+    title: "Name Full Test",
+    acronym: "NFT",
+  },
   catalog_data: {
     label: "AC-01",
     title: "Access Control Policy and Procedures",
     family: "Access Control",
-    description: "",
-    implementation: "",
-    guidance: "This control addresses ",
+    description: "This is the coolest control.",
+    implementation: "We used the thing.",
+    guidance: "Do the thing right.",
     version: "CMS_ARS_3_1_catalog",
-    next_id: "",
+    next_id: "zz-99",
   },
   component_data: {
     responsibility: "Hybrid",
@@ -29,12 +28,12 @@ const projectData = {
       inherited: {
         OCISO: {
           description: "This is a hybrid control.",
-          responsibility: ["Hybrid"],
+          responsibility: "Hybrid",
           provider: "Yes",
         },
         AWS: {
           description: "CMS Cloud is responsible",
-          responsibility: ["Hybrid"],
+          responsibility: "Hybrid",
           provider: "Yes",
         },
       },
@@ -43,18 +42,50 @@ const projectData = {
   },
 };
 
-test("renders the LoadingIcon when waiting for data, then renders the pageTemplate when project data is successfully returned", async () => {
-  let mock = new MockAdapter(axios);
+const projectDataNextControl = {
+  project: {
+    id: 99,
+    title: "Next Control",
+    acronym: "NEXT",
+  },
+  catalog_data: {
+    label: "AC-02",
+    title: "Access Control Policy and Procedures",
+    family: "Access Control",
+    description: "",
+    implementation: "",
+    guidance: "Do the thing right.",
+    version: "CMS_ARS_3_1_catalog",
+    next_id: "",
+  },
+  component_data: {
+    responsibility: "Hybrid",
+    components: {
+      inherited: {},
+      private: {},
+    },
+  },
+};
+
+jest.mock("axios");
+
+beforeEach(() => {
+  jest.restoreAllMocks();
+});
+
+afterAll(() => {
+  jest.restoreAllMocks();
+});
+
+test("renders the LoadingIcon when waiting for data, then renders the pageTemplate when data is successfully returned", async () => {
   const controlId = "ac-1";
-  mock
-    .onGet(
-      `${config.backendUrl}/projects/${projectData.id}/controls/${controlId}/`
-    )
-    .reply(200, projectData);
+  const projectId = projectData.project.id;
+  const getResponse = { status: 200, data: projectData };
+  axios.get.mockImplementation(() => Promise.resolve(getResponse));
 
   render(
     <MemoryRouter
-      initialEntries={[`/projects/${projectData.id}/controls/${controlId}`]}
+      initialEntries={[`/projects/${projectId}/controls/${controlId}`]}
     >
       <GlobalStateProvider>
         <Routes>
@@ -66,27 +97,27 @@ test("renders the LoadingIcon when waiting for data, then renders the pageTempla
       </GlobalStateProvider>
     </MemoryRouter>
   );
+
   screen.getByTestId("loading_indicator");
-  const expectedTitle = `${projectData.title} (${projectData.acronym})`;
+
+  const expectedTitle = `${projectData.project.title} (${projectData.project.acronym})`;
   await waitFor(() => {
-    // ensures component has finished running async code and has rendered data
+    // displays data
     screen.getByText(expectedTitle);
-    // checks that project template has rendered
-    expect(screen.getByTestId("project_header_subtitle")).toHaveTextContent(
-      "System Control: AC-01 Access Control Policy and Procedures"
-    );
   });
 });
 
 test("renders the ErrorMessage when projects data is NOT successfully returned", async () => {
   const nonExistentProjectId = 0;
   const controlId = "ac-1";
-  let mock = new MockAdapter(axios);
-  mock
-    .onGet(
-      `${config.backendUrl}/projects/${nonExistentProjectId}/controls/${controlId}`
-    )
-    .reply(401);
+  const errorResponse = {
+    response: {
+      message: "Request failed with status code 400",
+      code: "ERR_BAD_REQUEST",
+      status: 400,
+    },
+  };
+  axios.get.mockImplementation(() => Promise.reject(errorResponse));
 
   render(
     <MemoryRouter
@@ -108,31 +139,52 @@ test("renders the ErrorMessage when projects data is NOT successfully returned",
   await waitFor(() => {
     // ensures component has finished running async code and has rendered data
     screen.getByText("Error loading project control");
-    // checks that ErrorMessage component has rendered
-    const errorMessage = screen.getByTestId("error_message");
-    expect(within(errorMessage).getByRole("heading")).toHaveTextContent(
-      "Error"
-    );
   });
+
+  // checks that ErrorMessage component has rendered
+  const errorMessage = screen.getByTestId("error_message");
+  expect(within(errorMessage).getByRole("heading")).toHaveTextContent("Error");
 });
 
-test("renders the the page and marks control as completed and clicks next", async () => {
-  let mock = new MockAdapter(axios);
+test("displays page data as expected", async () => {
+  const dataToRender = {
+    project: {
+      id: 21,
+      title: "Name Full Test",
+      acronym: "NFT",
+    },
+    catalog_data: {
+      label: "AC-01",
+      title: "Access Control Policy and Procedures",
+      family: "Access Control",
+      description: "This is the coolest control",
+      implementation: "the thing is done",
+      guidance: "Do the thing right.",
+      version: "CMS_ARS_3_1_catalog",
+      next_id: "zz-99",
+    },
+    component_data: {
+      responsibility: "Hybrid",
+      components: {
+        inherited: {
+          OCISO: {
+            description: "This is a hybrid control.",
+            responsibility: "Hybrid",
+            provider: "Yes",
+          },
+        },
+        private: {},
+      },
+    },
+  };
   const controlId = "ac-1";
-  mock
-    .onGet(
-      `${config.backendUrl}/projects/${projectData.id}/controls/${controlId}/`
-    )
-    .reply(200, projectData);
-  mock
-    .onPost(
-      `${config.backendUrl}/projects/${projectData.id}/controls/${controlId}/`
-    )
-    .reply(200, projectData);
+  const projectId = dataToRender.project.id;
+  const getResponse = { status: 200, data: dataToRender };
+  axios.get.mockImplementation(() => Promise.resolve(getResponse));
 
   render(
     <MemoryRouter
-      initialEntries={[`/projects/${projectData.id}/controls/${controlId}`]}
+      initialEntries={[`/projects/${projectId}/controls/${controlId}`]}
     >
       <GlobalStateProvider>
         <Routes>
@@ -144,12 +196,97 @@ test("renders the the page and marks control as completed and clicks next", asyn
       </GlobalStateProvider>
     </MemoryRouter>
   );
-  const expectedTitle = `${projectData.title} (${projectData.acronym})`;
+
+  const expectedTitle = `${dataToRender.project.title} (${dataToRender.project.acronym})`;
+  await waitFor(() => {
+    // ensures component has finished running async code and has rendered data
+    screen.getByText(expectedTitle);
+  });
+
+  const expectedSubtitle = `System Control: ${dataToRender.catalog_data.label} ${dataToRender.catalog_data.title}`;
+  expect(screen.getByTestId("project_header_subtitle")).toHaveTextContent(
+    expectedSubtitle
+  );
+
+  screen.getByText(dataToRender.catalog_data.version);
+  screen.getByText(dataToRender.catalog_data.family);
+  screen.getByText(dataToRender.catalog_data.description);
+  screen.getByText(dataToRender.catalog_data.description);
+  screen.getByText(dataToRender.catalog_data.implementation);
+  screen.getByText(dataToRender.catalog_data.guidance);
+
+  const responsibilityBox = screen.getByTestId("responsibility_box");
+  expect(responsibilityBox).toHaveTextContent(
+    dataToRender.component_data.responsibility
+  );
+
+  const inheritedComponents = screen.getByTestId(
+    "accordionItem_inherited_narratives"
+  );
+  expect(inheritedComponents).toHaveTextContent(
+    dataToRender.component_data.components.inherited.OCISO.description
+  );
+});
+
+test("save and next button makes patch call and directs user to next control page", async () => {
+  const controlId = "ac-1";
+  const nextControlId = projectData.catalog_data.next_id;
+  const projectId = projectData.project.id;
+
+  const getResponse = { status: 200, data: projectData };
+  const nextControlGetResponse = { status: 200, data: projectDataNextControl };
+  const patchResponse = { status: 200, data: "Success" };
+
+  const mockGet = jest.spyOn(axios, "get");
+  const mockPatch = jest.spyOn(axios, "patch");
+
+  mockGet.mockImplementationOnce(() => Promise.resolve(getResponse)); // get initial control data
+  mockGet.mockImplementationOnce(() => Promise.resolve(nextControlGetResponse)); // get control data for next control page
+  mockPatch.mockImplementation(() => Promise.resolve(patchResponse));
+
+  render(
+    <MemoryRouter
+      initialEntries={[`/projects/${projectId}/controls/${controlId}`]}
+    >
+      <GlobalStateProvider>
+        <Routes>
+          <Route
+            path="projects/:id/controls/:controlId"
+            element={<Control />}
+          />
+        </Routes>
+      </GlobalStateProvider>
+    </MemoryRouter>
+  );
+
+  // initial control page loads
+  const expectedTitle = `${projectData.project.title} (${projectData.project.acronym})`;
   await waitFor(() => {
     screen.getByText(expectedTitle);
   });
 
-  const checkbox = screen.getByLabelText("Mark as complete");
-  fireEvent.click(checkbox);
+  // click save and next button
   fireEvent.click(screen.getByRole("button", { name: "Save & next" }));
+
+  // patch request is made
+  const expectedRequestUrl = `undefined/api/projects/21/controls/${nextControlId}/`;
+  const expectedRequestBody = `{"project_id":${projectId},"mark_completed":false,"private_narrative":""}`;
+  const expectedRequestHeaders = {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      Authorization: "TOKEN null",
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  };
+  expect(mockPatch).toBeCalledWith(
+    expectedRequestUrl,
+    expectedRequestBody,
+    expectedRequestHeaders
+  );
+
+  // next page loads with next control data
+  const expectedNextTitle = `${projectDataNextControl.project.title} (${projectDataNextControl.project.acronym})`;
+  await waitFor(() => {
+    screen.getByText(expectedNextTitle);
+  });
 });

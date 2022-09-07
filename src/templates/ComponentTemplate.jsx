@@ -7,7 +7,7 @@ import ControlHeader from "../organisms/ControlHeader";
 
 export function ComponentTemplate({
   component,
-  controlText,
+  selectedControl,
   catalogData,
   handleProjectUpdate,
 }) {
@@ -16,21 +16,31 @@ export function ComponentTemplate({
   const accordionItemsProps = [
     {
       title: "CMS Implementation Standards",
-      content: <p>{controlText.implementationStandards}</p>,
+      content: (
+        <p>
+          {selectedControl.implementationStandards ||
+            "No implementation standards found for this control."}
+        </p>
+      ),
       expanded: false,
       id: "implementation_standards",
       headingLevel: "h3",
     },
     {
       title: "CMS Control Guidance",
-      content: <p>{controlText.guidance}</p>,
+      content: (
+        <p>
+          {selectedControl.guidance ||
+            "No control guidance found for this control."}
+        </p>
+      ),
       expanded: false,
       id: "control_guidance",
       headingLevel: "h3",
     },
     {
       title: "Narrative",
-      content: <p>{controlText.narrative}</p>,
+      content: <p>{selectedControl.narrative}</p>,
       expanded: true,
       id: "inherited_narratives",
       headingLevel: "h3",
@@ -91,11 +101,11 @@ export function ComponentTemplate({
             </nav>
           </div>
           <div className="grid-col-fill padding-4 margin-x-2">
-            {controlText ? (
+            {selectedControl ? (
               <>
-                <ControlHeader control={controlText} />
+                <ControlHeader control={selectedControl} />
                 <ResponsibilityBox
-                  responsibility={controlText.responsibility}
+                  responsibilityForControl={selectedControl.responsibility}
                 />
                 <div className="control-page">
                   <Accordion
@@ -131,25 +141,36 @@ export function ComponentTemplate({
 }
 
 ComponentTemplate.propTypes = {
+  catalogData: PropTypes.func,
   component: PropTypes.shape({
+    component_data: PropTypes.shape({
+      title: PropTypes.string,
+      description: PropTypes.string,
+      standard: PropTypes.string,
+      source: PropTypes.string,
+    }),
+    project_data: PropTypes.object,
+    catalog_data: PropTypes.shape({
+      controls: PropTypes.object,
+    }),
     id: PropTypes.number,
-    title: PropTypes.string,
-    description: PropTypes.string,
-    standard: PropTypes.string,
-    source: PropTypes.string,
-    narrative: PropTypes.string,
-    responsibility: PropTypes.string,
-    controls: PropTypes.array,
-  }).isRequired,
-  control: PropTypes.shape({
+    assessment: PropTypes.string,
+    vetted: PropTypes.string,
+  }),
+  selectedControl: PropTypes.shape({
     controlId: PropTypes.string,
     controlTitle: PropTypes.string,
     controlFamily: PropTypes.string,
     description: PropTypes.string,
-    family: PropTypes.string,
     guidance: PropTypes.string,
     implementationStandards: PropTypes.string,
-    responsibility: PropTypes.oneOf(["none", "some", "all"]).isRequired,
+    narrative: PropTypes.string,
+    responsibilityForControl: PropTypes.oneOf([
+      "Inherited",
+      "Hybrid",
+      "Allocated",
+      null,
+    ]),
     version: PropTypes.string,
   }),
   handleProjectUpdate: PropTypes.func,

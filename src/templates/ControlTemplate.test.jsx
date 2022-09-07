@@ -28,7 +28,7 @@ const componentData = {
         description:
           "CMS Cloud provides a check in the Inspec profile to ensure that systems are configured to display the approved CMS system notification.",
         provider: "Yes",
-        responsibility: ["Inherited"],
+        responsibility: "Inherited",
       },
     },
     private: {},

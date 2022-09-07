@@ -32,10 +32,9 @@ export default function ControlTemplate({
     title: controlTitle,
     description,
     family,
-    guidance = "No control guidance found for this control",
-    implementation = "No implementation standards found for this control",
+    guidance,
+    implementation,
     version,
-    next_id: nextControlLabel,
   } = control;
   const { responsibility, components } = componentData;
   const subtitle = `System Control: ${label.toUpperCase()} ${controlTitle}`;
@@ -43,14 +42,21 @@ export default function ControlTemplate({
   let accordionItemsProps = [
     {
       title: "CMS Implementation Standards",
-      content: <p>{implementation}</p>,
+      content: (
+        <p>
+          {implementation ||
+            "No implementation standards found for this control."}
+        </p>
+      ),
       expanded: false,
       id: "implementation_standards",
       headingLevel: "h3",
     },
     {
       title: "CMS Control Guidance",
-      content: <p>{guidance}</p>,
+      content: (
+        <p>{guidance || "No control guidance found for this control."}</p>
+      ),
       expanded: false,
       id: "control_guidance",
       headingLevel: "h3",
@@ -112,7 +118,7 @@ export default function ControlTemplate({
       <p className="control-description" data-testid="control_description">
         <b>Control Description:</b> {description}
       </p>
-      <ResponsibilityBox responsibility={responsibility} />
+      <ResponsibilityBox responsibilityForControl={responsibility} />
       <Accordion
         items={accordionItemsProps}
         multiselectable
@@ -147,7 +153,12 @@ ControlTemplate.propTypes = {
   }).isRequired,
   componentData: PropTypes.shape({
     components: PropTypes.object,
-    responsibility: PropTypes.oneOf(["Inherited", "Hybrid", "Allocated"])
-      .isRequired,
+    responsibilityForControl: PropTypes.oneOf([
+      "Inherited",
+      "Hybrid",
+      "Allocated",
+      null,
+    ]),
   }),
+  submitCallback: PropTypes.func,
 };

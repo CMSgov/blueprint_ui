@@ -67,6 +67,30 @@ describe("<RequestService />", () => {
     });
   });
 
+  it("patches", (done) => {
+    mock.onPatch("fake.url").reply(200, data);
+    RequestService.patch("fake.url", {}, (response) => {
+      try {
+        expect(response.status).toBe(200);
+        expect(response.data).toStrictEqual(data);
+        done();
+      } catch (error) {
+        done(error);
+      }
+    });
+  });
+  it("patches and fails", (done) => {
+    mock.onPatch("fake.url").reply(500, data);
+    RequestService.patch("fake.url", {}, null, (err) => {
+      try {
+        expect(err.response.status).toBe(500);
+        done();
+      } catch (error) {
+        done(error);
+      }
+    });
+  });
+
   it("deletes", (done) => {
     mock.onDelete("fake.url").reply(200, data);
     RequestService.delete("fake.url", (response) => {
