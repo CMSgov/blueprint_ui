@@ -28,12 +28,14 @@ export default function ControlTemplate({
 }) {
   const { id: projectId, acronym, title } = project;
   const {
+    id: controlId,
     label,
     title: controlTitle,
     description,
     family,
     guidance,
     implementation,
+    status,
     version,
   } = control;
   const { responsibility, components } = componentData;
@@ -89,12 +91,23 @@ export default function ControlTemplate({
     delete accordionItemsProps[2];
   }
 
+  function getNewStatus(isCompleteChecked) {
+    let newStatus;
+    if (isCompleteChecked) {
+      newStatus = "completed";
+    } else {
+      newStatus = "incomplete";
+    }
+    return newStatus;
+  }
+
   function onClickNext() {
     let postVariables = {};
     postVariables["project_id"] = projectId;
-    postVariables["mark_completed"] = document.getElementById(
-      "is-complete-checkbox"
-    ).checked;
+    postVariables["control_id"] = controlId;
+    postVariables["status"] = getNewStatus(
+      document.getElementById("is-complete-checkbox").checked
+    );
     postVariables["private_narrative"] = document.getElementById(
       "textarea-private-narrative"
     ).value;
@@ -127,7 +140,11 @@ export default function ControlTemplate({
       />
       <hr />
       <div className="bottom-section">
-        <Checkbox id="is-complete-checkbox" label="Mark as complete" />
+        <Checkbox
+          id="is-complete-checkbox"
+          label="Mark as complete"
+          defaultChecked={status === "completed"}
+        />
         <button className="usa-button" onClick={onClickNext}>
           Save & next
         </button>
@@ -143,13 +160,15 @@ ControlTemplate.propTypes = {
     title: PropTypes.string,
   }).isRequired,
   control: PropTypes.shape({
-    title: PropTypes.string,
+    id: PropTypes.number,
     description: PropTypes.string,
     family: PropTypes.string,
     guidance: PropTypes.string,
     implementation: PropTypes.string,
-    version: PropTypes.string,
     next_id: PropTypes.string,
+    status: PropTypes.oneOf(["not_started", "incomplete", "completed"]),
+    title: PropTypes.string,
+    version: PropTypes.string,
   }).isRequired,
   componentData: PropTypes.shape({
     components: PropTypes.object,

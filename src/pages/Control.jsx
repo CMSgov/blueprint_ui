@@ -41,7 +41,7 @@ export default function Control() {
   function postControlUpdate(postVariables) {
     const nextPageId = pageData.catalog_data.next_id;
     RequestService.patch(
-      `${config.backendUrl}/projects/${id}/controls/${nextPageId}/`,
+      `${config.backendUrl}/projects/${id}/controls/${controlId}/`,
       JSON.stringify(postVariables),
       (response) => {
         toast(
@@ -66,10 +66,13 @@ export default function Control() {
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
   if (pageData) {
+    let controlData = pageData.catalog_data;
+    controlData.id = pageData.control.id;
+    controlData.status = pageData.status;
     return (
       <ControlTemplate
         project={pageData.project}
-        control={pageData.catalog_data}
+        control={controlData}
         componentData={pageData.component_data}
         submitCallback={postControlUpdate}
       />

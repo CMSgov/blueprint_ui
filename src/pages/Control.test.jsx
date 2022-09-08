@@ -40,6 +40,10 @@ const projectData = {
       private: {},
     },
   },
+  control: {
+    id: 100,
+    status: "not_started",
+  },
 };
 
 const projectDataNextControl = {
@@ -64,6 +68,10 @@ const projectDataNextControl = {
       inherited: {},
       private: {},
     },
+  },
+  control: {
+    id: 101,
+    status: "not_started",
   },
 };
 
@@ -176,6 +184,10 @@ test("displays page data as expected", async () => {
         private: {},
       },
     },
+    control: {
+      id: 100,
+      status: "not_started",
+    },
   };
   const controlId = "ac-1";
   const projectId = dataToRender.project.id;
@@ -229,8 +241,8 @@ test("displays page data as expected", async () => {
 });
 
 test("save and next button makes patch call and directs user to next control page", async () => {
-  const controlId = "ac-1";
-  const nextControlId = projectData.catalog_data.next_id;
+  const controlLabel = "ac-1";
+  const controlId = projectData.control.id;
   const projectId = projectData.project.id;
 
   const getResponse = { status: 200, data: projectData };
@@ -246,7 +258,7 @@ test("save and next button makes patch call and directs user to next control pag
 
   render(
     <MemoryRouter
-      initialEntries={[`/projects/${projectId}/controls/${controlId}`]}
+      initialEntries={[`/projects/${projectId}/controls/${controlLabel}`]}
     >
       <GlobalStateProvider>
         <Routes>
@@ -269,8 +281,9 @@ test("save and next button makes patch call and directs user to next control pag
   fireEvent.click(screen.getByRole("button", { name: "Save & next" }));
 
   // patch request is made
-  const expectedRequestUrl = `undefined/api/projects/21/controls/${nextControlId}/`;
-  const expectedRequestBody = `{"project_id":${projectId},"mark_completed":false,"private_narrative":""}`;
+  const expectedNewStatus = '"incomplete"';
+  const expectedRequestUrl = `undefined/api/projects/${projectId}/controls/${controlLabel}/`;
+  const expectedRequestBody = `{"project_id":${projectId},"control_id":${controlId},"status":${expectedNewStatus},"private_narrative":""}`;
   const expectedRequestHeaders = {
     headers: {
       "Access-Control-Allow-Origin": "*",
