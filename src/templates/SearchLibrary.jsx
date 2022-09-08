@@ -292,7 +292,7 @@ const SearchLibrary = ({
               ))}
             </tbody>
           </table>
-          <EmptyResults lenth={totalItemCount} />
+          <EmptyResults length={totalItemCount} />
           <Pagination
             onPageChange={onPageChange}
             totalCount={totalItemCount}
