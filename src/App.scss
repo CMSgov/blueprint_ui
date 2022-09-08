@@ -386,6 +386,9 @@ nav.usa-breadcrumb {
   .usa-radio__label {
     display: inline;
   }
+  .usa-list > li {
+    max-width: none;
+  }
   .usa-prose > table,
   .usa-table {
     margin-bottom: 37px;
