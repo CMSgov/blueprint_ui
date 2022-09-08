@@ -54,7 +54,7 @@ export default function Control() {
         navigate(nextLink);
       },
       (err) => {
-        toast(AlertToast("error", `Something went wrong, try again.`));
+        toast(AlertToast("error", "Something went wrong, try again."));
       }
     );
   }

@@ -281,9 +281,9 @@ test("save and next button makes patch call and directs user to next control pag
   fireEvent.click(screen.getByRole("button", { name: "Save & next" }));
 
   // patch request is made
-  const expectedNewStatus = '"incomplete"';
+  const expectedNewStatus = "incomplete";
   const expectedRequestUrl = `undefined/api/projects/${projectId}/controls/${controlLabel}/`;
-  const expectedRequestBody = `{"project_id":${projectId},"control_id":${controlId},"status":${expectedNewStatus},"private_narrative":""}`;
+  const expectedRequestBody = `{"project_id":${projectId},"control_id":${controlId},"status":"${expectedNewStatus}","private_narrative":""}`;
   const expectedRequestHeaders = {
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -301,5 +301,102 @@ test("save and next button makes patch call and directs user to next control pag
   const expectedNextTitle = `${projectDataNextControl.project.title} (${projectDataNextControl.project.acronym})`;
   await waitFor(() => {
     screen.getByText(expectedNextTitle);
+  });
+});
+
+test("can mark a control complete", async () => {
+  const controlLabel = "ac-1";
+  const controlId = projectData.control.id;
+  const projectId = projectData.project.id;
+
+  const getResponse = { status: 200, data: projectData };
+  const nextControlGetResponse = { status: 200, data: projectDataNextControl };
+  const patchResponse = { status: 200, data: "Success" };
+
+  const mockGet = jest.spyOn(axios, "get");
+  const mockPatch = jest.spyOn(axios, "patch");
+
+  mockGet.mockImplementationOnce(() => Promise.resolve(getResponse)); // get initial control data
+  mockGet.mockImplementationOnce(() => Promise.resolve(nextControlGetResponse)); // get control data for next control page
+  mockPatch.mockImplementation(() => Promise.resolve(patchResponse));
+
+  render(
+    <MemoryRouter
+      initialEntries={[`/projects/${projectId}/controls/${controlLabel}`]}
+    >
+      <GlobalStateProvider>
+        <Routes>
+          <Route
+            path="projects/:id/controls/:controlId"
+            element={<Control />}
+          />
+        </Routes>
+      </GlobalStateProvider>
+    </MemoryRouter>
+  );
+
+  // initial control page loads
+  const expectedTitle = `${projectData.project.title} (${projectData.project.acronym})`;
+  await waitFor(() => {
+    screen.getByText(expectedTitle);
+  });
+
+  // check off mark as complete box
+  fireEvent.click(screen.getByText("Mark as complete"));
+  // click save and next button
+  fireEvent.click(screen.getByRole("button", { name: "Save & next" }));
+
+  // patch request is made
+  const expectedNewStatus = "completed";
+  const expectedRequestUrl = `undefined/api/projects/${projectId}/controls/${controlLabel}/`;
+  const expectedRequestBody = `{"project_id":${projectId},"control_id":${controlId},"status":"${expectedNewStatus}","private_narrative":""}`;
+  const expectedRequestHeaders = {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      Authorization: "TOKEN null",
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  };
+  expect(mockPatch).toBeCalledWith(
+    expectedRequestUrl,
+    expectedRequestBody,
+    expectedRequestHeaders
+  );
+
+  // next page loads with next control data
+  const expectedNextTitle = `${projectDataNextControl.project.title} (${projectDataNextControl.project.acronym})`;
+  await waitFor(() => {
+    screen.getByText(expectedNextTitle);
+  });
+});
+
+test("completed control renders with checkbox already checked", async () => {
+  const controlLabel = "ac-1";
+  const dataToRender = Object.assign(projectData);
+  dataToRender.status = "completed";
+  const projectId = dataToRender.project.id;
+
+  const getResponse = { status: 200, data: dataToRender };
+  const mockGet = jest.spyOn(axios, "get");
+  mockGet.mockImplementationOnce(() => Promise.resolve(getResponse));
+
+  render(
+    <MemoryRouter
+      initialEntries={[`/projects/${projectId}/controls/${controlLabel}`]}
+    >
+      <GlobalStateProvider>
+        <Routes>
+          <Route
+            path="projects/:id/controls/:controlId"
+            element={<Control />}
+          />
+        </Routes>
+      </GlobalStateProvider>
+    </MemoryRouter>
+  );
+
+  await waitFor(() => {
+    const checkbox = screen.getByLabelText("Mark as complete");
+    expect(checkbox).toBeChecked();
   });
 });
