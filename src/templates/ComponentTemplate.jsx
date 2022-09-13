@@ -1,6 +1,7 @@
 import { Accordion } from "@trussworks/react-uswds";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { isEmpty } from "../utils";
 import ResponsibilityBox from "../atoms/ResponsibilityBox";
 import ComponentProjectForm from "../organisms/ComponentProjectForm";
 import ControlHeader from "../organisms/ControlHeader";
@@ -101,7 +102,7 @@ export function ComponentTemplate({
             </nav>
           </div>
           <div className="grid-col-fill padding-4 margin-x-2">
-            {selectedControl ? (
+            {!isEmpty(selectedControl) ? (
               <>
                 <ControlHeader control={selectedControl} />
                 <ResponsibilityBox

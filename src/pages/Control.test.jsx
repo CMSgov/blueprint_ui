@@ -4,6 +4,7 @@ import { within } from "@testing-library/dom";
 import "@testing-library/jest-dom";
 import Control from "./Control";
 import axios from "axios";
+import { config } from "../config";
 import { GlobalStateProvider } from "../GlobalState";
 
 const projectData = {
@@ -282,7 +283,7 @@ test("save and next button makes patch call and directs user to next control pag
 
   // patch request is made
   const expectedNewStatus = "incomplete";
-  const expectedRequestUrl = `undefined/api/projects/${projectId}/controls/${controlLabel}/`;
+  const expectedRequestUrl = `${config.backendUrl}/projects/${projectId}/controls/${controlLabel}/`;
   const expectedRequestBody = `{"project_id":${projectId},"control_id":${controlId},"status":"${expectedNewStatus}","private_narrative":""}`;
   const expectedRequestHeaders = {
     headers: {
@@ -348,7 +349,7 @@ test("can mark a control complete", async () => {
 
   // patch request is made
   const expectedNewStatus = "completed";
-  const expectedRequestUrl = `undefined/api/projects/${projectId}/controls/${controlLabel}/`;
+  const expectedRequestUrl = `${config.backendUrl}/projects/${projectId}/controls/${controlLabel}/`;
   const expectedRequestBody = `{"project_id":${projectId},"control_id":${controlId},"status":"${expectedNewStatus}","private_narrative":""}`;
   const expectedRequestHeaders = {
     headers: {

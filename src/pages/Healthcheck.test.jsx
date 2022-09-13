@@ -33,9 +33,8 @@ test("renders the LoadingIcon when waiting for data, then renders the pageTempla
 });
 
 test("renders the ErrorMessage when page data is NOT successfully returned", async () => {
-  const nonExistentId = 0;
   let mock = new MockAdapter(axios);
-  mock.onGet(`${config.backendUrl}/healthcheck/`).reply(401);
+  mock.onGet(`${config.backendUrl}/healthcheck/`).reply(500);
 
   render(
     <MemoryRouter initialEntries={[`/healthcheck`]}>
