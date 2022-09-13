@@ -18,7 +18,7 @@ const ERROR_MESSAGE = "Error loading component";
 const Component = () => {
   const { componentId } = useParams();
 
-  const [selectedControl, setSelectedControl] = useState(false);
+  const [selectedControl, setSelectedControl] = useState({});
   const [state, setState] = useContext(GlobalState);
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

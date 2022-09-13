@@ -43,7 +43,7 @@ test("renders the ProjectTemplate page when projects data is successfully return
 
 test("renders the ErrorMessage when projects data is NOT successfully returned", async () => {
   let mock = new MockAdapter(axios);
-  mock.onGet(`${config.backendUrl}/projects/`).reply(401);
+  mock.onGet(`${config.backendUrl}/projects/`).reply(403);
 
   render(
     <MemoryRouter>

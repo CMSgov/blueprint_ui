@@ -65,7 +65,7 @@ test("renders the ErrorMessage when page data is NOT successfully returned", asy
   let mock = new MockAdapter(axios);
   mock
     .onGet(`${config.backendUrl}/projects/${nonExistentId}/search/`)
-    .reply(401);
+    .reply(403);
 
   render(
     <MemoryRouter initialEntries={[`/projects/${nonExistentId}/components`]}>

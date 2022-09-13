@@ -39,7 +39,7 @@ test("filled in form data is used to make api request", async () => {
   fireEvent.click(signInButton);
 
   const expectedRequestUrl = `${config.backendUrl}/users/`;
-  const expectedRequestBody = `{\"username\":"${username}",\"password\":"${password}",\"passwordConfirm\":"${passwordConfirm}",\"firstName\":"${firstName}",\"lastName\":"${lastName}",\"email\":"${email}"}`;
+  const expectedRequestBody = `{"username":"${username}","password":"${password}","passwordConfirm":"${passwordConfirm}","firstName":"${firstName}","lastName":"${lastName}","email":"${email}"}`;
 
   await waitFor(() => {
     expect(RequestService.post).toHaveBeenCalledWith(
