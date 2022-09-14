@@ -9,7 +9,7 @@ import ControlHeader from "../organisms/ControlHeader";
 export function ComponentTemplate({
   component,
   selectedControl,
-  catalogData,
+  handleSelectControl,
   handleProjectUpdate,
 }) {
   const { title, description, standard, source } = component.component_data;
@@ -92,7 +92,10 @@ export function ComponentTemplate({
                 {Object.entries(component.catalog_data.controls).map(
                   ([key, val]) => (
                     <li className="usa-sidenav__item" key={key}>
-                      <a href="#controls" onClick={() => catalogData(key)}>
+                      <a
+                        href="#controls"
+                        onClick={() => handleSelectControl(key)}
+                      >
                         {val.label}
                       </a>
                     </li>
@@ -142,7 +145,6 @@ export function ComponentTemplate({
 }
 
 ComponentTemplate.propTypes = {
-  catalogData: PropTypes.func,
   component: PropTypes.shape({
     component_data: PropTypes.shape({
       title: PropTypes.string,
@@ -175,4 +177,5 @@ ComponentTemplate.propTypes = {
     version: PropTypes.string,
   }),
   handleProjectUpdate: PropTypes.func,
+  handleSelectControl: PropTypes.func,
 };

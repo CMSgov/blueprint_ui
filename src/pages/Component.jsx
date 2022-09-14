@@ -66,7 +66,7 @@ const Component = () => {
     }
   }, [componentId, state.component, setState]);
 
-  const getControl = (controlId) => {
+  const handleSelectControl = (controlId) => {
     let control = getControlData(state.component, controlId);
     setSelectedControl(control);
     window.location.hash = "#controls";
@@ -83,7 +83,7 @@ const Component = () => {
       <ComponentTemplate
         component={state.component}
         selectedControl={selectedControl}
-        catalogData={getControl}
+        handleSelectControl={handleSelectControl}
         handleProjectUpdate={handleProjectUpdate}
       />
     );
