@@ -30,6 +30,8 @@ const TableRow = ({ control }) => {
           ? "Completed"
           : control.status === "incomplete"
           ? "Incomplete"
+          : control.status === "not_applicable"
+          ? "Not applicable"
           : "Not started"}
       </td>
     </>
@@ -81,6 +83,15 @@ const FilterCol = ({ currentStatus, checkBoxHandler }) => {
             onChange={checkBoxHandler}
             key="1"
             checked={isCheckedStatus("not_started")}
+          />
+          <Checkbox
+            id="notapplicable-filter"
+            name="status__in"
+            label="Not Applicable"
+            value="not_applicable"
+            onChange={checkBoxHandler}
+            key="1"
+            checked={isCheckedStatus("not_applicable")}
           />
         </fieldset>
       </div>
