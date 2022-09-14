@@ -90,7 +90,7 @@ const FilterCol = ({ currentStatus, checkBoxHandler }) => {
             label="Not Applicable"
             value="not_applicable"
             onChange={checkBoxHandler}
-            key="1"
+            key="4"
             checked={isCheckedStatus("not_applicable")}
           />
         </fieldset>
