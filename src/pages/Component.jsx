@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { isEmpty } from "../utils";
-import { getControlData } from "../Helpers";
 import { config } from "../config";
 import RequestService from "../services/RequestService";
 
@@ -13,13 +12,13 @@ import GlobalState from "../GlobalState";
 import AlertToast from "../atoms/AlertToast";
 import LoadingIndicator from "../atoms/LoadingIndicator";
 
+const CATALOG_VERSION = "CMS_ARS_3_1";
 const ERROR_MESSAGE = "Error loading component";
 
 const Component = () => {
   const { componentId } = useParams();
-
-  const [selectedControl, setSelectedControl] = useState({});
   const [state, setState] = useContext(GlobalState);
+  const [selectedControl, setSelectedControl] = useState("");
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -67,8 +66,7 @@ const Component = () => {
   }, [componentId, state.component, setState]);
 
   const handleSelectControl = (controlId) => {
-    let control = getControlData(state.component, controlId);
-    setSelectedControl(control);
+    setSelectedControl(controlId);
     window.location.hash = "#controls";
   };
 
@@ -81,7 +79,11 @@ const Component = () => {
   if (state.component && !isEmpty(state.component)) {
     return (
       <ComponentTemplate
-        component={state.component}
+        catalogData={state.component.catalog_data}
+        catalogVersion={CATALOG_VERSION}
+        componentData={state.component.component_data}
+        componentId={state.component.id}
+        projectData={state.component.project_data}
         selectedControl={selectedControl}
         handleSelectControl={handleSelectControl}
         handleProjectUpdate={handleProjectUpdate}

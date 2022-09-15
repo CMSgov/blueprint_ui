@@ -12,21 +12,29 @@ const pageData = {
   title: "Django",
   description: "Django",
   type: "software",
-  catalog: 1,
-  controls: [],
-  search_terms: null,
-  status: 2,
   catalog_data: {
-    version: "CMS_ARS_3_1_catalog",
-    controls: {},
+    CMS_ARS_3_1: {
+      high: {
+        controls: {},
+      },
+      moderate: {
+        controls: {},
+      },
+      low: {
+        controls: {},
+      },
+    },
   },
   component_data: {
     title: "Django",
     description: "Django",
-    standard: "CMS_ARS_3_1",
-    source:
-      "https://raw.githubusercontent.com/CMSgov/ars-machine-readable/main/3.1/oscal/json/CMS_ARS_3_1_catalog.json",
-    controls: {},
+    standards: {
+      CMS_ARS_3_1: {
+        source:
+          "https://raw.githubusercontent.com/CMSgov/ars-machine-readable/main/3.1/oscal/json/CMS_ARS_3_1_catalog.json",
+        controls: {},
+      },
+    },
   },
   project_data: {
     add: [],
