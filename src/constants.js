@@ -7,5 +7,4 @@ export const DEFAULT_CATALOG_VERSION = "CMS_ARS_3_1";
 
 export const CATALOG_DISPLAY_NAMES = {
   CMS_ARS_3_1: "CMS ARS 3.1",
-  CMS_ARS_5_0: "CMS ARS 5.0",
 };
