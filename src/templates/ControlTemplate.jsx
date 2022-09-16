@@ -132,13 +132,11 @@ export default function ControlTemplate({
       <p className="control-description" data-testid="control_description">
         <b>Control Description:</b> {description}
       </p>
-      <div>
-        <div className="display-flex">
-          <Toggle />
-          <div className="display-inline margin-left-1">
-            <b>Non-applicable Control:</b> Toggle this control on if it applies
-            to your system
-          </div>
+      <div className="display-flex">
+        <Toggle />
+        <div className="display-inline margin-left-1">
+          <b>Non-applicable Control:</b> Toggle this control on if it applies to
+          your system
         </div>
       </div>
       <ResponsibilityBox responsibilityForControl={responsibility} />
