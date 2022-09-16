@@ -3,6 +3,7 @@ import { Accordion, Checkbox, Textarea } from "@trussworks/react-uswds";
 import ProjectHeader from "../molecules/ProjectHeader";
 import ResponsibilityBox from "../atoms/ResponsibilityBox";
 import { isEmpty } from "../utils";
+import Toggle from "../atoms/Toggle";
 
 const InheritedComponentNarratives = ({ inherited }) => {
   if (inherited === undefined) {
@@ -131,6 +132,15 @@ export default function ControlTemplate({
       <p className="control-description" data-testid="control_description">
         <b>Control Description:</b> {description}
       </p>
+      <div>
+        <div className="display-flex">
+          <Toggle />
+          <div className="display-inline margin-left-1">
+            <b>Non-applicable Control:</b> Toggle this control on if it applies
+            to your system
+          </div>
+        </div>
+      </div>
       <ResponsibilityBox responsibilityForControl={responsibility} />
       <Accordion
         items={accordionItemsProps}
