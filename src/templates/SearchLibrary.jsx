@@ -8,9 +8,9 @@ import {
 } from "react-router-dom";
 
 import { Link } from "react-router-dom";
+import { CATALOG_DISPLAY_NAMES } from "../constants";
 import { MAIN_ROUTES } from "../AppRoutes";
 import Pagination from "../molecules/Pagination";
-import { formatCatalogTitle } from "../Helpers";
 
 const TableRow = ({ component }) => {
   if (component.title === undefined) {
@@ -40,9 +40,6 @@ const EmptyResults = ({ length }) => {
 };
 
 const FilterCol = ({
-  showTypeFilter,
-  showCatalogFilter,
-  catalogClasses,
   typeList,
   catalogList,
   currentType,
@@ -64,38 +61,34 @@ const FilterCol = ({
   return (
     <>
       <div className="component-library-filter grid-col-2">
-        {showTypeFilter && (
-          <fieldset className="usa-fieldset">
-            <legend className="usa-legend">Type</legend>
-            {typeList.map((type, i) => (
-              <Checkbox
-                id={type[0] + "-filter"}
-                name={type[0] + "-filter"}
-                label={type[0]}
-                value={"type=" + type[0]}
-                onChange={checkBoxHandler}
-                key={i}
-                checked={isCheckedType(type[0])}
-              />
-            ))}
-          </fieldset>
-        )}
-        {showCatalogFilter && (
-          <fieldset className={catalogClasses}>
-            <legend className="usa-legend">Catalog</legend>
-            {catalogList.map((catalog, i) => (
-              <Checkbox
-                id={catalog.id + "-filter"}
-                name={catalog.name + "-filter"}
-                label={formatCatalogTitle(catalog.name)}
-                value={"catalog=" + catalog.id}
-                onChange={checkBoxHandler}
-                key={i}
-                checked={isCheckedCatalog(catalog.id)}
-              />
-            ))}
-          </fieldset>
-        )}
+        <fieldset className="usa-fieldset">
+          <legend className="usa-legend">Type</legend>
+          {typeList.map((type, i) => (
+            <Checkbox
+              id={type[0] + "-filter"}
+              name={type[0] + "-filter"}
+              label={type[0]}
+              value={"type=" + type[0]}
+              onChange={checkBoxHandler}
+              key={i}
+              checked={isCheckedType(type[0])}
+            />
+          ))}
+        </fieldset>
+        <fieldset className="usa-fieldset catalog-filter xxx">
+          <legend className="usa-legend">Catalog</legend>
+          {catalogList.map((catalog, i) => (
+            <Checkbox
+              id={catalog + "-filter"}
+              name={catalog + "-filter"}
+              label={CATALOG_DISPLAY_NAMES[catalog]}
+              value={"catalog_version=" + catalog}
+              onChange={checkBoxHandler}
+              key={i}
+              checked={isCheckedCatalog(catalog)}
+            />
+          ))}
+        </fieldset>
       </div>
       <div className="grid-col-1"></div>
     </>
@@ -138,12 +131,12 @@ const SearchLibrary = ({
     setCurrentType(searchParams.getAll("type"));
   }
   if (
-    searchParams.get("catalog") &&
-    !currentCatalog.includes(Number(searchParams.get("catalog")))
+    searchParams.get("catalog_version") &&
+    !currentCatalog.includes(searchParams.get("catalog_version"))
   ) {
     let values = [];
-    searchParams.getAll("catalog").forEach((element) => {
-      values.push(Number(element));
+    searchParams.getAll("catalog_version").forEach((element) => {
+      values.push(element);
     });
     setCurrentCatalog(values);
   }
@@ -165,7 +158,7 @@ const SearchLibrary = ({
     }
     if (currentCatalog) {
       currentCatalog.forEach((element) => {
-        url += "catalog=" + element + "&";
+        url += "catalog_version=" + element + "&";
       });
     }
     return url;
@@ -221,19 +214,6 @@ const SearchLibrary = ({
   paginationUrl += getSearchQuery();
   paginationUrl += getFiltersQuery();
 
-  // How to display filters
-  let showCatalogFilter = catalogList && catalogList.length > 1;
-  let showTypeFilter = typeList && typeList.length > 1;
-  let catalogClasses = "usa-fieldset ";
-  let tableGridCol = "grid-col-9";
-  let showFilterCol = true;
-  if (showTypeFilter && showCatalogFilter) {
-    catalogClasses += "catalog-filter";
-  } else if (!showCatalogFilter && !showTypeFilter) {
-    tableGridCol = "grid-col-12";
-    showFilterCol = false;
-  }
-
   return (
     <>
       <div className="grid-row">
@@ -260,19 +240,14 @@ const SearchLibrary = ({
         </div>
       </div>
       <div className="grid-row">
-        {showFilterCol && (
-          <FilterCol
-            showTypeFilter={showTypeFilter}
-            showCatalogFilter={showCatalogFilter}
-            catalogClasses={catalogClasses}
-            typeList={typeList}
-            currentType={currentType}
-            currentCatalog={currentCatalog}
-            catalogList={catalogList}
-            checkBoxHandler={checkBoxHandler}
-          />
-        )}
-        <div className={tableGridCol}>
+        <FilterCol
+          typeList={typeList}
+          currentType={currentType}
+          currentCatalog={currentCatalog}
+          catalogList={catalogList}
+          checkBoxHandler={checkBoxHandler}
+        />
+        <div className="grid-col-9">
           <table
             data-testid="table"
             className="usa-table width-full usa-table--striped"

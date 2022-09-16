@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
+import { DEFAULT_CATALOG_VERSION } from "../constants";
 import SearchLibrary from "./SearchLibrary";
 
 const componentList = [
@@ -55,18 +56,7 @@ const componentList = [
 
 const typeList = [["software"], ["service"]];
 
-const catalogList = [
-  {
-    id: 1,
-    name: "cms ars 3.1",
-    file_name: "/media/CMS_ARS_3_1_catalog_1.json",
-  },
-  {
-    id: 2,
-    name: "cms ars 5.0",
-    file_name: "/media/CMS_ARS_5_catalog_1.json",
-  },
-];
+const catalogList = [DEFAULT_CATALOG_VERSION];
 
 test("renders page with link to component library", () => {
   render(
@@ -146,10 +136,8 @@ test("renders page with type & catalog filters", () => {
   const labelService = screen.getByLabelText("service");
   expect(labelSoftware).toBeInTheDocument();
   expect(labelService).toBeInTheDocument();
-  const labelCatalog1 = screen.getByLabelText("cms ars 3.1");
-  const labelCatalog2 = screen.getByLabelText("cms ars 5.0");
-  expect(labelCatalog1).toBeInTheDocument();
-  expect(labelCatalog2).toBeInTheDocument();
+  const labelCatalog = screen.getByLabelText("CMS ARS 3.1");
+  expect(labelCatalog).toBeInTheDocument();
 });
 
 test("renders page with just catalog filters", () => {
@@ -167,18 +155,14 @@ test("renders page with just catalog filters", () => {
   const labelService = screen.queryByLabelText("service");
   expect(labelSoftware).toBeNull();
   expect(labelService).toBeNull();
-  const labelCatalog1 = screen.getByLabelText("cms ars 3.1");
-  const labelCatalog2 = screen.getByLabelText("cms ars 5.0");
-  expect(labelCatalog1).toBeInTheDocument();
-  expect(labelCatalog2).toBeInTheDocument();
+  const labelCatalog = screen.getByLabelText("CMS ARS 3.1");
+  expect(labelCatalog).toBeInTheDocument();
 });
 
 test("renders page with out catalog filters", () => {
   render(<SearchLibrary componentList={componentList} totalItemCount={5} />, {
     wrapper: MemoryRouter,
   });
-  const labelCatalog1 = screen.queryByLabelText("cms ars 3.1");
-  const labelCatalog2 = screen.queryByLabelText("cms ars 5.0");
-  expect(labelCatalog1).toBeNull();
-  expect(labelCatalog2).toBeNull();
+  const labelCatalog = screen.queryByLabelText("CMS ARS 3.1");
+  expect(labelCatalog).toBeNull();
 });

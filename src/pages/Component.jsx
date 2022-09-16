@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
+import { DEFAULT_CATALOG_VERSION } from "../constants";
 import { isEmpty } from "../utils";
 import { config } from "../config";
 import RequestService from "../services/RequestService";
@@ -12,10 +13,6 @@ import GlobalState from "../GlobalState";
 import AlertToast from "../atoms/AlertToast";
 import LoadingIndicator from "../atoms/LoadingIndicator";
 
-// @TODO Future refactor opportunity for replacing this hardcoded CATALOG_VERSION when either:
-// 1. additional versions of a catalog are added and we need to display multiple versions/choose from them
-// 2. the desire to grab the catalog version dynamically from the backend (need to decide what data dictates this)
-const CATALOG_VERSION = "CMS_ARS_3_1";
 const ERROR_MESSAGE = "Error loading component";
 
 const Component = () => {
@@ -83,7 +80,7 @@ const Component = () => {
     return (
       <ComponentTemplate
         catalogData={state.component.catalog_data}
-        catalogVersion={CATALOG_VERSION}
+        catalogVersion={DEFAULT_CATALOG_VERSION}
         componentData={state.component.component_data}
         componentId={state.component.id}
         projectData={state.component.project_data}
