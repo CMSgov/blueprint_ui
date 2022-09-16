@@ -2,6 +2,7 @@ import { Accordion } from "@trussworks/react-uswds";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import ResponsibilityBox from "../atoms/ResponsibilityBox";
+import { CATALOG_DISPLAY_NAMES } from "../constants";
 import ComponentProjectForm from "../organisms/ComponentProjectForm";
 import ControlHeader from "../organisms/ControlHeader";
 
@@ -64,7 +65,7 @@ export function ComponentTemplate({
       <div className="grid-row">
         <div className="tablet:grid-col padding-top-1">
           <p>
-            <b>Standard:</b> {catalogVersion}
+            <b>Standard:</b> {CATALOG_DISPLAY_NAMES[catalogVersion]}
           </p>
           <p>
             <b>Source link:</b> <a href={source}>Source</a>
