@@ -12,6 +12,9 @@ import GlobalState from "../GlobalState";
 import AlertToast from "../atoms/AlertToast";
 import LoadingIndicator from "../atoms/LoadingIndicator";
 
+// @TODO Future refactor opportunity for replacing this hardcoded CATALOG_VERSION when either:
+// 1. additional versions of a catalog are added and we need to display multiple versions/choose from them
+// 2. the desire to grab the catalog version dynamically from the backend (need to decide what data dictates this)
 const CATALOG_VERSION = "CMS_ARS_3_1";
 const ERROR_MESSAGE = "Error loading component";
 

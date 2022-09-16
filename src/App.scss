@@ -273,6 +273,32 @@ nav.usa-breadcrumb {
   }
 }
 
+.component-page {
+  .control-id-title {
+    font-size: 22px;
+  }
+
+  .controls-list-header {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 33px;
+    margin-bottom: 17px;
+  }
+
+  .impact-level-accordion {
+    margin-bottom: 40px;
+    .usa-accordion__heading:not(:first-child) {
+      margin-top: 35px;
+    }
+    .usa-accordion__heading {
+      font-size: 18px;
+    }
+    .usa-accordion__button {
+      background-color: #e1f3f8;
+    }
+  }
+}
+
 .control-page {
   hr {
     margin: 40px 0 25px;
@@ -289,6 +315,7 @@ nav.usa-breadcrumb {
       margin-top: 35px;
       font-size: 18px;
       .usa-accordion__button {
+        background-color: $gray-light;
         color: $gray-darkest;
       }
     }

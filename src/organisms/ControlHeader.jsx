@@ -5,9 +5,9 @@ const ControlHeader = ({ control, controlId }) => {
   if (title) {
     return (
       <>
-        <h3 className="usa-prose-h3">
+        <div className="control-id-title">
           {controlId}: {title}
-        </h3>
+        </div>
         <p>
           <b>Version:</b> {version || noDataMessage}
         </p>
@@ -20,11 +20,7 @@ const ControlHeader = ({ control, controlId }) => {
       </>
     );
   } else {
-    return (
-      <>
-        <h3 className="usa-prose-h3">{controlId}:</h3>
-      </>
-    );
+    return <div className="control-id-title">{controlId}:</div>;
   }
 };
 

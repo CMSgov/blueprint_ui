@@ -1,7 +1,6 @@
 import { Accordion } from "@trussworks/react-uswds";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { isEmpty } from "../utils";
 import ResponsibilityBox from "../atoms/ResponsibilityBox";
 import ComponentProjectForm from "../organisms/ComponentProjectForm";
 import ControlHeader from "../organisms/ControlHeader";
@@ -20,24 +19,30 @@ export function ComponentTemplate({
   const source = componentData.standards[catalogVersion].source;
   const componentControls = componentData.standards[catalogVersion].controls;
 
-  const selectedControlCatalogData =
-    catalogData[catalogVersion].low.controls[selectedControl];
+  const selectedControlCatalogData = {
+    low: catalogData[catalogVersion].low.controls[selectedControl],
+    moderate: catalogData[catalogVersion].moderate.controls[selectedControl],
+    high: catalogData[catalogVersion].high.controls[selectedControl],
+  };
   const selectedControlComponentData = componentControls[selectedControl];
 
-  const getImplementationText = () => {
+  const getImplementationText = (level) => {
     if (
       selectedControlCatalogData &&
-      selectedControlCatalogData.implementationStandards
+      selectedControlCatalogData[level].implementationStandards
     ) {
-      return selectedControlCatalogData.implementationStandards;
+      return selectedControlCatalogData[level].implementationStandards;
     } else {
       return "No implementation standards found for this control.";
     }
   };
 
-  const getControlGuidanceText = () => {
-    if (selectedControlCatalogData && selectedControlCatalogData.guidance) {
-      return selectedControlCatalogData.guidance;
+  const getControlGuidanceText = (level) => {
+    if (
+      selectedControlCatalogData &&
+      selectedControlCatalogData[level].guidance
+    ) {
+      return selectedControlCatalogData[level].guidance;
     } else {
       return "No control guidance found for this control.";
     }
@@ -53,30 +58,6 @@ export function ComponentTemplate({
       return "No narrative found for this control.";
     }
   };
-
-  const accordionItemsProps = [
-    {
-      title: "CMS Implementation Standards",
-      content: <p>{getImplementationText()}</p>,
-      expanded: false,
-      id: "implementation_standards",
-      headingLevel: "h3",
-    },
-    {
-      title: "CMS Control Guidance",
-      content: <p>{getControlGuidanceText()}</p>,
-      expanded: false,
-      id: "control_guidance",
-      headingLevel: "h3",
-    },
-    {
-      title: "Narrative",
-      content: <p>{getNarrativeText()}</p>,
-      expanded: true,
-      id: "inherited_narratives",
-      headingLevel: "h3",
-    },
-  ];
 
   function renderTopSection() {
     return (
@@ -114,11 +95,34 @@ export function ComponentTemplate({
     );
   }
 
-  function renderControlInfo() {
+  function renderControlLevelSection(level) {
+    const accordionItemsProps = [
+      {
+        title: "CMS Implementation Standards",
+        content: <p>{getImplementationText(level)}</p>,
+        expanded: false,
+        id: "implementation_standards",
+        headingLevel: "h3",
+      },
+      {
+        title: "CMS Control Guidance",
+        content: <p>{getControlGuidanceText(level)}</p>,
+        expanded: false,
+        id: "control_guidance",
+        headingLevel: "h3",
+      },
+      {
+        title: "Narrative",
+        content: <p>{getNarrativeText()}</p>,
+        expanded: true,
+        id: "inherited_narratives",
+        headingLevel: "h3",
+      },
+    ];
     return (
       <>
         <ControlHeader
-          control={selectedControlCatalogData}
+          control={selectedControlCatalogData[level]}
           controlId={selectedControl}
         />
         <ResponsibilityBox
@@ -133,6 +137,29 @@ export function ComponentTemplate({
           />
         </div>
       </>
+    );
+  }
+
+  function renderControlInfo() {
+    const levels = ["low", "moderate", "high"];
+    let accordionControlSections = [];
+
+    levels.map((level) => {
+      let accordionItemProps = {
+        expanded: false,
+        headingLevel: "h3",
+      };
+      accordionItemProps.title = `Impact level: ${level}`;
+      accordionItemProps.id = `${level}`;
+      accordionItemProps.content = renderControlLevelSection(level);
+      accordionControlSections.push(accordionItemProps);
+    });
+    return (
+      <Accordion
+        items={accordionControlSections}
+        multiselectable
+        className={"impact-level-accordion"}
+      />
     );
   }
 
@@ -154,14 +181,14 @@ export function ComponentTemplate({
   }
 
   return (
-    <div>
+    <div className="component-page">
       <h1>{title}</h1>
       <p>{description}</p>
       {renderTopSection()}
       <div className="border-top margin-top-4" id="controls">
         <div className="grid-row">
           <div className="grid-col-2">
-            <h3 className="text-bold margin-bottom-2 margin-top-1">Controls</h3>
+            <div className="controls-list-header">Controls</div>
             <nav aria-label="Secondary navigation">{renderControlsList()}</nav>
           </div>
           <div className="grid-col-fill padding-4 margin-x-2">
