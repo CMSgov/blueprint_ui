@@ -158,7 +158,7 @@ export function ComponentTemplate({
     return (
       <Accordion
         items={accordionControlSections}
-        multiselectable
+        multiselectable={false}
         className={"impact-level-accordion"}
       />
     );
