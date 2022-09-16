@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
+import { DEFAULT_CATALOG_VERSION } from "../constants";
 import { config } from "../config";
 import RequestService from "../services/RequestService";
 
@@ -80,7 +81,7 @@ const ComponentLibrary = () => {
       <SearchLibrary
         componentList={componentList}
         typeList={typeList}
-        catalogList={catalogList}
+        catalogList={[DEFAULT_CATALOG_VERSION]}
         totalItemCount={totalItemCount}
       />
     </>

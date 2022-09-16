@@ -2,6 +2,7 @@ import SearchLibrary from "./SearchLibrary";
 import ProjectHeader from "../molecules/ProjectHeader";
 import { Link } from "react-router-dom";
 import { MAIN_ROUTES } from "../AppRoutes";
+import { DEFAULT_CATALOG_VERSION } from "../constants";
 
 const ProjectComponentsTemplate = ({
   project,
@@ -30,6 +31,7 @@ const ProjectComponentsTemplate = ({
         <Link to={MAIN_ROUTES.COMPONENT_LIBRARY}>Component Library</Link>.
       </p>
       <SearchLibrary
+        catalogList={[DEFAULT_CATALOG_VERSION]}
         componentList={componentList}
         linkToComponentLibrary={true}
         totalItemCount={totalItemCount}

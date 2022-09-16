@@ -1,8 +1,8 @@
 import { ComboBox, Label } from "@trussworks/react-uswds";
 
 const ComponentProjectForm = ({
-  project_data,
-  component_id,
+  projectData,
+  componentId,
   handleProjectUpdate,
 }) => {
   const postVariables = {};
@@ -11,7 +11,7 @@ const ComponentProjectForm = ({
     if (value) {
       let path = "add-component/";
       postVariables["project_id"] = value;
-      postVariables["component_id"] = component_id;
+      postVariables["component_id"] = componentId;
       handleProjectUpdate(postVariables, path);
     }
   };
@@ -20,7 +20,7 @@ const ComponentProjectForm = ({
     if (value) {
       let path = "remove-component/";
       postVariables["project_id"] = value;
-      postVariables["component_id"] = component_id;
+      postVariables["component_id"] = componentId;
       handleProjectUpdate(postVariables, path);
     }
   };
@@ -32,7 +32,7 @@ const ComponentProjectForm = ({
         <ComboBox
           id="project-add"
           name="project-add"
-          options={project_data.add}
+          options={projectData.add}
           onChange={addComponent}
         />
       </div>
@@ -42,7 +42,7 @@ const ComponentProjectForm = ({
         <ComboBox
           id="project-remove"
           name="project-remove"
-          options={project_data.remove}
+          options={projectData.remove}
           onChange={removeComponent}
         />
       </div>

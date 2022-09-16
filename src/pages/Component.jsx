@@ -2,8 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
+import { DEFAULT_CATALOG_VERSION } from "../constants";
 import { isEmpty } from "../utils";
-import { getControlData } from "../Helpers";
 import { config } from "../config";
 import RequestService from "../services/RequestService";
 
@@ -17,9 +17,8 @@ const ERROR_MESSAGE = "Error loading component";
 
 const Component = () => {
   const { componentId } = useParams();
-
-  const [selectedControl, setSelectedControl] = useState({});
   const [state, setState] = useContext(GlobalState);
+  const [selectedControl, setSelectedControl] = useState("");
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -66,9 +65,8 @@ const Component = () => {
     }
   }, [componentId, state.component, setState]);
 
-  const getControl = (controlId) => {
-    let control = getControlData(state.component, controlId);
-    setSelectedControl(control);
+  const handleSelectControl = (controlId) => {
+    setSelectedControl(controlId);
     window.location.hash = "#controls";
   };
 
@@ -81,9 +79,13 @@ const Component = () => {
   if (state.component && !isEmpty(state.component)) {
     return (
       <ComponentTemplate
-        component={state.component}
+        catalogData={state.component.catalog_data}
+        catalogVersion={DEFAULT_CATALOG_VERSION}
+        componentData={state.component.component_data}
+        componentId={state.component.id}
+        projectData={state.component.project_data}
         selectedControl={selectedControl}
-        catalogData={getControl}
+        handleSelectControl={handleSelectControl}
         handleProjectUpdate={handleProjectUpdate}
       />
     );
