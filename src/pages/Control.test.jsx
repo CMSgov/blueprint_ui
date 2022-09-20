@@ -12,6 +12,7 @@ const projectData = {
     id: 21,
     title: "Name Full Test",
     acronym: "NFT",
+    private_component: 50,
   },
   catalog_data: {
     label: "AC-01",
@@ -43,6 +44,7 @@ const projectData = {
   },
   control: {
     id: 100,
+    control_id: "ac-1",
     status: "not_started",
   },
 };
@@ -52,6 +54,7 @@ const projectDataNextControl = {
     id: 99,
     title: "Next Control",
     acronym: "NEXT",
+    private_component: 50,
   },
   catalog_data: {
     label: "AC-02",
@@ -182,7 +185,9 @@ test("displays page data as expected", async () => {
             provider: "Yes",
           },
         },
-        private: {},
+        private: {
+          description: null,
+        },
       },
     },
     control: {
@@ -241,10 +246,12 @@ test("displays page data as expected", async () => {
   );
 });
 
-test("save and next button makes patch call and directs user to next control page", async () => {
+test("save and next button makes patch calls and directs user to next control page", async () => {
   const controlLabel = "ac-1";
   const controlId = projectData.control.id;
+  const controlIdName = projectData.control.control_id;
   const projectId = projectData.project.id;
+  const privateComponentId = projectData.project.private_component;
 
   const getResponse = { status: 200, data: projectData };
   const nextControlGetResponse = { status: 200, data: projectDataNextControl };
@@ -281,22 +288,42 @@ test("save and next button makes patch call and directs user to next control pag
   // click save and next button
   fireEvent.click(screen.getByRole("button", { name: "Save & next" }));
 
-  // patch request is made
-  const expectedNewStatus = "incomplete";
-  const expectedRequestUrl = `${config.backendUrl}/projects/${projectId}/controls/${controlLabel}/`;
-  const expectedRequestBody = `{"project_id":${projectId},"control_id":${controlId},"status":"${expectedNewStatus}","private_narrative":""}`;
-  const expectedRequestHeaders = {
+  // first patch request is made to update private component
+  const expectedFirstRequestUrl = `${config.backendUrl}/components/${privateComponentId}/implemented-requirements/`;
+  const expectedFirstRequestBody = `{"catalog_version":"CMS_ARS_3_1","controls":["${controlIdName}"],"action":"remove"}`;
+  const expectedFirstRequestHeaders = {
     headers: {
       "Access-Control-Allow-Origin": "*",
       Authorization: "TOKEN null",
       "Content-type": "application/json; charset=UTF-8",
     },
   };
-  expect(mockPatch).toBeCalledWith(
-    expectedRequestUrl,
-    expectedRequestBody,
-    expectedRequestHeaders
+  expect(mockPatch).toHaveBeenNthCalledWith(
+    1,
+    expectedFirstRequestUrl,
+    expectedFirstRequestBody,
+    expectedFirstRequestHeaders
   );
+
+  // second patch request is made to update project control status
+  const expectedNewStatus = "incomplete";
+  const expectedSecondRequestUrl = `${config.backendUrl}/projects/${projectId}/controls/${controlLabel}/`;
+  const expectedSecondRequestBody = `{"project_id":${projectId},"control_id":${controlId},"status":"${expectedNewStatus}"}`;
+  const expectedSecondRequestHeaders = {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      Authorization: "TOKEN null",
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  };
+  await waitFor(() => {
+    expect(mockPatch).toHaveBeenNthCalledWith(
+      2,
+      expectedSecondRequestUrl,
+      expectedSecondRequestBody,
+      expectedSecondRequestHeaders
+    );
+  });
 
   // next page loads with next control data
   const expectedNextTitle = `${projectDataNextControl.project.title} (${projectDataNextControl.project.acronym})`;
@@ -347,10 +374,10 @@ test("can mark a control complete", async () => {
   // click save and next button
   fireEvent.click(screen.getByRole("button", { name: "Save & next" }));
 
-  // patch request is made
+  // patch request to update control status made
   const expectedNewStatus = "completed";
   const expectedRequestUrl = `${config.backendUrl}/projects/${projectId}/controls/${controlLabel}/`;
-  const expectedRequestBody = `{"project_id":${projectId},"control_id":${controlId},"status":"${expectedNewStatus}","private_narrative":""}`;
+  const expectedRequestBody = `{"project_id":${projectId},"control_id":${controlId},"status":"${expectedNewStatus}"}`;
   const expectedRequestHeaders = {
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -358,11 +385,14 @@ test("can mark a control complete", async () => {
       "Content-type": "application/json; charset=UTF-8",
     },
   };
-  expect(mockPatch).toBeCalledWith(
-    expectedRequestUrl,
-    expectedRequestBody,
-    expectedRequestHeaders
-  );
+  await waitFor(() => {
+    expect(mockPatch).toHaveBeenNthCalledWith(
+      2, // second patch request made on the page is to update control status
+      expectedRequestUrl,
+      expectedRequestBody,
+      expectedRequestHeaders
+    );
+  });
 
   // next page loads with next control data
   const expectedNextTitle = `${projectDataNextControl.project.title} (${projectDataNextControl.project.acronym})`;

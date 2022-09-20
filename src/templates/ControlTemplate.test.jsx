@@ -9,7 +9,9 @@ const projectData = {
   id: 1,
 };
 const controlData = {
-  label: "ac-1",
+  id: 70,
+  controlIdName: "ac-1",
+  label: "AC-01",
   title: "Access Control Policy and Procedures",
   version: "5",
   family: "ac",
@@ -27,11 +29,11 @@ const componentData = {
       AWS: {
         description:
           "CMS Cloud provides a check in the Inspec profile to ensure that systems are configured to display the approved CMS system notification.",
-        provider: "Yes",
-        responsibility: "Inherited",
       },
     },
-    private: {},
+    private: {
+      description: null,
+    },
   },
 };
 
@@ -42,7 +44,7 @@ test("clicking next triggers correct function", () => {
       <ControlTemplate
         project={projectData}
         control={controlData}
-        componentData={componentData}
+        component={componentData}
         submitCallback={submitCallback}
       />
     </MemoryRouter>
@@ -57,7 +59,7 @@ test("renders each section on the page", () => {
       <ControlTemplate
         project={projectData}
         control={controlData}
-        componentData={componentData}
+        component={componentData}
       />
     </MemoryRouter>
   );
@@ -90,7 +92,7 @@ test("renders each section on the page", () => {
   const privateNarrativesAccordion = within(accordionSection).getByText(
     "Private (System-Specific) Narratives"
   );
-  const expectedSubtitle = `System Control: AC-1 ${controlData.title}`;
+  const expectedSubtitle = `System Control: ${controlData.label} ${controlData.title}`;
   const buttonElement = screen.getByText("Save & next");
   expect(implementationAccordion).toBeInTheDocument();
   expect(guidanceAccordion).toBeInTheDocument();

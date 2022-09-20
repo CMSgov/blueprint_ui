@@ -38,23 +38,57 @@ export default function Control() {
     );
   }, [controlId, id, setState]);
 
-  function postControlUpdate(postVariables) {
+  function updateProjectControl(
+    patchComponentVariables,
+    patchControlVariables
+  ) {
     const nextPageId = pageData.catalog_data.next_id;
+    const privateComponentId = pageData.project.private_component;
+
+    // Initial request (update private component)
     RequestService.patch(
-      `${config.backendUrl}/projects/${id}/controls/${controlId}/`,
-      JSON.stringify(postVariables),
+      `${config.backendUrl}/components/${privateComponentId}/implemented-requirements/`,
+      JSON.stringify(patchComponentVariables),
+
+      // Initial request success
       (response) => {
+        // Subsequent request (update the project control data including status)
+        RequestService.patch(
+          `${config.backendUrl}/projects/${id}/controls/${controlId}/`,
+          JSON.stringify(patchControlVariables),
+
+          // Subsequent request success (display toast alert and navigate to next control)
+          (response) => {
+            toast(
+              AlertToast(
+                "success",
+                `Control ${controlId.toUpperCase()} has been saved.`
+              )
+            );
+            const nextLink = `/projects/${id}/controls/${nextPageId}`;
+            navigate(nextLink);
+          },
+
+          // Subsequent request failure (display alert toast)
+          (err) => {
+            toast(
+              AlertToast(
+                "error",
+                "Something went wrong updating the project control, try again."
+              )
+            );
+          }
+        );
+      },
+
+      // Initial request failure (display alert toast)
+      (err) => {
         toast(
           AlertToast(
-            "success",
-            `Control ${controlId.toUpperCase()} has been saved.`
+            "error",
+            "Something went wrong updating the private narrative, try again."
           )
         );
-        const nextLink = `/projects/${id}/controls/${nextPageId}`;
-        navigate(nextLink);
-      },
-      (err) => {
-        toast(AlertToast("error", "Something went wrong, try again."));
       }
     );
   }
@@ -68,13 +102,14 @@ export default function Control() {
   if (pageData) {
     let controlData = pageData.catalog_data;
     controlData.id = pageData.control.id;
+    controlData.controlIdName = pageData.control.control_id;
     controlData.status = pageData.status;
     return (
       <ControlTemplate
         project={pageData.project}
         control={controlData}
-        componentData={pageData.component_data}
-        submitCallback={postControlUpdate}
+        component={pageData.component_data}
+        submitCallback={updateProjectControl}
       />
     );
   }

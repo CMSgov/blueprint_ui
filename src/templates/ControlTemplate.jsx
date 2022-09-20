@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { Accordion, Checkbox, Textarea } from "@trussworks/react-uswds";
+import { DEFAULT_CATALOG_VERSION } from "../constants";
 import ProjectHeader from "../molecules/ProjectHeader";
 import ResponsibilityBox from "../atoms/ResponsibilityBox";
 import { isEmpty } from "../utils";
@@ -23,23 +24,24 @@ const InheritedComponentNarratives = ({ inherited }) => {
 export default function ControlTemplate({
   project,
   control,
-  componentData,
+  component,
   submitCallback,
 }) {
   const { id: projectId, acronym, title } = project;
   const {
     id: controlId,
-    label,
+    controlIdName,
     title: controlTitle,
     description,
     family,
     guidance,
+    label,
     implementation,
     status,
     version,
   } = control;
-  const { responsibility, components } = componentData;
-  const subtitle = `System Control: ${label.toUpperCase()} ${controlTitle}`;
+  const { responsibility, components } = component;
+  const subtitle = `System Control: ${label} ${controlTitle}`;
 
   let accordionItemsProps = [
     {
@@ -79,6 +81,7 @@ export default function ControlTemplate({
           id="textarea-private-narrative"
           placeholder="Add your private control narrative here."
           className={"control-page-textarea"}
+          defaultValue={components.private.description}
         />
       ),
       expanded: false,
@@ -102,16 +105,29 @@ export default function ControlTemplate({
   }
 
   function onClickNext() {
-    let postVariables = {};
-    postVariables["project_id"] = projectId;
-    postVariables["control_id"] = controlId;
-    postVariables["status"] = getNewStatus(
-      document.getElementById("is-complete-checkbox").checked
-    );
-    postVariables["private_narrative"] = document.getElementById(
+    let postComponentVariables = {
+      catalog_version: DEFAULT_CATALOG_VERSION,
+      controls: [controlIdName],
+    };
+    let privateNarrativeText = document.getElementById(
       "textarea-private-narrative"
     ).value;
-    submitCallback(postVariables);
+    if (privateNarrativeText) {
+      postComponentVariables.action = "add";
+      postComponentVariables.description = privateNarrativeText;
+    } else {
+      postComponentVariables.action = "remove";
+    }
+
+    let postControlVariables = {
+      project_id: projectId,
+      control_id: controlId,
+      status: getNewStatus(
+        document.getElementById("is-complete-checkbox").checked
+      ),
+    };
+
+    submitCallback(postComponentVariables, postControlVariables);
   }
 
   return (
@@ -157,10 +173,12 @@ ControlTemplate.propTypes = {
   project: PropTypes.shape({
     id: PropTypes.number,
     acronym: PropTypes.string,
+    private_component: PropTypes.number,
     title: PropTypes.string,
   }).isRequired,
   control: PropTypes.shape({
     id: PropTypes.number,
+    controlIdName: PropTypes.string,
     description: PropTypes.string,
     family: PropTypes.string,
     guidance: PropTypes.string,
@@ -170,14 +188,9 @@ ControlTemplate.propTypes = {
     title: PropTypes.string,
     version: PropTypes.string,
   }).isRequired,
-  componentData: PropTypes.shape({
+  component: PropTypes.shape({
     components: PropTypes.object,
-    responsibilityForControl: PropTypes.oneOf([
-      "Inherited",
-      "Hybrid",
-      "Allocated",
-      null,
-    ]),
+    responsibility: PropTypes.oneOf(["Inherited", "Hybrid", "Allocated", null]),
   }),
   submitCallback: PropTypes.func,
 };
