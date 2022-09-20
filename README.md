@@ -45,7 +45,7 @@ To run Cypress end-to-end tests:
 - in the root directory of Blueprint UI, run `npx cypress open`
 
 ## Interfacing with backend systems
-When adding a new request to an API, developers should leverage the [RequestService](https://github.com/CMSgov/blueprint_ui/blob/develop/src/services/RequestService.js).  This will allow tha app to
+When adding a new request to an API, developers should leverage the [RequestService](https://github.com/CMSgov/blueprint_ui/blob/develop/src/services/RequestService.js).  This will allow the app to
 1. Maintain a simplified and uniform way to handle all types of requests
 2. Reduce code repetition
 3. Leverage generalized tests that are sufficient for most requests
