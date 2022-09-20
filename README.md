@@ -5,7 +5,7 @@
 Please visit the infrastructure repo for setting up a local development environment at <https://github.com/CMSgov/blueprint_infra>
 
 ## Visual Elements
-This application leverages [USWDS](https://designsystem.digital.gov/) and [Trussworks' React-USWDS](https://github.com/trussworks/react-uswds).  The application currently has the USWDS dependency pinned to version 2.x.x until Trussworks releases a version of it's library for the latest USWDS enhancements.
+This application leverages [USWDS](https://designsystem.digital.gov/) and [Trussworks' React-USWDS](https://github.com/trussworks/react-uswds).  The application currently has the USWDS dependency pinned to version 2.x.x until Trussworks releases a version of it's library for the latest USWDS enhancements.  For this to work propery, the project requires the `--legacy-peer-deps` flag to properly install dependencies.
 
 ## Pre-commit hook
 
