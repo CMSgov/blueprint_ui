@@ -30,22 +30,22 @@ test("renders breadcrumbs home", async () => {
   });
 });
 
-test("renders breadcrumbs healthcheck", async () => {
-  render(
-    <MemoryRouter initialEntries={[MAIN_ROUTES.HEALTHCHECK]}>
-      <App />
-    </MemoryRouter>
-  );
-
-  await waitFor(() => {
-    expect(screen.getByTestId("breadcrumbs-bar")).toHaveTextContent("Home");
-  });
-  await waitFor(() => {
-    expect(screen.getByTestId("breadcrumbs-bar")).toHaveTextContent(
-      "healthcheck"
-    );
-  });
-});
+// test("renders breadcrumbs healthcheck", async () => {
+//   render(
+//     <MemoryRouter initialEntries={[MAIN_ROUTES.HEALTHCHECK]}>
+//       <App />
+//     </MemoryRouter>
+//   );
+//
+//   await waitFor(() => {
+//     expect(screen.getByTestId("breadcrumbs-bar")).toHaveTextContent("Home");
+//   });
+//   await waitFor(() => {
+//     expect(screen.getByTestId("breadcrumbs-bar")).toHaveTextContent(
+//       "healthcheck"
+//     );
+//   });
+// });
 
 test("renders breadcrumbs help", async () => {
   render(

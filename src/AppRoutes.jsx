@@ -10,7 +10,7 @@ import Control from "./pages/Control";
 import Controls from "./pages/Controls";
 import CreateAccount from "./pages/CreateAccount";
 import Faq from "./pages/Faq";
-import Healthcheck from "./pages/Healthcheck";
+import Healthcheck from "./pages/Healthcheck.jsx__";
 import Help from "./pages/Help";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -25,7 +25,6 @@ import ProjectComponents from "./pages/ProjectComponents";
 
 export const MAIN_ROUTES = {
   HOME: "/",
-  HEALTHCHECK: "/healthcheck",
   COMPONENT_LIBRARY: "/components",
   HELP: "/help",
   LOGIN: "/login",
