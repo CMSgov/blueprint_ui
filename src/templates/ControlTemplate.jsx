@@ -6,22 +6,6 @@ import ProjectHeader from "../molecules/ProjectHeader";
 import ResponsibilityBox from "../atoms/ResponsibilityBox";
 import { isEmpty } from "../utils";
 
-const InheritedComponentNarratives = ({ inherited }) => {
-  if (inherited === undefined) {
-    return "";
-  }
-  return (
-    <>
-      {Object.keys(inherited).map((component, i) => (
-        <div key={i}>
-          <b>{component}</b>
-          <p>{inherited[component].description}</p>
-        </div>
-      ))}
-    </>
-  );
-};
-
 export default function ControlTemplate({
   project,
   control,
@@ -71,9 +55,7 @@ export default function ControlTemplate({
     },
     {
       title: "Inherited Narratives",
-      content: (
-        <InheritedComponentNarratives inherited={components.inherited} />
-      ),
+      content: renderInheritedComponentNarratives(),
       expanded: false,
       id: "inherited_narratives",
       headingLevel: "h3",
@@ -102,10 +84,6 @@ export default function ControlTemplate({
       setShowPrivateNarrativeBox(true);
     }
   }, [components]);
-
-  if (isEmpty(components.inherited)) {
-    delete accordionItemsProps[2];
-  }
 
   const getNewStatus = (isCompleteChecked) => {
     let newStatus;
@@ -156,6 +134,23 @@ export default function ControlTemplate({
     };
 
     submitCallback(patchComponentVariables, patchControlVariables);
+  }
+
+  function renderInheritedComponentNarratives() {
+    const inheritedComponentNarratives = components.inherited;
+    if (isEmpty(inheritedComponentNarratives)) {
+      return "You have no inherited narratives.";
+    }
+    return (
+      <>
+        {Object.keys(inheritedComponentNarratives).map((component, i) => (
+          <div key={i}>
+            <b>{component}</b>
+            <p>{inheritedComponentNarratives[component].description}</p>
+          </div>
+        ))}
+      </>
+    );
   }
 
   return (
