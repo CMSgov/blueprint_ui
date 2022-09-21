@@ -32,7 +32,7 @@ const componentData = {
       },
     },
     private: {
-      description: null,
+      description: "I did whatever I wanted.",
     },
   },
 };
@@ -79,19 +79,22 @@ test("renders each section on the page", () => {
   );
   expect(screen.getByTestId("responsibility_box")).toBeInTheDocument();
 
-  const accordionSection = screen.getByTestId("accordion");
-  const implementationAccordion = within(accordionSection).getByText(
+  const accordionSections = screen.getAllByTestId("accordion");
+  const topAccordionItems = accordionSections[0];
+  const privateNarrativeAccordion = accordionSections[1];
+
+  const implementationAccordion = within(topAccordionItems).getByText(
     "CMS Implementation Standards"
   );
-  const guidanceAccordion = within(accordionSection).getByText(
+  const guidanceAccordion = within(topAccordionItems).getByText(
     "CMS Control Guidance"
   );
-  const inheritedNarrativesAccordion = within(accordionSection).getByText(
+  const inheritedNarrativesAccordion = within(topAccordionItems).getByText(
     "Inherited Narratives"
   );
-  const privateNarrativesAccordion = within(accordionSection).getByText(
-    "Private (System-Specific) Narratives"
-  );
+  const privateNarrativesAccordion = within(
+    privateNarrativeAccordion
+  ).getByText("Private (System-Specific) Narratives");
   const expectedSubtitle = `System Control: ${controlData.label} ${controlData.title}`;
   const buttonElement = screen.getByText("Save & next");
   expect(implementationAccordion).toBeInTheDocument();

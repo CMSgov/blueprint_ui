@@ -38,50 +38,43 @@ export default function Control() {
     );
   }, [controlId, id, setState]);
 
-  function updateProjectControl(
+  function updateControl(patchControlVariables) {
+    const nextPageId = pageData.catalog_data.next_id;
+    RequestService.patch(
+      `${config.backendUrl}/projects/${id}/controls/${controlId}/`,
+      JSON.stringify(patchControlVariables),
+      (response) => {
+        toast(
+          AlertToast(
+            "success",
+            `Control ${controlId.toUpperCase()} has been saved.`
+          )
+        );
+        const nextLink = `/projects/${id}/controls/${nextPageId}`;
+        navigate(nextLink);
+      },
+      (err) => {
+        toast(
+          AlertToast(
+            "error",
+            "Something went wrong updating the project control, try again."
+          )
+        );
+      }
+    );
+  }
+
+  function updateComponentAndControl(
     patchComponentVariables,
     patchControlVariables
   ) {
-    const nextPageId = pageData.catalog_data.next_id;
     const privateComponentId = pageData.project.private_component;
-
-    // Initial request (update private component)
     RequestService.patch(
       `${config.backendUrl}/components/${privateComponentId}/implemented-requirements/`,
       JSON.stringify(patchComponentVariables),
-
-      // Initial request success
       (response) => {
-        // Subsequent request (update the project control data including status)
-        RequestService.patch(
-          `${config.backendUrl}/projects/${id}/controls/${controlId}/`,
-          JSON.stringify(patchControlVariables),
-
-          // Subsequent request success (display toast alert and navigate to next control)
-          (response) => {
-            toast(
-              AlertToast(
-                "success",
-                `Control ${controlId.toUpperCase()} has been saved.`
-              )
-            );
-            const nextLink = `/projects/${id}/controls/${nextPageId}`;
-            navigate(nextLink);
-          },
-
-          // Subsequent request failure (display alert toast)
-          (err) => {
-            toast(
-              AlertToast(
-                "error",
-                "Something went wrong updating the project control, try again."
-              )
-            );
-          }
-        );
+        updateControl(patchControlVariables);
       },
-
-      // Initial request failure (display alert toast)
       (err) => {
         toast(
           AlertToast(
@@ -91,6 +84,14 @@ export default function Control() {
         );
       }
     );
+  }
+
+  function handleUpdate(patchComponentVariables, patchControlVariables) {
+    if (patchComponentVariables) {
+      updateComponentAndControl(patchComponentVariables, patchControlVariables);
+    } else {
+      updateControl(patchControlVariables);
+    }
   }
 
   if (isLoading) {
@@ -109,7 +110,7 @@ export default function Control() {
         project={pageData.project}
         control={controlData}
         component={pageData.component_data}
-        submitCallback={updateProjectControl}
+        submitCallback={handleUpdate}
       />
     );
   }

@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { Accordion, Checkbox, Textarea } from "@trussworks/react-uswds";
+import { useEffect, useState } from "react";
 import { DEFAULT_CATALOG_VERSION } from "../constants";
 import ProjectHeader from "../molecules/ProjectHeader";
 import ResponsibilityBox from "../atoms/ResponsibilityBox";
@@ -27,6 +28,8 @@ export default function ControlTemplate({
   component,
   submitCallback,
 }) {
+  const [showPrivateNarrativeBox, setShowPrivateNarrativeBox] = useState(false);
+
   const { id: projectId, acronym, title } = project;
   const {
     id: controlId,
@@ -42,6 +45,7 @@ export default function ControlTemplate({
   } = control;
   const { responsibility, components } = component;
   const subtitle = `System Control: ${label} ${controlTitle}`;
+  const existingPrivateNarrative = components.private.description || "";
 
   let accordionItemsProps = [
     {
@@ -74,6 +78,9 @@ export default function ControlTemplate({
       id: "inherited_narratives",
       headingLevel: "h3",
     },
+  ];
+
+  let accordionPrivateNarrativeProps = [
     {
       title: "Private (System-Specific) Narratives",
       content: (
@@ -81,20 +88,26 @@ export default function ControlTemplate({
           id="textarea-private-narrative"
           placeholder="Add your private control narrative here."
           className={"control-page-textarea"}
-          defaultValue={components.private.description}
+          defaultValue={existingPrivateNarrative}
         />
       ),
-      expanded: false,
+      expanded: true,
       id: "private_narratives",
       headingLevel: "h3",
     },
   ];
 
+  useEffect(() => {
+    if (existingPrivateNarrative) {
+      setShowPrivateNarrativeBox(true);
+    }
+  }, [components]);
+
   if (isEmpty(components.inherited)) {
     delete accordionItemsProps[2];
   }
 
-  function getNewStatus(isCompleteChecked) {
+  const getNewStatus = (isCompleteChecked) => {
     let newStatus;
     if (isCompleteChecked) {
       newStatus = "completed";
@@ -102,24 +115,39 @@ export default function ControlTemplate({
       newStatus = "incomplete";
     }
     return newStatus;
-  }
+  };
 
-  function onClickNext() {
-    let postComponentVariables = {
+  // when new private narrative is different from existing private narrative,
+  // builds out and returns variables for patch request
+  // otherwise returns falsy
+  const createPatchComponentVariables = () => {
+    let newNarrative = document.getElementById(
+      "textarea-private-narrative"
+    ).value;
+    if (newNarrative == existingPrivateNarrative) {
+      return;
+    }
+
+    let patchComponentVariables = {
       catalog_version: DEFAULT_CATALOG_VERSION,
       controls: [controlIdName],
     };
-    let privateNarrativeText = document.getElementById(
-      "textarea-private-narrative"
-    ).value;
-    if (privateNarrativeText) {
-      postComponentVariables.action = "add";
-      postComponentVariables.description = privateNarrativeText;
+    if (newNarrative) {
+      patchComponentVariables.action = "add";
+      patchComponentVariables.description = newNarrative;
     } else {
-      postComponentVariables.action = "remove";
+      patchComponentVariables.action = "remove";
+    }
+    return patchComponentVariables;
+  };
+
+  function onClickNext() {
+    let patchComponentVariables;
+    if (showPrivateNarrativeBox) {
+      patchComponentVariables = createPatchComponentVariables();
     }
 
-    let postControlVariables = {
+    let patchControlVariables = {
       project_id: projectId,
       control_id: controlId,
       status: getNewStatus(
@@ -127,7 +155,7 @@ export default function ControlTemplate({
       ),
     };
 
-    submitCallback(postComponentVariables, postControlVariables);
+    submitCallback(patchComponentVariables, patchControlVariables);
   }
 
   return (
@@ -154,6 +182,20 @@ export default function ControlTemplate({
         bordered
         className={"control-page-accordion"}
       />
+      {showPrivateNarrativeBox ? (
+        <Accordion
+          items={accordionPrivateNarrativeProps}
+          bordered
+          className={"control-page-accordion"}
+        />
+      ) : (
+        <button
+          className="usa-button usa-button--outline margin-top-4"
+          onClick={() => setShowPrivateNarrativeBox(true)}
+        >
+          Write an additional narrative
+        </button>
+      )}
       <hr />
       <div className="bottom-section">
         <Checkbox

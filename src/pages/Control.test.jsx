@@ -246,7 +246,7 @@ test("displays page data as expected", async () => {
   );
 });
 
-test("save and next button makes patch calls and directs user to next control page", async () => {
+test("save and next button makes patch call and directs user to next control page", async () => {
   const controlLabel = "ac-1";
   const controlId = projectData.control.id;
   const controlIdName = projectData.control.control_id;
@@ -288,24 +288,6 @@ test("save and next button makes patch calls and directs user to next control pa
   // click save and next button
   fireEvent.click(screen.getByRole("button", { name: "Save & next" }));
 
-  // first patch request is made to update private component
-  const expectedFirstRequestUrl = `${config.backendUrl}/components/${privateComponentId}/implemented-requirements/`;
-  const expectedFirstRequestBody = `{"catalog_version":"CMS_ARS_3_1","controls":["${controlIdName}"],"action":"remove"}`;
-  const expectedFirstRequestHeaders = {
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      Authorization: "TOKEN null",
-      "Content-type": "application/json; charset=UTF-8",
-    },
-  };
-  expect(mockPatch).toHaveBeenNthCalledWith(
-    1,
-    expectedFirstRequestUrl,
-    expectedFirstRequestBody,
-    expectedFirstRequestHeaders
-  );
-
-  // second patch request is made to update project control status
   const expectedNewStatus = "incomplete";
   const expectedSecondRequestUrl = `${config.backendUrl}/projects/${projectId}/controls/${controlLabel}/`;
   const expectedSecondRequestBody = `{"project_id":${projectId},"control_id":${controlId},"status":"${expectedNewStatus}"}`;
@@ -316,14 +298,11 @@ test("save and next button makes patch calls and directs user to next control pa
       "Content-type": "application/json; charset=UTF-8",
     },
   };
-  await waitFor(() => {
-    expect(mockPatch).toHaveBeenNthCalledWith(
-      2,
-      expectedSecondRequestUrl,
-      expectedSecondRequestBody,
-      expectedSecondRequestHeaders
-    );
-  });
+  expect(mockPatch).toBeCalledWith(
+    expectedSecondRequestUrl,
+    expectedSecondRequestBody,
+    expectedSecondRequestHeaders
+  );
 
   // next page loads with next control data
   const expectedNextTitle = `${projectDataNextControl.project.title} (${projectDataNextControl.project.acronym})`;
@@ -386,8 +365,7 @@ test("can mark a control complete", async () => {
     },
   };
   await waitFor(() => {
-    expect(mockPatch).toHaveBeenNthCalledWith(
-      2, // second patch request made on the page is to update control status
+    expect(mockPatch).toBeCalledWith(
       expectedRequestUrl,
       expectedRequestBody,
       expectedRequestHeaders
