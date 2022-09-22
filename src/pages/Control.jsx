@@ -69,6 +69,7 @@ export default function Control() {
     let controlData = pageData.catalog_data;
     controlData.id = pageData.control.id;
     controlData.status = pageData.status;
+    controlData.remarks = pageData.remarks;
     return (
       <ControlTemplate
         project={pageData.project}

@@ -4,6 +4,7 @@ import ProjectHeader from "../molecules/ProjectHeader";
 import ResponsibilityBox from "../atoms/ResponsibilityBox";
 import { isEmpty } from "../utils";
 import Toggle from "../atoms/Toggle";
+import { useState } from "react";
 
 const InheritedComponentNarratives = ({ inherited }) => {
   if (inherited === undefined) {
@@ -27,6 +28,9 @@ export default function ControlTemplate({
   componentData,
   submitCallback,
 }) {
+  const [notApplicable, setNotApplicable] = useState(
+    control.status == "not_applicable"
+  );
   const { id: projectId, acronym, title } = project;
   const {
     id: controlId,
@@ -38,7 +42,9 @@ export default function ControlTemplate({
     implementation,
     status,
     version,
+    remarks,
   } = control;
+  console.log(status);
   const { responsibility, components } = componentData;
   const subtitle = `System Control: ${label.toUpperCase()} ${controlTitle}`;
 
@@ -80,6 +86,7 @@ export default function ControlTemplate({
           id="textarea-private-narrative"
           placeholder="Add your private control narrative here."
           className={"control-page-textarea"}
+          name={"private_statement"}
         />
       ),
       expanded: false,
@@ -94,7 +101,10 @@ export default function ControlTemplate({
 
   function getNewStatus(isCompleteChecked) {
     let newStatus;
-    if (isCompleteChecked) {
+    let na = document.getElementById("toggle-switch").checked;
+    if (na) {
+      newStatus = "not_applicable";
+    } else if (isCompleteChecked) {
       newStatus = "completed";
     } else {
       newStatus = "incomplete";
@@ -109,10 +119,24 @@ export default function ControlTemplate({
     postVariables["status"] = getNewStatus(
       document.getElementById("is-complete-checkbox").checked
     );
-    postVariables["private_narrative"] = document.getElementById(
-      "textarea-private-narrative"
-    ).value;
+
+    if (postVariables["status"] === "not_applicable") {
+      let remarks = document.getElementById("textarea-na-remarks").value;
+      if (!remarks) {
+        alert("Status is na and no remark");
+      }
+      postVariables["remarks"] = remarks;
+    } else {
+      postVariables["private_narrative"] = document.getElementById(
+        "textarea-private-narrative"
+      ).value;
+    }
     submitCallback(postVariables);
+  }
+
+  function onChangeNA(e) {
+    let is_na = e.target.checked;
+    setNotApplicable(is_na);
   }
 
   return (
@@ -133,25 +157,60 @@ export default function ControlTemplate({
         <b>Control Description:</b> {description}
       </p>
       <div className="display-flex">
-        <Toggle />
+        <Toggle isOn={notApplicable} onChange={onChangeNA} />
         <div className="display-inline margin-left-1">
-          <b>Non-applicable Control:</b> Toggle this control on if it applies to
-          your system
+          {notApplicable ? (
+            <>
+              <b>Non-applicable Control:</b> Toggle this control on if it
+              applies to your system
+            </>
+          ) : (
+            <>
+              <b>Applicable Control:</b> Toggle this control off if it does not
+              apply to your system
+            </>
+          )}
         </div>
       </div>
       <ResponsibilityBox responsibilityForControl={responsibility} />
-      <Accordion
-        items={accordionItemsProps}
-        multiselectable
-        bordered
-        className={"control-page-accordion"}
-      />
+      {notApplicable ? (
+        <Accordion
+          items={[
+            {
+              title: "Non-applicable control justification",
+              content: (
+                <Textarea
+                  id="textarea-na-remarks"
+                  placeholder="Describe why this control is not applicable to your system project."
+                  className={"control-page-textarea"}
+                  name={"remarks"}
+                  value={remarks}
+                />
+              ),
+              expanded: true,
+              id: "remarks",
+              headingLevel: "h3",
+            },
+          ]}
+          multiselectable
+          bordered
+          className={"control-page-accordion"}
+        />
+      ) : (
+        <Accordion
+          items={accordionItemsProps}
+          multiselectable
+          bordered
+          className={"control-page-accordion"}
+        />
+      )}
       <hr />
       <div className="bottom-section">
         <Checkbox
           id="is-complete-checkbox"
           label="Mark as complete"
           defaultChecked={status === "completed"}
+          name={"status"}
         />
         <button className="usa-button" onClick={onClickNext}>
           Save & next
@@ -174,7 +233,12 @@ ControlTemplate.propTypes = {
     guidance: PropTypes.string,
     implementation: PropTypes.string,
     next_id: PropTypes.string,
-    status: PropTypes.oneOf(["not_started", "incomplete", "completed"]),
+    status: PropTypes.oneOf([
+      "not_started",
+      "incomplete",
+      "completed",
+      "not_applicable",
+    ]),
     title: PropTypes.string,
     version: PropTypes.string,
   }).isRequired,
