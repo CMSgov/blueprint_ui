@@ -44,7 +44,7 @@ export default function ControlTemplate({
     version,
     remarks,
   } = control;
-  console.log(status);
+
   const { responsibility, components } = componentData;
   const subtitle = `System Control: ${label.toUpperCase()} ${controlTitle}`;
 
@@ -123,6 +123,7 @@ export default function ControlTemplate({
     if (postVariables["status"] === "not_applicable") {
       let remarks = document.getElementById("textarea-na-remarks").value;
       if (!remarks) {
+        // Trigger modal here.
         alert("Status is na and no remark");
       }
       postVariables["remarks"] = remarks;
