@@ -5,6 +5,8 @@ import { DEFAULT_CATALOG_VERSION } from "../constants";
 import ProjectHeader from "../molecules/ProjectHeader";
 import ResponsibilityBox from "../atoms/ResponsibilityBox";
 import { isEmpty } from "../utils";
+import moreInfo from "../info.png";
+import Tooltip from "../atoms/Tooltip";
 
 export default function ControlTemplate({
   project,
@@ -30,6 +32,9 @@ export default function ControlTemplate({
   const { responsibility, components } = component;
   const subtitle = `System Control: ${label} ${controlTitle}`;
   const existingPrivateNarrative = components.private.description || "";
+
+  let tooltipContent =
+    "Add a text field to tell us how your system is addressing this control";
 
   let accordionItemsProps = [
     {
@@ -186,12 +191,19 @@ export default function ControlTemplate({
           className={"control-page-accordion"}
         />
       ) : (
-        <button
-          className="usa-button usa-button--outline margin-top-4"
-          onClick={() => setShowPrivateNarrativeBox(true)}
-        >
-          Write an additional narrative
-        </button>
+        <div className="additional-narrative-section">
+          <button
+            className="usa-button usa-button--outline margin-top-4"
+            onClick={() => setShowPrivateNarrativeBox(true)}
+          >
+            Write an additional narrative
+          </button>
+          <div className="tooltip-div">
+            <Tooltip content={tooltipContent} direction="right">
+              <img type="button" src={moreInfo} alt="More info." />
+            </Tooltip>
+          </div>
+        </div>
       )}
       <hr />
       <div className="bottom-section">

@@ -381,6 +381,17 @@ nav.usa-breadcrumb {
   padding-right: 20px;
 }
 
+.additional-narrative-section button {
+  display: inline;
+}
+
+.additional-narrative-section img {
+  vertical-align: middle;
+  height: 20px;
+  width: 20px;
+  margin-left: 10px;
+}
+
 .component-library-filter {
   legend {
     font-weight: 700;
@@ -460,4 +471,101 @@ nav.usa-breadcrumb {
     font-size: 16px;
     font-weight: bold;
   }
+}
+
+///* Tooltip *///
+
+/* Wrapping */
+.Tooltip-Wrapper {
+  display: inline-block;
+  position: relative;
+}
+
+.tooltip-div {
+  display: inline;
+  width: 400px;
+}
+
+/* Absolute positioning */
+.Tooltip-Tip {
+  position: absolute;
+  border-radius: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 16px;
+  color: white;
+  background: $blue-primary;
+  // font-size: 14px;
+  line-height: 1.2;
+  z-index: 100;
+  white-space: nowrap;
+}
+
+/* CSS border triangles */
+.Tooltip-Tip::before {
+  content: " ";
+  left: 50%;
+  border: solid transparent;
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-width: 6px;
+  margin-left: calc(6px * -1);
+}
+
+//* Top Tooltip *//
+/* Absolute positioning */
+.Tooltip-Tip.top {
+  top: calc(30px * -1);
+  display: inline;
+}
+/* CSS border triangles */
+.Tooltip-Tip.top::before {
+  top: 100%;
+  border-top-color: $blue-primary;
+}
+
+//* Right Tooltip *//
+/* Absolute positioning */
+.Tooltip-Tip.right {
+  left: calc(100% + 15px);
+  top: 50%;
+  transform: translateX(0) translateY(-50%);
+  display: inline;
+}
+/* CSS border triangles */
+.Tooltip-Tip.right::before {
+  left: calc(6px * -1);
+  top: 50%;
+  transform: translateX(0) translateY(-50%);
+  border-right-color: $blue-primary;
+}
+
+//* Bottom Tooltip *//
+/* Absolute positioning */
+.Tooltip-Tip.bottom {
+  bottom: calc(30px * -1);
+}
+/* CSS border triangles */
+.Tooltip-Tip.bottom::before {
+  bottom: 100%;
+  border-bottom-color: $blue-primary;
+}
+
+//* Left Tooltip *//
+/* Absolute positioning */
+.Tooltip-Tip.left {
+  left: auto;
+  right: calc(100% + 30px);
+  top: 50%;
+  transform: translateX(0) translateY(-50%);
+}
+/* CSS border triangles */
+.Tooltip-Tip.left::before {
+  left: auto;
+  right: calc(6px) * -2;
+  top: 50%;
+  transform: translateX(0) translateY(-50%);
+  border-left-color: $blue-primary;
 }
