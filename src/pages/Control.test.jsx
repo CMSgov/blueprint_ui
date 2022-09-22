@@ -239,7 +239,7 @@ test("displays page data as expected", async () => {
   );
 
   const inheritedComponents = screen.getByTestId(
-    "accordionItem_inherited_narratives"
+    "accordionItem_inherited_narratives_accordion"
   );
   expect(inheritedComponents).toHaveTextContent(
     dataToRender.component_data.components.inherited.OCISO.description

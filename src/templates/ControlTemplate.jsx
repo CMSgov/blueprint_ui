@@ -57,7 +57,7 @@ export default function ControlTemplate({
       title: "Inherited Narratives",
       content: renderInheritedComponentNarratives(),
       expanded: false,
-      id: "inherited_narratives",
+      id: "inherited_narratives_accordion",
       headingLevel: "h3",
     },
   ];
@@ -139,12 +139,14 @@ export default function ControlTemplate({
   function renderInheritedComponentNarratives() {
     const inheritedComponentNarratives = components.inherited;
     if (isEmpty(inheritedComponentNarratives)) {
-      return "You have no inherited narratives.";
+      return (
+        <p id="no-inherited-narrative-msg">You have no inherited narratives.</p>
+      );
     }
     return (
       <>
         {Object.keys(inheritedComponentNarratives).map((component, i) => (
-          <div key={i}>
+          <div key={i} class="inherited-narrative">
             <b>{component}</b>
             <p>{inheritedComponentNarratives[component].description}</p>
           </div>
