@@ -146,7 +146,7 @@ export default function ControlTemplate({
     return (
       <>
         {Object.keys(inheritedComponentNarratives).map((component, i) => (
-          <div key={i} class="inherited-narrative">
+          <div key={i} className="inherited-narrative">
             <b>{component}</b>
             <p>{inheritedComponentNarratives[component].description}</p>
           </div>
