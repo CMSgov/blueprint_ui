@@ -85,7 +85,7 @@ export default function ControlTemplate({
   ];
 
   useEffect(() => {
-    if (existingPrivateNarrative) {
+    if (components.private.description || "") {
       setShowPrivateNarrativeBox(true);
     }
   }, [components]);
@@ -107,7 +107,7 @@ export default function ControlTemplate({
     let newNarrative = document.getElementById(
       "textarea-private-narrative"
     ).value;
-    if (newNarrative == existingPrivateNarrative) {
+    if (newNarrative === existingPrivateNarrative) {
       return;
     }
 
