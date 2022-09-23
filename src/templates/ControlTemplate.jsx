@@ -1,45 +1,40 @@
 import PropTypes from "prop-types";
 import { Accordion, Checkbox, Textarea } from "@trussworks/react-uswds";
+import { useEffect, useState } from "react";
+import { DEFAULT_CATALOG_VERSION } from "../constants";
 import ProjectHeader from "../molecules/ProjectHeader";
 import ResponsibilityBox from "../atoms/ResponsibilityBox";
 import { isEmpty } from "../utils";
-
-const InheritedComponentNarratives = ({ inherited }) => {
-  if (inherited === undefined) {
-    return "";
-  }
-  return (
-    <>
-      {Object.keys(inherited).map((component, i) => (
-        <div key={i}>
-          <b>{component}</b>
-          <p>{inherited[component].description}</p>
-        </div>
-      ))}
-    </>
-  );
-};
+import moreInfo from "../info.png";
+import Tooltip from "../atoms/Tooltip";
 
 export default function ControlTemplate({
   project,
   control,
-  componentData,
+  component,
   submitCallback,
 }) {
+  const [showPrivateNarrativeBox, setShowPrivateNarrativeBox] = useState(false);
+
   const { id: projectId, acronym, title } = project;
   const {
     id: controlId,
-    label,
+    controlIdName,
     title: controlTitle,
     description,
     family,
     guidance,
+    label,
     implementation,
     status,
     version,
   } = control;
-  const { responsibility, components } = componentData;
-  const subtitle = `System Control: ${label.toUpperCase()} ${controlTitle}`;
+  const { responsibility, components } = component;
+  const subtitle = `System Control: ${label} ${controlTitle}`;
+  const existingPrivateNarrative = components.private.description || "";
+
+  let tooltipContent =
+    "Add a text field to tell us how your system is addressing this control";
 
   let accordionItemsProps = [
     {
@@ -65,13 +60,14 @@ export default function ControlTemplate({
     },
     {
       title: "Inherited Narratives",
-      content: (
-        <InheritedComponentNarratives inherited={components.inherited} />
-      ),
+      content: renderInheritedComponentNarratives(),
       expanded: false,
-      id: "inherited_narratives",
+      id: "inherited_narratives_accordion",
       headingLevel: "h3",
     },
+  ];
+
+  let accordionPrivateNarrativeProps = [
     {
       title: "Private (System-Specific) Narratives",
       content: (
@@ -79,19 +75,22 @@ export default function ControlTemplate({
           id="textarea-private-narrative"
           placeholder="Add your private control narrative here."
           className={"control-page-textarea"}
+          defaultValue={existingPrivateNarrative}
         />
       ),
-      expanded: false,
+      expanded: true,
       id: "private_narratives",
       headingLevel: "h3",
     },
   ];
 
-  if (isEmpty(components.inherited)) {
-    delete accordionItemsProps[2];
-  }
+  useEffect(() => {
+    if (components.private.description || "") {
+      setShowPrivateNarrativeBox(true);
+    }
+  }, [components]);
 
-  function getNewStatus(isCompleteChecked) {
+  const getNewStatus = (isCompleteChecked) => {
     let newStatus;
     if (isCompleteChecked) {
       newStatus = "completed";
@@ -99,19 +98,66 @@ export default function ControlTemplate({
       newStatus = "incomplete";
     }
     return newStatus;
-  }
+  };
 
-  function onClickNext() {
-    let postVariables = {};
-    postVariables["project_id"] = projectId;
-    postVariables["control_id"] = controlId;
-    postVariables["status"] = getNewStatus(
-      document.getElementById("is-complete-checkbox").checked
-    );
-    postVariables["private_narrative"] = document.getElementById(
+  // when new private narrative is different from existing private narrative,
+  // builds out and returns variables for patch request
+  // otherwise returns falsy
+  const createPatchComponentVariables = () => {
+    let newNarrative = document.getElementById(
       "textarea-private-narrative"
     ).value;
-    submitCallback(postVariables);
+    if (newNarrative === existingPrivateNarrative) {
+      return;
+    }
+
+    let patchComponentVariables = {
+      catalog_version: DEFAULT_CATALOG_VERSION,
+      controls: [controlIdName],
+    };
+    if (newNarrative) {
+      patchComponentVariables.action = "add";
+      patchComponentVariables.description = newNarrative;
+    } else {
+      patchComponentVariables.action = "remove";
+    }
+    return patchComponentVariables;
+  };
+
+  function onClickNext() {
+    let patchComponentVariables;
+    if (showPrivateNarrativeBox) {
+      patchComponentVariables = createPatchComponentVariables();
+    }
+
+    let patchControlVariables = {
+      project_id: projectId,
+      control_id: controlId,
+      status: getNewStatus(
+        document.getElementById("is-complete-checkbox").checked
+      ),
+    };
+
+    submitCallback(patchComponentVariables, patchControlVariables);
+  }
+
+  function renderInheritedComponentNarratives() {
+    const inheritedComponentNarratives = components.inherited;
+    if (isEmpty(inheritedComponentNarratives)) {
+      return (
+        <p id="no-inherited-narrative-msg">You have no inherited narratives.</p>
+      );
+    }
+    return (
+      <>
+        {Object.keys(inheritedComponentNarratives).map((component, i) => (
+          <div key={i} className="inherited-narrative">
+            <b>{component}</b>
+            <p>{inheritedComponentNarratives[component].description}</p>
+          </div>
+        ))}
+      </>
+    );
   }
 
   return (
@@ -138,6 +184,27 @@ export default function ControlTemplate({
         bordered
         className={"control-page-accordion"}
       />
+      {showPrivateNarrativeBox ? (
+        <Accordion
+          items={accordionPrivateNarrativeProps}
+          bordered
+          className={"control-page-accordion"}
+        />
+      ) : (
+        <div className="additional-narrative-section">
+          <button
+            className="usa-button usa-button--outline margin-top-4"
+            onClick={() => setShowPrivateNarrativeBox(true)}
+          >
+            Write an additional narrative
+          </button>
+          <div className="tooltip-div">
+            <Tooltip content={tooltipContent} direction="right">
+              <img type="button" src={moreInfo} alt="More info." />
+            </Tooltip>
+          </div>
+        </div>
+      )}
       <hr />
       <div className="bottom-section">
         <Checkbox
@@ -157,10 +224,12 @@ ControlTemplate.propTypes = {
   project: PropTypes.shape({
     id: PropTypes.number,
     acronym: PropTypes.string,
+    private_component: PropTypes.number,
     title: PropTypes.string,
   }).isRequired,
   control: PropTypes.shape({
     id: PropTypes.number,
+    controlIdName: PropTypes.string,
     description: PropTypes.string,
     family: PropTypes.string,
     guidance: PropTypes.string,
@@ -170,14 +239,9 @@ ControlTemplate.propTypes = {
     title: PropTypes.string,
     version: PropTypes.string,
   }).isRequired,
-  componentData: PropTypes.shape({
+  component: PropTypes.shape({
     components: PropTypes.object,
-    responsibilityForControl: PropTypes.oneOf([
-      "Inherited",
-      "Hybrid",
-      "Allocated",
-      null,
-    ]),
+    responsibility: PropTypes.oneOf(["Inherited", "Hybrid", "Allocated", null]),
   }),
   submitCallback: PropTypes.func,
 };

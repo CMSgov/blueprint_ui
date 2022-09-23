@@ -38,11 +38,11 @@ export default function Control() {
     );
   }, [controlId, id, setState]);
 
-  function postControlUpdate(postVariables) {
+  function updateControl(patchControlVariables) {
     const nextPageId = pageData.catalog_data.next_id;
     RequestService.patch(
       `${config.backendUrl}/projects/${id}/controls/${controlId}/`,
-      JSON.stringify(postVariables),
+      JSON.stringify(patchControlVariables),
       (response) => {
         toast(
           AlertToast(
@@ -54,9 +54,44 @@ export default function Control() {
         navigate(nextLink);
       },
       (err) => {
-        toast(AlertToast("error", "Something went wrong, try again."));
+        toast(
+          AlertToast(
+            "error",
+            "Something went wrong updating the project control, try again."
+          )
+        );
       }
     );
+  }
+
+  function updateComponentAndControl(
+    patchComponentVariables,
+    patchControlVariables
+  ) {
+    const privateComponentId = pageData.project.private_component;
+    RequestService.patch(
+      `${config.backendUrl}/components/${privateComponentId}/implemented-requirements/`,
+      JSON.stringify(patchComponentVariables),
+      (response) => {
+        updateControl(patchControlVariables);
+      },
+      (err) => {
+        toast(
+          AlertToast(
+            "error",
+            "Something went wrong updating the private narrative, try again."
+          )
+        );
+      }
+    );
+  }
+
+  function handleUpdate(patchComponentVariables, patchControlVariables) {
+    if (patchComponentVariables) {
+      updateComponentAndControl(patchComponentVariables, patchControlVariables);
+    } else {
+      updateControl(patchControlVariables);
+    }
   }
 
   if (isLoading) {
@@ -68,13 +103,14 @@ export default function Control() {
   if (pageData) {
     let controlData = pageData.catalog_data;
     controlData.id = pageData.control.id;
+    controlData.controlIdName = pageData.control.control_id;
     controlData.status = pageData.status;
     return (
       <ControlTemplate
         project={pageData.project}
         control={controlData}
-        componentData={pageData.component_data}
-        submitCallback={postControlUpdate}
+        component={pageData.component_data}
+        submitCallback={handleUpdate}
       />
     );
   }

@@ -9,7 +9,9 @@ const projectData = {
   id: 1,
 };
 const controlData = {
-  label: "ac-1",
+  id: 70,
+  controlIdName: "ac-1",
+  label: "AC-01",
   title: "Access Control Policy and Procedures",
   version: "5",
   family: "ac",
@@ -27,11 +29,11 @@ const componentData = {
       AWS: {
         description:
           "CMS Cloud provides a check in the Inspec profile to ensure that systems are configured to display the approved CMS system notification.",
-        provider: "Yes",
-        responsibility: "Inherited",
       },
     },
-    private: {},
+    private: {
+      description: "I did whatever I wanted.",
+    },
   },
 };
 
@@ -42,7 +44,7 @@ test("clicking next triggers correct function", () => {
       <ControlTemplate
         project={projectData}
         control={controlData}
-        componentData={componentData}
+        component={componentData}
         submitCallback={submitCallback}
       />
     </MemoryRouter>
@@ -57,7 +59,7 @@ test("renders each section on the page", () => {
       <ControlTemplate
         project={projectData}
         control={controlData}
-        componentData={componentData}
+        component={componentData}
       />
     </MemoryRouter>
   );
@@ -77,20 +79,23 @@ test("renders each section on the page", () => {
   );
   expect(screen.getByTestId("responsibility_box")).toBeInTheDocument();
 
-  const accordionSection = screen.getByTestId("accordion");
-  const implementationAccordion = within(accordionSection).getByText(
+  const accordionSections = screen.getAllByTestId("accordion");
+  const topAccordionItems = accordionSections[0];
+  const privateNarrativeAccordion = accordionSections[1];
+
+  const implementationAccordion = within(topAccordionItems).getByText(
     "CMS Implementation Standards"
   );
-  const guidanceAccordion = within(accordionSection).getByText(
+  const guidanceAccordion = within(topAccordionItems).getByText(
     "CMS Control Guidance"
   );
-  const inheritedNarrativesAccordion = within(accordionSection).getByText(
+  const inheritedNarrativesAccordion = within(topAccordionItems).getByText(
     "Inherited Narratives"
   );
-  const privateNarrativesAccordion = within(accordionSection).getByText(
-    "Private (System-Specific) Narratives"
-  );
-  const expectedSubtitle = `System Control: AC-1 ${controlData.title}`;
+  const privateNarrativesAccordion = within(
+    privateNarrativeAccordion
+  ).getByText("Private (System-Specific) Narratives");
+  const expectedSubtitle = `System Control: ${controlData.label} ${controlData.title}`;
   const buttonElement = screen.getByText("Save & next");
   expect(implementationAccordion).toBeInTheDocument();
   expect(guidanceAccordion).toBeInTheDocument();
