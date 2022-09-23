@@ -249,9 +249,7 @@ test("displays page data as expected", async () => {
 test("save and next button makes patch call and directs user to next control page", async () => {
   const controlLabel = "ac-1";
   const controlId = projectData.control.id;
-  const controlIdName = projectData.control.control_id;
   const projectId = projectData.project.id;
-  const privateComponentId = projectData.project.private_component;
 
   const getResponse = { status: 200, data: projectData };
   const nextControlGetResponse = { status: 200, data: projectDataNextControl };
@@ -288,10 +286,11 @@ test("save and next button makes patch call and directs user to next control pag
   // click save and next button
   fireEvent.click(screen.getByRole("button", { name: "Save & next" }));
 
+  // patch request is made to update control
   const expectedNewStatus = "incomplete";
-  const expectedSecondRequestUrl = `${config.backendUrl}/projects/${projectId}/controls/${controlLabel}/`;
-  const expectedSecondRequestBody = `{"project_id":${projectId},"control_id":${controlId},"status":"${expectedNewStatus}"}`;
-  const expectedSecondRequestHeaders = {
+  const expectedRequestUrl = `${config.backendUrl}/projects/${projectId}/controls/${controlLabel}/`;
+  const expectedRequestBody = `{"project_id":${projectId},"control_id":${controlId},"status":"${expectedNewStatus}"}`;
+  const expectedRequestHeaders = {
     headers: {
       "Access-Control-Allow-Origin": "*",
       Authorization: "TOKEN null",
@@ -299,9 +298,9 @@ test("save and next button makes patch call and directs user to next control pag
     },
   };
   expect(mockPatch).toBeCalledWith(
-    expectedSecondRequestUrl,
-    expectedSecondRequestBody,
-    expectedSecondRequestHeaders
+    expectedRequestUrl,
+    expectedRequestBody,
+    expectedRequestHeaders
   );
 
   // next page loads with next control data
