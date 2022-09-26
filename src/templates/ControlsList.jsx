@@ -93,6 +93,7 @@ const ProjectControls = ({ controlsList = [], totalItemCount = 0 }) => {
   let navigate = useNavigate();
   const [currentStatus, setCurrentStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [, setQueryString] = useState("");
 
   //set the url query params into state
   const [searchParams] = useSearchParams();
@@ -108,6 +109,7 @@ const ProjectControls = ({ controlsList = [], totalItemCount = 0 }) => {
     !currentStatus.includes(searchParams.get("status__in"))
   ) {
     setCurrentStatus(searchParams.get("status__in"));
+    setQueryString("status__in=" + searchParams.get("status__in"));
   }
 
   // Call back functions used for updating values from the page
