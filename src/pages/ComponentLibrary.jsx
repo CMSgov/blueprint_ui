@@ -15,7 +15,7 @@ const ComponentLibrary = () => {
 
   const [componentList, setComponentList] = useState([]);
   const [typeList, setTypeList] = useState([]);
-  const [catalogList, setCatalogList] = useState([]);
+  const [, setCatalogList] = useState([]);
   const [hasError, setHasError] = useState(false);
 
   const getParams = urlParams.search;

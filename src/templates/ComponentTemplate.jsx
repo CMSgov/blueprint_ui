@@ -145,7 +145,7 @@ export function ComponentTemplate({
     const levels = ["low", "moderate", "high"];
     let accordionControlSections = [];
 
-    levels.map((level) => {
+    levels.forEach((level) => {
       let accordionItemProps = {
         expanded: false,
         headingLevel: "h3",

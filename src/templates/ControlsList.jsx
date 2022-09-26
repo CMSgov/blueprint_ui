@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 
 import { Link } from "react-router-dom";
-import { MAIN_ROUTES } from "../AppRoutes";
 import Pagination from "../molecules/Pagination";
 
 const TableRow = ({ control }) => {
@@ -94,7 +93,7 @@ const ProjectControls = ({ controlsList = [], totalItemCount = 0 }) => {
   let navigate = useNavigate();
   const [currentStatus, setCurrentStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [queryString, setQueryString] = useState("");
+  const [, setQueryString] = useState("");
 
   //set the url query params into state
   const [searchParams] = useSearchParams();
