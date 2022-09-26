@@ -9,6 +9,7 @@ const Toggle = ({ isOn, onChange }) => {
         type="checkbox"
         checked={isOn}
         onChange={onChange}
+        data-testid={"on-off-toggle"}
       />
       <label className="toggle-label" htmlFor={`toggle-switch`}>
         <span className={`toggle-button`} />

@@ -41,7 +41,7 @@ export default function ControlTemplate({
     "Add a text field to tell us how your system is addressing this control";
 
   let naTooltipContent =
-    "Non-applicable controls will not be include in your System Security Plan";
+    "Non-applicable controls will not be included in your System Security Plan";
 
   let accordionItemsProps = [
     {
@@ -217,7 +217,7 @@ export default function ControlTemplate({
             </>
           )}
           <div className="tooltip-div margin-left-1">
-            <Tooltip content={naTooltipContent} direction="right">
+            <Tooltip content={naTooltipContent} direction="down">
               <img type="button" src={moreInfo} alt="More info." />
             </Tooltip>
           </div>
