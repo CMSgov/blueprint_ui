@@ -9,7 +9,7 @@ export default function ProjectHeader({
   title,
 }) {
   const projectHomeUrl = `/projects/${id}`;
-  const projectSettingsUrl = `/projects/${id}/settings`;
+  const projectSettingsUrl = projectHomeUrl + "/settings";
   return (
     <div className="project-header" id="project_header">
       <h1
