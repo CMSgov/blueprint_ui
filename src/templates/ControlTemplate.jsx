@@ -1,12 +1,13 @@
-import PropTypes from "prop-types";
 import { Accordion, Checkbox, Textarea } from "@trussworks/react-uswds";
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { DEFAULT_CATALOG_VERSION } from "../constants";
-import ProjectHeader from "../molecules/ProjectHeader";
 import ResponsibilityBox from "../atoms/ResponsibilityBox";
-import { isEmpty } from "../utils";
-import moreInfo from "../info.png";
+import Toggle from "../atoms/Toggle";
 import Tooltip from "../atoms/Tooltip";
+import { DEFAULT_CATALOG_VERSION } from "../constants";
+import moreInfo from "../info.png";
+import ProjectHeader from "../molecules/ProjectHeader";
+import { isEmpty } from "../utils";
 
 export default function ControlTemplate({
   project,
@@ -15,7 +16,9 @@ export default function ControlTemplate({
   submitCallback,
 }) {
   const [showPrivateNarrativeBox, setShowPrivateNarrativeBox] = useState(false);
-
+  const [notApplicable, setNotApplicable] = useState(
+    control.status === "not_applicable"
+  );
   const { id: projectId, acronym, title } = project;
   const {
     id: controlId,
@@ -28,6 +31,7 @@ export default function ControlTemplate({
     implementation,
     status,
     version,
+    remarks,
   } = control;
   const { responsibility, components } = component;
   const subtitle = `System Control: ${label} ${controlTitle}`;
@@ -35,6 +39,9 @@ export default function ControlTemplate({
 
   let tooltipContent =
     "Add a text field to tell us how your system is addressing this control";
+
+  let naTooltipContent =
+    "Non-applicable controls will not be include in your System Security Plan";
 
   let accordionItemsProps = [
     {
@@ -92,7 +99,10 @@ export default function ControlTemplate({
 
   const getNewStatus = (isCompleteChecked) => {
     let newStatus;
-    if (isCompleteChecked) {
+    let na = document.getElementById("toggle-switch").checked;
+    if (na) {
+      newStatus = "not_applicable";
+    } else if (isCompleteChecked) {
       newStatus = "complete";
     } else {
       newStatus = "incomplete";
@@ -133,10 +143,20 @@ export default function ControlTemplate({
     let patchControlVariables = {
       project_id: projectId,
       control_id: controlId,
-      status: getNewStatus(
-        document.getElementById("is-complete-checkbox").checked
-      ),
+      status: notApplicable
+        ? "not_applicable"
+        : getNewStatus(document.getElementById("is-complete-checkbox").checked),
     };
+
+    if (notApplicable) {
+      let remarks = document.getElementById("textarea-na-remarks").value;
+      if (!remarks) {
+        // Trigger modal here.
+        alert("Status is na and no remark");
+      } else {
+        patchControlVariables["remarks"] = remarks;
+      }
+    }
 
     submitCallback(patchComponentVariables, patchControlVariables);
   }
@@ -160,6 +180,11 @@ export default function ControlTemplate({
     );
   }
 
+  function onChangeNA(e) {
+    let is_na = e.target.checked;
+    setNotApplicable(is_na);
+  }
+
   return (
     <div className="control-page">
       <ProjectHeader
@@ -177,13 +202,59 @@ export default function ControlTemplate({
       <p className="control-description" data-testid="control_description">
         <b>Control Description:</b> {description}
       </p>
+      <div className={"display-flex"}>
+        <Toggle isOn={notApplicable} onChange={onChangeNA} />
+        <div className="display-inline margin-left-1">
+          {notApplicable ? (
+            <>
+              <b>Non-applicable Control:</b> Toggle this control on if it
+              applies to your system
+            </>
+          ) : (
+            <>
+              <b>Applicable Control:</b> Toggle this control off if it does not
+              apply to your system
+            </>
+          )}
+          <div className="tooltip-div margin-left-1">
+            <Tooltip content={naTooltipContent} direction="right">
+              <img type="button" src={moreInfo} alt="More info." />
+            </Tooltip>
+          </div>
+        </div>
+      </div>
       <ResponsibilityBox responsibilityForControl={responsibility} />
-      <Accordion
-        items={accordionItemsProps}
-        multiselectable
-        bordered
-        className={"control-page-accordion"}
-      />
+      {notApplicable ? (
+        <Accordion
+          items={[
+            {
+              title: "Non-applicable control justification",
+              content: (
+                <Textarea
+                  id="textarea-na-remarks"
+                  placeholder="Describe why this control is not applicable to your system project."
+                  className={"control-page-textarea"}
+                  name={"remarks"}
+                  value={remarks}
+                />
+              ),
+              expanded: true,
+              id: "remarks",
+              headingLevel: "h3",
+            },
+          ]}
+          multiselectable
+          bordered
+          className={"control-page-accordion"}
+        />
+      ) : (
+        <Accordion
+          items={accordionItemsProps}
+          multiselectable
+          bordered
+          className={"control-page-accordion"}
+        />
+      )}
       {showPrivateNarrativeBox ? (
         <Accordion
           items={accordionPrivateNarrativeProps}
