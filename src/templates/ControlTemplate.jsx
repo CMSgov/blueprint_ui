@@ -1,6 +1,7 @@
 import { Accordion, Checkbox, Textarea } from "@trussworks/react-uswds";
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { createRef, useEffect, useState } from "react";
+import BlueprintModal from "../atoms/BlueprintModal";
 import ResponsibilityBox from "../atoms/ResponsibilityBox";
 import Toggle from "../atoms/Toggle";
 import Tooltip from "../atoms/Tooltip";
@@ -36,6 +37,16 @@ export default function ControlTemplate({
   const { responsibility, components } = component;
   const subtitle = `System Control: ${label} ${controlTitle}`;
   const existingPrivateNarrative = components.private.description || "";
+
+  const naErrorModalRef = createRef();
+  const handleNaErrorOpen = () =>
+    naErrorModalRef.current?.toggleModal(undefined, true);
+  const selectNaModalRef = createRef();
+  const handleSelectNaOpen = () =>
+    selectNaModalRef.current?.toggleModal(undefined, true);
+  const deselectNaModalRef = createRef();
+  const handleDeselectNaOpen = () =>
+    deselectNaModalRef.current?.toggleModal(undefined, true);
 
   let tooltipContent =
     "Add a text field to tell us how your system is addressing this control";
@@ -82,6 +93,7 @@ export default function ControlTemplate({
           id="textarea-private-narrative"
           placeholder="Add your private control narrative here."
           className={"control-page-textarea"}
+          name={"private-narrative"}
           defaultValue={existingPrivateNarrative}
         />
       ),
@@ -151,8 +163,7 @@ export default function ControlTemplate({
     if (notApplicable) {
       let remarks = document.getElementById("textarea-na-remarks").value;
       if (!remarks) {
-        // Trigger modal here.
-        alert("Status is na and no remark");
+        handleNaErrorOpen();
       } else {
         patchControlVariables["remarks"] = remarks;
       }
@@ -182,6 +193,11 @@ export default function ControlTemplate({
 
   function onChangeNA(e) {
     let is_na = e.target.checked;
+    if (is_na) {
+      handleSelectNaOpen();
+    } else {
+      handleDeselectNaOpen();
+    }
     setNotApplicable(is_na);
   }
 
@@ -235,7 +251,7 @@ export default function ControlTemplate({
                   placeholder="Describe why this control is not applicable to your system project."
                   className={"control-page-textarea"}
                   name={"remarks"}
-                  value={remarks}
+                  defaultValue={remarks}
                 />
               ),
               expanded: true,
@@ -280,6 +296,7 @@ export default function ControlTemplate({
       <div className="bottom-section">
         <Checkbox
           id="is-complete-checkbox"
+          name={"is-complete"}
           label="Mark as complete"
           defaultChecked={status === "complete"}
         />
@@ -287,6 +304,33 @@ export default function ControlTemplate({
           Save & next
         </button>
       </div>
+      <BlueprintModal
+        id={"na-error"}
+        ref={naErrorModalRef}
+        header={"Non-applicable controls must have documented justifications."}
+        button={"Go back"}
+        link={"Continue without saving"}
+      />
+      <BlueprintModal
+        id={"select-na"}
+        ref={selectNaModalRef}
+        header={"Are you sure you want to disable this narrative?"}
+        body={
+          "This will remove it from your System Security Plan. You can choose to enable it later if needed. This could affect the inheritance state of this control."
+        }
+        button={"Disable"}
+        link={"Go back"}
+      />
+      <BlueprintModal
+        id={"deselect-na"}
+        ref={deselectNaModalRef}
+        header={"Are you sure you want to enable this narrative?"}
+        body={
+          "This will add it back into your System Security Plan. You can choose to disable it later if needed. This could affect the inheritance state of this control."
+        }
+        button={"Enable"}
+        link={"Go back"}
+      />
     </div>
   );
 }
