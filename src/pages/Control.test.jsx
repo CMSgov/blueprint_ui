@@ -353,7 +353,7 @@ test("can mark a control complete", async () => {
   fireEvent.click(screen.getByRole("button", { name: "Save & next" }));
 
   // patch request to update control status made
-  const expectedNewStatus = "completed";
+  const expectedNewStatus = "complete";
   const expectedRequestUrl = `${config.backendUrl}/projects/${projectId}/controls/${controlLabel}/`;
   const expectedRequestBody = `{"project_id":${projectId},"control_id":${controlId},"status":"${expectedNewStatus}"}`;
   const expectedRequestHeaders = {
@@ -378,10 +378,10 @@ test("can mark a control complete", async () => {
   });
 });
 
-test("completed control renders with checkbox already checked", async () => {
+test("a complete control renders with checkbox already checked", async () => {
   const controlLabel = "ac-1";
   const dataToRender = Object.assign(projectData);
-  dataToRender.status = "completed";
+  dataToRender.status = "complete";
   const projectId = dataToRender.project.id;
 
   const getResponse = { status: 200, data: dataToRender };

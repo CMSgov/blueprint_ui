@@ -22,7 +22,7 @@ const controlData = {
   previous: null,
   results: [
     {
-      status: "completed",
+      status: "complete",
       control: {
         id: 1,
         control_id: "ac-1",
@@ -46,7 +46,7 @@ const controlData = {
       project: 1,
     },
     {
-      status: "completed",
+      status: "complete",
       control: {
         id: 3,
         control_id: "ac-2.1",
@@ -58,7 +58,7 @@ const controlData = {
       project: 1,
     },
     {
-      status: "completed",
+      status: "complete",
       control: {
         id: 4,
         control_id: "ac-2.2",

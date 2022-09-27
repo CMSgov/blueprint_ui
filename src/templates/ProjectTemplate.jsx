@@ -23,10 +23,12 @@ export function ProjectTemplate({ project }) {
         impactLevel={impact_level}
         title={title}
       />
-      <ControlsCompleted
-        numControlsCompleted={completed_controls}
-        numControlsTotal={total_controls}
-      />
+      <div className="section">
+        <ControlsCompleted
+          numControlsComplete={completed_controls}
+          numControlsTotal={total_controls}
+        />
+      </div>
       <div className="section">
         <div className="section-header">System Components</div>
         <p>

@@ -25,8 +25,8 @@ const TableRow = ({ control }) => {
       </td>
       <td>{control.control.title}</td>
       <td>
-        {control.status === "completed"
-          ? "Completed"
+        {control.status === "complete"
+          ? "Complete"
           : control.status === "incomplete"
           ? "Incomplete"
           : "Not started"}
@@ -55,13 +55,13 @@ const FilterCol = ({ currentStatus, checkBoxHandler }) => {
         <fieldset className="usa-fieldset">
           <legend className="usa-legend">Status</legend>
           <Checkbox
-            id="completed-filter"
+            id="complete-filter"
             name="status__in"
-            label="Completed"
-            value="completed"
+            label="Complete"
+            value="complete"
             onChange={checkBoxHandler}
             key="3"
-            checked={isCheckedStatus("completed")}
+            checked={isCheckedStatus("complete")}
           />
           <Checkbox
             id="incomplete-filter"

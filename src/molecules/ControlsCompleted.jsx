@@ -5,19 +5,19 @@ import { Chart as ChartJS, ArcElement } from "chart.js";
 ChartJS.register(ArcElement);
 
 export default function ControlsCompleted({
-  numControlsCompleted,
+  numControlsComplete,
   numControlsTotal,
 }) {
   const params = useLocation();
   const controlsUrl = params.pathname + "/controls";
-  const numControlsIncomplete = numControlsTotal - numControlsCompleted;
-  const percentControlsCompleted = Math.floor(
-    (numControlsCompleted / numControlsTotal) * 100
-  ); // round down to prevent inaccurate "100% complete" feedback as num completed controls near total
+  const numControlsIncomplete = numControlsTotal - numControlsComplete;
+  const percentControlsComplete = Math.floor(
+    (numControlsComplete / numControlsTotal) * 100
+  ); // round down to prevent inaccurate "100% complete" feedback as num complete controls near total
   const data = {
     datasets: [
       {
-        data: [numControlsCompleted, numControlsIncomplete],
+        data: [numControlsComplete, numControlsIncomplete],
         backgroundColor: ["rgba(77, 128, 85, 1)", "rgba(220, 222, 224, 1)"],
       },
     ],
@@ -28,18 +28,20 @@ export default function ControlsCompleted({
       <div className="percent-complete-graphic">
         <Doughnut data={data} options={{ cutout: "80%" }} />
         <div className="percent-complete-text">
-          {percentControlsCompleted + "%"}
+          {percentControlsComplete + "%"}
         </div>
       </div>
       <div className="right-side-content">
         <div className="controls-completed-header">
-          {numControlsCompleted} of {numControlsTotal} Controls Completed
+          {numControlsComplete} of {numControlsTotal} Controls Completed
         </div>
         Review and update control narratives as you iteratively build your
         system.
-        <Link to={controlsUrl}>
-          <button className="usa-button">Manage Controls</button>
-        </Link>
+        <div>
+          <Link to={controlsUrl}>
+            <button className="usa-button">Manage Controls</button>
+          </Link>
+        </div>
       </div>
     </div>
   );

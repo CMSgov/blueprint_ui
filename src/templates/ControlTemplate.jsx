@@ -93,7 +93,7 @@ export default function ControlTemplate({
   const getNewStatus = (isCompleteChecked) => {
     let newStatus;
     if (isCompleteChecked) {
-      newStatus = "completed";
+      newStatus = "complete";
     } else {
       newStatus = "incomplete";
     }
@@ -210,7 +210,7 @@ export default function ControlTemplate({
         <Checkbox
           id="is-complete-checkbox"
           label="Mark as complete"
-          defaultChecked={status === "completed"}
+          defaultChecked={status === "complete"}
         />
         <button className="usa-button" onClick={onClickNext}>
           Save & next
@@ -235,7 +235,7 @@ ControlTemplate.propTypes = {
     guidance: PropTypes.string,
     implementation: PropTypes.string,
     next_id: PropTypes.string,
-    status: PropTypes.oneOf(["not_started", "incomplete", "completed"]),
+    status: PropTypes.oneOf(["not_started", "incomplete", "complete"]),
     title: PropTypes.string,
     version: PropTypes.string,
   }).isRequired,
