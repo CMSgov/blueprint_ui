@@ -11,6 +11,9 @@ export default function ControlsCompleted({
   const params = useLocation();
   const controlsUrl = params.pathname + "/controls";
   const numControlsIncomplete = numControlsTotal - numControlsCompleted;
+  const percentControlsCompleted = Math.floor(
+    (numControlsCompleted / numControlsTotal) * 100
+  ); // round down to prevent inaccurate "100% complete" feedback as num completed controls near total
   const data = {
     datasets: [
       {
@@ -24,9 +27,14 @@ export default function ControlsCompleted({
     <div className="controls-completed-section">
       <div className="percent-complete-graphic">
         <Doughnut data={data} options={{ cutout: "80%" }} />
+        <div className="percent-complete-text">
+          {percentControlsCompleted + "%"}
+        </div>
       </div>
       <div className="right-side-content">
-        <div className="controls-completed-header">Controls Completed</div>
+        <div className="controls-completed-header">
+          {numControlsCompleted} of {numControlsTotal} Controls Completed
+        </div>
         Review and update control narratives as you iteratively build your
         system.
         <Link to={controlsUrl}>
