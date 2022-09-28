@@ -57,25 +57,12 @@ h1 {
   padding: 0 100px 95px;
 }
 
-.site-header-dark {
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   background-color: $blue-dark-background;
-  color: $white;
-  a {
-    color: $white;
-  }
-}
-.site-header-navbar {
-  padding: 15px 0;
-  button {
-    &:hover {
-      background-color: $blue-dark-background;
-    }
-    font-weight: normal;
-  }
-  a {
-    margin: 0 50px;
-    text-decoration: none;
-  }
+  padding: 10px 0 10px 36px;
   svg.site-logo {
     width: 125px;
     .cls-1 {
@@ -88,22 +75,42 @@ h1 {
       fill: #6cf;
     }
   }
-  .site-header-right {
+  button {
+    background-color: $blue-dark-background;
+    color: $white;
+    &:hover {
+      background-color: $blue-dark-background;
+    }
+    font-weight: normal;
+  }
+  a {
+    text-decoration: none;
+    color: $white;
+  }
+  .header-left {
     display: flex;
     align-items: center;
-    position: absolute;
-    right: 180px;
+    justify-content: flex-start;
+    :not(:first-child) {
+      margin-left: 55px;
+    }
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     a {
       margin: 0 35px;
     }
   }
 }
-@media (min-width: 64em) {
-  .site-header-navbar {
-    display: flex;
-    align-items: center;
+@media (max-width: 680px) {
+  .header-right {
+    margin-top: 20px;
+    margin-left: 145px;
   }
 }
+
 textarea {
   height: 16rem;
   width: 100%;
