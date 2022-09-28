@@ -16,11 +16,9 @@ function App() {
       <ToastContainer autoClose={5000} transition={Slide} hideProgressBar />
       <GlobalStateProvider>
         <Header />
-        <div className="grid-row">
-          <div className="grid-col-12 main-content-body">
-            <Breadcrumbs />
-            <Outlet />
-          </div>
+        <div className="main-content-container">
+          <Breadcrumbs />
+          <Outlet />
         </div>
         <Footer />
       </GlobalStateProvider>

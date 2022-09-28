@@ -103,7 +103,7 @@ const ProjectSetup = () => {
   }
 
   return (
-    <>
+    <div className="project-setup-page">
       {project && <Navigate to="/project-setup/confirmation" />}
       <h1>Tell us a little about this system</h1>
       <p className="sub-header-text">
@@ -237,10 +237,10 @@ const ProjectSetup = () => {
       <Link to={MAIN_ROUTES.HOME}>
         <button className="usa-button usa-button--outline">Back</button>
       </Link>
-      <Button type="submit" onClick={formSubmit} className="top-space-40">
+      <Button type="submit" onClick={formSubmit} className="submit-button">
         Next
       </Button>
-    </>
+    </div>
   );
 };
 

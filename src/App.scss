@@ -52,6 +52,11 @@ h1 {
   text-decoration: none;
 }
 
+// container for content between header and footer
+.main-content-container {
+  padding: 0 100px 95px;
+}
+
 .site-header-dark {
   background-color: $blue-dark-background;
   color: $white;
@@ -106,27 +111,6 @@ textarea {
 #root {
   min-height: 100%;
 }
-.main-content-body {
-  padding: 0 100px 95px;
-  margin: 0;
-  min-height: 100%;
-
-  position: relative;
-  h3 {
-    margin-top: 40px;
-  }
-  .bold-text {
-    font-weight: bold;
-    font-size: 16px;
-  }
-  .sub-header-text {
-    font-size: 22px;
-    line-height: 35px;
-  }
-  .top-space-40 {
-    margin-top: 40px;
-  }
-}
 nav.usa-breadcrumb {
   padding-bottom: 35px;
   padding-top: 30px;
@@ -158,7 +142,7 @@ nav.usa-breadcrumb {
   }
 }
 @media (max-width: $tablet-size-max-width) {
-  .main-content-body {
+  .main-content-container {
     padding: 0 50px 130px;
   }
   .site-footer {
@@ -173,6 +157,19 @@ nav.usa-breadcrumb {
     a {
       padding-top: 16px;
     }
+  }
+}
+
+.homepage {
+  margin-top: 60px;
+  .subtitle {
+    font-size: 22px;
+  }
+  .usa-process-list__heading {
+    font-size: 22px;
+  }
+  .usa-card__header > h3 {
+    font-size: 22px;
   }
 }
 
@@ -282,6 +279,20 @@ nav.usa-breadcrumb {
     .above-button-text {
       padding-bottom: 18px;
     }
+  }
+}
+
+.project-setup-page {
+  .bold-text {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .sub-header-text {
+    font-size: 22px;
+    line-height: 35px;
+  }
+  .submit-button {
+    margin-top: 40px;
   }
 }
 
