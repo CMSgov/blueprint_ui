@@ -1,6 +1,3 @@
-// WIP test file
-// ProjectSettings uses Context and we need a way to test the changes to Context
-
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import { within } from "@testing-library/dom";

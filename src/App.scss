@@ -43,6 +43,10 @@ body {
 h1 {
   font-size: 40px;
 }
+.generic-section-header {
+  font-size: 22px;
+  font-weight: bold;
+}
 .link-title {
   color: $blue-primary;
   text-decoration: none;
@@ -212,8 +216,7 @@ nav.usa-breadcrumb {
     width: 45%;
   }
   .card-title {
-    font-size: 22px;
-    font-weight: bold;
+    @extend .generic-section-header;
     margin-bottom: 20px;
   }
   .links-list {
@@ -222,6 +225,15 @@ nav.usa-breadcrumb {
     margin-left: 0;
     a {
       color: $blue-primary;
+    }
+  }
+}
+
+.project-page {
+  .section {
+    margin-top: 42px;
+    .section-header {
+      @extend .generic-section-header;
     }
   }
 }
@@ -279,8 +291,7 @@ nav.usa-breadcrumb {
   }
 
   .controls-list-header {
-    font-size: 22px;
-    font-weight: bold;
+    @extend .generic-section-header;
     margin-top: 33px;
     margin-bottom: 17px;
   }
@@ -298,6 +309,34 @@ nav.usa-breadcrumb {
     }
     p {
       max-width: 100%;
+    }
+  }
+}
+
+.controls-completed-section {
+  display: flex;
+  flex-direction: row;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.15);
+  padding: 30px;
+  .percent-complete-graphic {
+    height: 150px;
+    width: 150px;
+    .percent-complete-text {
+      display: flex;
+      justify-content: center;
+      position: relative;
+      top: -90px;
+      font-size: 23px;
+      font-weight: 300;
+    }
+  }
+  .right-side-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-left: 30px;
+    .controls-completed-header {
+      @extend .generic-section-header;
     }
   }
 }

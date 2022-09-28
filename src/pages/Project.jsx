@@ -14,27 +14,26 @@ const ERROR_MESSAGE = "Error loading project";
 
 const Project = () => {
   const { id } = useParams();
-
-  const [state, setState] = useContext(GlobalState);
+  const [, setState] = useContext(GlobalState);
+  const [project, setProject] = useState();
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!state.project || state.project.id !== parseInt(id)) {
-      setIsLoading(true);
-      RequestService.get(
-        `${config.backendUrl}/projects/${id}/`,
-        (response) => {
-          setState((state) => ({ ...state, project: response.data }));
-          setIsLoading(false);
-        },
-        (err) => {
-          setHasError(true);
-          setIsLoading(false);
-        }
-      );
-    }
-  }, [id, state, setState]);
+    setIsLoading(true);
+    RequestService.get(
+      `${config.backendUrl}/projects/${id}/`,
+      (response) => {
+        setState((state) => ({ ...state, project: response.data })); // TODO: This can be removed or updated accordingly when Breadcrumbs is refactored
+        setProject(response.data);
+        setIsLoading(false);
+      },
+      (err) => {
+        setHasError(true);
+        setIsLoading(false);
+      }
+    );
+  }, [id, setProject, setState]);
 
   if (isLoading) {
     return <LoadingIndicator />;
@@ -42,8 +41,8 @@ const Project = () => {
   if (hasError) {
     return <ErrorMessage message={ERROR_MESSAGE} />;
   }
-  if (state.project && !isEmpty(state.project)) {
-    return <ProjectTemplate project={state.project} />;
+  if (project && !isEmpty(project)) {
+    return <ProjectTemplate project={project} />;
   }
 };
 
