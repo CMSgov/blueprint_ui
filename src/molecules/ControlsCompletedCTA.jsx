@@ -14,7 +14,7 @@ export default function ControlsCompletedCTA({
   const percentControlsComplete = Math.floor(
     (numControlsComplete / numControlsTotal) * 100
   ); // round down to prevent inaccurate "100% complete" feedback as num complete controls near total
-  const data = {
+  const doughnutGraphicData = {
     datasets: [
       {
         data: [numControlsComplete, numControlsIncomplete],
@@ -32,7 +32,7 @@ export default function ControlsCompletedCTA({
         className="percent-complete-graphic"
         data-testid="percent_complete_graphic"
       >
-        <Doughnut data={data} options={{ cutout: "80%" }} />
+        <Doughnut data={doughnutGraphicData} options={{ cutout: "80%" }} />
         <div className="percent-complete-text">
           {percentControlsComplete + "%"}
         </div>
