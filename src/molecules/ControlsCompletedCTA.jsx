@@ -4,7 +4,7 @@ import { Chart as ChartJS, ArcElement } from "chart.js";
 
 ChartJS.register(ArcElement);
 
-export default function ControlsCompleted({
+export default function ControlsCompletedCTA({
   numControlsComplete,
   numControlsTotal,
 }) {
@@ -24,8 +24,14 @@ export default function ControlsCompleted({
   };
 
   return (
-    <div className="controls-completed-section">
-      <div className="percent-complete-graphic">
+    <div
+      className="controls-completed-section"
+      data-testid="controls_completed_cta"
+    >
+      <div
+        className="percent-complete-graphic"
+        data-testid="percent_complete_graphic"
+      >
         <Doughnut data={data} options={{ cutout: "80%" }} />
         <div className="percent-complete-text">
           {percentControlsComplete + "%"}

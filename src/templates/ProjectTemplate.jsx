@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import ControlsCompleted from "../molecules/ControlsCompleted";
+import ControlsCompletedCTA from "../molecules/ControlsCompletedCTA";
 import ProjectHeader from "../molecules/ProjectHeader";
 
 export function ProjectTemplate({ project }) {
@@ -24,7 +24,7 @@ export function ProjectTemplate({ project }) {
         title={title}
       />
       <div className="section">
-        <ControlsCompleted
+        <ControlsCompletedCTA
           numControlsComplete={completed_controls}
           numControlsTotal={total_controls}
         />
