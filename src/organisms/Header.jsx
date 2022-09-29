@@ -12,24 +12,20 @@ const Header = () => {
   const username = sessionStorage.getItem("Username");
 
   return (
-    <header className="usa-header site-header site-header-dark" role="banner">
-      <div className="usa-navbar site-header-navbar">
+    <header className="site-header">
+      <div className="header-left">
         <div id="logo">
           <Link to={MAIN_ROUTES.HOME}>
             <Logo />
           </Link>
         </div>
-
         <Link to={MAIN_ROUTES.PROJECTS}>Projects</Link>
         <Link to={MAIN_ROUTES.COMPONENT_LIBRARY}>Component Library</Link>
-        <div className="site-header-right">
-          <Link to={MAIN_ROUTES.HELP}>Help</Link>
-          {username && (
-            <Button className="site-header-dark" onClick={logoutUser}>
-              {username}
-            </Button>
-          )}
-        </div>
+      </div>
+
+      <div className="header-right">
+        <Link to={MAIN_ROUTES.HELP}>Help</Link>
+        {username && <Button onClick={logoutUser}>{username}</Button>}
       </div>
     </header>
   );
