@@ -1,12 +1,14 @@
-import PropTypes from "prop-types";
 import { Accordion, Checkbox, Textarea } from "@trussworks/react-uswds";
-import { useEffect, useState } from "react";
-import { DEFAULT_CATALOG_VERSION } from "../constants";
-import ProjectHeader from "../molecules/ProjectHeader";
+import PropTypes from "prop-types";
+import { createRef, useEffect, useState } from "react";
+import BlueprintModal from "../atoms/BlueprintModal";
 import ResponsibilityBox from "../atoms/ResponsibilityBox";
-import { isEmpty } from "../utils";
-import moreInfo from "../info.png";
+import Toggle from "../atoms/Toggle";
 import Tooltip from "../atoms/Tooltip";
+import { DEFAULT_CATALOG_VERSION } from "../constants";
+import moreInfo from "../info.png";
+import ProjectHeader from "../molecules/ProjectHeader";
+import { isEmpty } from "../utils";
 
 export default function ControlTemplate({
   project,
@@ -15,7 +17,9 @@ export default function ControlTemplate({
   submitCallback,
 }) {
   const [showPrivateNarrativeBox, setShowPrivateNarrativeBox] = useState(false);
-
+  const [notApplicable, setNotApplicable] = useState(
+    control.status === "not_applicable"
+  );
   const { id: projectId, acronym, title } = project;
   const {
     id: controlId,
@@ -28,13 +32,73 @@ export default function ControlTemplate({
     implementation,
     status,
     version,
+    remarks,
   } = control;
   const { responsibility, components } = component;
   const subtitle = `System Control: ${label} ${controlTitle}`;
   const existingPrivateNarrative = components.private.description || "";
 
+  const naErrorModalRef = createRef();
+  const handleNaErrorOpen = () =>
+    naErrorModalRef.current?.toggleModal(undefined, true);
+  const selectNaModalRef = createRef();
+  const handleSelectNaOpen = () =>
+    selectNaModalRef.current?.toggleModal(undefined, true);
+  const deselectNaModalRef = createRef();
+  const handleDeselectNaOpen = () =>
+    deselectNaModalRef.current?.toggleModal(undefined, true);
+
+  function handleDeselectModalClicks(e) {
+    if (e) {
+      deselectNaModalRef.current?.toggleModal(undefined, false);
+      document
+        .querySelector(".usa-accordion__content")
+        .setAttribute("hidden", "hidden");
+      document
+        .querySelector(".usa-accordion__button")
+        .removeAttribute("aria-expanded");
+      document
+        .querySelector(".usa-accordion__content")
+        .setAttribute("aria-hidden", "hidden");
+    } else {
+      deselectNaModalRef.current?.toggleModal(undefined, false);
+      setNotApplicable(true);
+    }
+  }
+
+  function handleSelectModalClicks(e) {
+    if (e) {
+      selectNaModalRef.current?.toggleModal(undefined, false);
+      document.querySelector("#remarks").removeAttribute("hidden");
+      document
+        .querySelector("#remarks")
+        .setAttribute("aria-expanded", "expanded");
+      document.querySelector("#remarks").removeAttribute("aria-hidden");
+    } else {
+      selectNaModalRef.current?.toggleModal(undefined, false);
+      setNotApplicable(false);
+    }
+  }
+
+  function handleEmptyRemarksModalClicks(e) {
+    if (e) {
+      naErrorModalRef.current?.toggleModal(undefined, false);
+      document.querySelector("#remarks").removeAttribute("hidden");
+      document
+        .querySelector("#remarks")
+        .setAttribute("aria-expanded", "expanded");
+      document.querySelector("#remarks").removeAttribute("aria-hidden");
+    } else {
+      naErrorModalRef.current?.toggleModal(undefined, false);
+      setNotApplicable(false);
+    }
+  }
+
   let tooltipContent =
     "Add a text field to tell us how your system is addressing this control";
+
+  let naTooltipContent =
+    "Non-applicable controls will not be included in your System Security Plan";
 
   let accordionItemsProps = [
     {
@@ -75,6 +139,7 @@ export default function ControlTemplate({
           id="textarea-private-narrative"
           placeholder="Add your private control narrative here."
           className={"control-page-textarea"}
+          name={"private-narrative"}
           defaultValue={existingPrivateNarrative}
         />
       ),
@@ -92,7 +157,10 @@ export default function ControlTemplate({
 
   const getNewStatus = (isCompleteChecked) => {
     let newStatus;
-    if (isCompleteChecked) {
+    let na = document.getElementById("toggle-switch").checked;
+    if (na) {
+      newStatus = "not_applicable";
+    } else if (isCompleteChecked) {
       newStatus = "complete";
     } else {
       newStatus = "incomplete";
@@ -126,6 +194,7 @@ export default function ControlTemplate({
 
   function onClickNext() {
     let patchComponentVariables;
+    let sendIt = true;
     if (showPrivateNarrativeBox) {
       patchComponentVariables = createPatchComponentVariables();
     }
@@ -133,12 +202,24 @@ export default function ControlTemplate({
     let patchControlVariables = {
       project_id: projectId,
       control_id: controlId,
-      status: getNewStatus(
-        document.getElementById("is-complete-checkbox").checked
-      ),
+      status: notApplicable
+        ? "not_applicable"
+        : getNewStatus(document.getElementById("is-complete-checkbox").checked),
     };
 
-    submitCallback(patchComponentVariables, patchControlVariables);
+    if (notApplicable) {
+      let remarks = document.getElementById("textarea-na-remarks").value;
+      if (!remarks) {
+        sendIt = false;
+        handleNaErrorOpen();
+      } else {
+        patchControlVariables["remarks"] = remarks;
+      }
+    }
+
+    if (sendIt) {
+      submitCallback(patchComponentVariables, patchControlVariables);
+    }
   }
 
   function renderInheritedComponentNarratives() {
@@ -160,6 +241,16 @@ export default function ControlTemplate({
     );
   }
 
+  function onChangeNA(e) {
+    let is_na = e.target.checked;
+    if (is_na) {
+      handleSelectNaOpen();
+    } else {
+      handleDeselectNaOpen();
+    }
+    setNotApplicable(is_na);
+  }
+
   return (
     <div className="control-page">
       <ProjectHeader
@@ -177,13 +268,59 @@ export default function ControlTemplate({
       <p className="control-description" data-testid="control_description">
         <b>Control Description:</b> {description}
       </p>
+      <div className={"display-flex"}>
+        <Toggle isOn={notApplicable} onChange={onChangeNA} />
+        <div className="display-inline margin-left-1">
+          {notApplicable ? (
+            <>
+              <b>Non-applicable Control:</b> Toggle this control on if it
+              applies to your system
+            </>
+          ) : (
+            <>
+              <b>Applicable Control:</b> Toggle this control off if it does not
+              apply to your system
+            </>
+          )}
+          <div className="tooltip-div margin-left-1">
+            <Tooltip content={naTooltipContent} direction="down">
+              <img type="button" src={moreInfo} alt="More info." />
+            </Tooltip>
+          </div>
+        </div>
+      </div>
       <ResponsibilityBox responsibilityForControl={responsibility} />
-      <Accordion
-        items={accordionItemsProps}
-        multiselectable
-        bordered
-        className={"control-page-accordion"}
-      />
+      {notApplicable ? (
+        <Accordion
+          items={[
+            {
+              title: "Non-applicable control justification",
+              content: (
+                <Textarea
+                  id="textarea-na-remarks"
+                  placeholder="Describe why this control is not applicable to your system project."
+                  className={"control-page-textarea"}
+                  name={"remarks"}
+                  defaultValue={remarks}
+                />
+              ),
+              expanded: true,
+              id: "remarks",
+              headingLevel: "h3",
+            },
+          ]}
+          multiselectable
+          bordered
+          className={"control-page-accordion"}
+        />
+      ) : (
+        <Accordion
+          items={accordionItemsProps}
+          multiselectable
+          bordered
+          className={"control-page-accordion"}
+        />
+      )}
       {showPrivateNarrativeBox ? (
         <Accordion
           items={accordionPrivateNarrativeProps}
@@ -209,13 +346,44 @@ export default function ControlTemplate({
       <div className="bottom-section">
         <Checkbox
           id="is-complete-checkbox"
+          name={"is-complete"}
           label="Mark as complete"
           defaultChecked={status === "complete"}
         />
-        <button className="usa-button" onClick={onClickNext}>
+        <button className="usa-button" onClick={(e) => onClickNext(e)}>
           Save & next
         </button>
       </div>
+      <BlueprintModal
+        id={"na-error"}
+        ref={naErrorModalRef}
+        header={"Non-applicable controls must have documented justifications."}
+        button={"Go back"}
+        link={"Continue without saving"}
+        clickHandler={handleEmptyRemarksModalClicks}
+      />
+      <BlueprintModal
+        id={"select-na"}
+        ref={selectNaModalRef}
+        header={"Are you sure you want to disable this narrative?"}
+        body={
+          "This will remove it from your System Security Plan. You can choose to enable it later if needed. This could affect the inheritance state of this control."
+        }
+        button={"Disable"}
+        link={"Go back"}
+        clickHandler={handleSelectModalClicks}
+      />
+      <BlueprintModal
+        id={"deselect-na"}
+        ref={deselectNaModalRef}
+        header={"Are you sure you want to enable this narrative?"}
+        body={
+          "This will add it back into your System Security Plan. You can choose to disable it later if needed. This could affect the inheritance state of this control."
+        }
+        button={"Enable"}
+        link={"Go back"}
+        clickHandler={handleDeselectModalClicks}
+      />
     </div>
   );
 }

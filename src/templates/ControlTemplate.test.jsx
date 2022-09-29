@@ -107,3 +107,23 @@ test("renders each section on the page", () => {
     expectedSubtitle
   );
 });
+
+test("clicking not applicable shows remarks", () => {
+  render(
+    <MemoryRouter>
+      <ControlTemplate
+        project={projectData}
+        control={controlData}
+        component={componentData}
+      />
+    </MemoryRouter>
+  );
+
+  const accordionSections = screen.getAllByTestId("accordion");
+  fireEvent.click(screen.getByTestId("on-off-toggle"));
+  const topAccordionItems = accordionSections[0];
+  const natApplicableAccordion = within(topAccordionItems).getByText(
+    "Non-applicable control justification"
+  );
+  expect(natApplicableAccordion).toBeInTheDocument();
+});

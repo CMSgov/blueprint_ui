@@ -105,6 +105,7 @@ export default function Control() {
     controlData.id = pageData.control.id;
     controlData.controlIdName = pageData.control.control_id;
     controlData.status = pageData.status;
+    controlData.remarks = pageData.remarks ? pageData.remarks : null;
     return (
       <ControlTemplate
         project={pageData.project}
