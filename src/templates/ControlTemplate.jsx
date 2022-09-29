@@ -48,6 +48,52 @@ export default function ControlTemplate({
   const handleDeselectNaOpen = () =>
     deselectNaModalRef.current?.toggleModal(undefined, true);
 
+  function handleDeselectModalClicks(e) {
+    if (e) {
+      deselectNaModalRef.current?.toggleModal(undefined, false);
+      document
+        .querySelector(".usa-accordion__content")
+        .setAttribute("hidden", "hidden");
+      document
+        .querySelector(".usa-accordion__button")
+        .removeAttribute("aria-expanded");
+      document
+        .querySelector(".usa-accordion__content")
+        .setAttribute("aria-hidden", "hidden");
+    } else {
+      deselectNaModalRef.current?.toggleModal(undefined, false);
+      setNotApplicable(true);
+    }
+  }
+
+  function handleSelectModalClicks(e) {
+    if (e) {
+      selectNaModalRef.current?.toggleModal(undefined, false);
+      document.querySelector("#remarks").removeAttribute("hidden");
+      document
+        .querySelector("#remarks")
+        .setAttribute("aria-expanded", "expanded");
+      document.querySelector("#remarks").removeAttribute("aria-hidden");
+    } else {
+      selectNaModalRef.current?.toggleModal(undefined, false);
+      setNotApplicable(false);
+    }
+  }
+
+  function handleEmptyRemarksModalClicks(e) {
+    if (e) {
+      naErrorModalRef.current?.toggleModal(undefined, false);
+      document.querySelector("#remarks").removeAttribute("hidden");
+      document
+        .querySelector("#remarks")
+        .setAttribute("aria-expanded", "expanded");
+      document.querySelector("#remarks").removeAttribute("aria-hidden");
+    } else {
+      naErrorModalRef.current?.toggleModal(undefined, false);
+      setNotApplicable(false);
+    }
+  }
+
   let tooltipContent =
     "Add a text field to tell us how your system is addressing this control";
 
@@ -148,6 +194,7 @@ export default function ControlTemplate({
 
   function onClickNext() {
     let patchComponentVariables;
+    let sendIt = true;
     if (showPrivateNarrativeBox) {
       patchComponentVariables = createPatchComponentVariables();
     }
@@ -163,13 +210,16 @@ export default function ControlTemplate({
     if (notApplicable) {
       let remarks = document.getElementById("textarea-na-remarks").value;
       if (!remarks) {
+        sendIt = false;
         handleNaErrorOpen();
       } else {
         patchControlVariables["remarks"] = remarks;
       }
     }
 
-    submitCallback(patchComponentVariables, patchControlVariables);
+    if (sendIt) {
+      submitCallback(patchComponentVariables, patchControlVariables);
+    }
   }
 
   function renderInheritedComponentNarratives() {
@@ -300,7 +350,7 @@ export default function ControlTemplate({
           label="Mark as complete"
           defaultChecked={status === "complete"}
         />
-        <button className="usa-button" onClick={onClickNext}>
+        <button className="usa-button" onClick={(e) => onClickNext(e)}>
           Save & next
         </button>
       </div>
@@ -310,6 +360,7 @@ export default function ControlTemplate({
         header={"Non-applicable controls must have documented justifications."}
         button={"Go back"}
         link={"Continue without saving"}
+        clickHandler={handleEmptyRemarksModalClicks}
       />
       <BlueprintModal
         id={"select-na"}
@@ -320,6 +371,7 @@ export default function ControlTemplate({
         }
         button={"Disable"}
         link={"Go back"}
+        clickHandler={handleSelectModalClicks}
       />
       <BlueprintModal
         id={"deselect-na"}
@@ -330,6 +382,7 @@ export default function ControlTemplate({
         }
         button={"Enable"}
         link={"Go back"}
+        clickHandler={handleDeselectModalClicks}
       />
     </div>
   );

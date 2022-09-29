@@ -1,9 +1,9 @@
 import {
+  Button,
   ButtonGroup,
   Modal,
   ModalFooter,
   ModalHeading,
-  ModalToggleButton,
 } from "@trussworks/react-uswds";
 import { forwardRef } from "react";
 
@@ -21,16 +21,15 @@ const BlueprintModal = forwardRef((props, modalRef) => {
       </div>
       <ModalFooter>
         <ButtonGroup>
-          <ModalToggleButton
-            modalRef={modalRef}
-            closer
+          <Button
             className="padding-105 text-center"
+            onClick={() => props.clickHandler(true)}
           >
             {props.button}
-          </ModalToggleButton>
-          <ModalToggleButton modalRef={modalRef} unstyled closer>
+          </Button>
+          <Button unstyled onClick={() => props.clickHandler(false)}>
             {props.link}
-          </ModalToggleButton>
+          </Button>
         </ButtonGroup>
       </ModalFooter>
     </Modal>
